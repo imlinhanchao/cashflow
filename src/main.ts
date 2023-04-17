@@ -25,6 +25,8 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
 
+  app.enableCors();
+  
   await app.listen(7894);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
