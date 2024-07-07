@@ -2,7 +2,7 @@ import * as unzipper from 'unzipper';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as fetch from 'node-fetch';
-import { parse } from 'content-disposition';
+
 export function extractZip(zipPath: string, password: string, extractPath: string): Promise<string[]> {
   return unzipper.Open.file(zipPath).then(async (d) => {
     return (await Promise.all(d.files.filter(f => f.type == "File").map((file) => 

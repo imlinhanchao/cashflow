@@ -30,7 +30,6 @@
     "@nestjs/websockets": "9.1.6",
     "@types/node-fetch": "^2.6.11",
     "@types/unzipper": "^0.10.9",
-    "content-disposition": "^0.5.4",
     "iconv-lite": "^0.6.3",
     "imap": "^0.8.19",
     "mailparser": "^3.6.4",
