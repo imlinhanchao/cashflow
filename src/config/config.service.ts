@@ -5,7 +5,7 @@ import * as path from 'path';
 @Injectable()
 export class ConfigService {
 
-  readonly configKeys = [ 'database', 'jwtConstants', 'salt', 'chatgpt' ];
+  readonly configKeys = [ 'database', 'jwtConstants', 'salt' ];
   readonly configPath = path.resolve(__dirname, './config.json')
 
   isConfig(): boolean {

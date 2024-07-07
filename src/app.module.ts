@@ -4,9 +4,7 @@ import { UsersModule } from './users/users.module';
 import { WsModule } from './ws/ws.module';
 import { AuthModule } from './auth/auth.module';
 import { database } from './config';
-import { WechatModule } from './wechat/wechat.module';
 import { CashflowModule } from './cashflow/cashflow.module';
-import { ChatgptModule } from './chatgpt/chatgpt.module';
 import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -20,9 +18,7 @@ import { MailModule } from './mail/mail.module';
     UsersModule,
     AuthModule,
     WsModule,
-    WechatModule,
     CashflowModule,
-    ChatgptModule,
     MailModule,
   ]
 })

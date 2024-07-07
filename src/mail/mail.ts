@@ -1,6 +1,6 @@
 import * as Imap from 'imap';
 import { simpleParser, ParsedMail, MailParser } from 'mailparser';
-import { MailConfigDto } from './mail.dto';
+import { MailConfigDto, MailRecvOptions } from './mail.dto';
 
 export class Mail {
   private imap: Imap;
@@ -37,7 +37,7 @@ export class Mail {
     return this.imap.end();
   }
 
-  async getUnread () {
+  async getUnread (n: number=-1, options: MailRecvOptions = { }) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
         return reject('Mail is not connected');
@@ -51,14 +51,14 @@ export class Mail {
           if (err) {
             reject(err);
           }
-          resolve(await this.fetchResult(results));
+          resolve(await this.fetchResult(n < 0 ? results : results.slice(-n), options).catch(reject));
         });
       });
     });
   }
 
   // 搜索最新的n封主题包含text的邮件
-  async searchLatest (text: string, n: number) {
+  async searchLatest (text: string, n: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
         return reject('Mail is not connected');
@@ -71,14 +71,14 @@ export class Mail {
           if (err) {
             reject(err);
           }
-          resolve(await this.fetchResult(results.slice(-n)));
+          resolve(await this.fetchResult(results.slice(-n), options).catch(reject));
         });
       });
     });
   }
 
   // 获取最新n封邮件
-  getLatest (n: number) {
+  getLatest (n: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
         return reject('Mail is not connected');
@@ -91,52 +91,83 @@ export class Mail {
           if (err) {
             reject(err);
           }
-          resolve(await this.fetchResult(results.slice(-n)));
+          resolve(await this.fetchResult(results.slice(-n), options).catch(reject));
         });
       });
     });
   }
 
-  private fetchResult (results: number[]) {
+  getMail (id: number, options: MailRecvOptions = {}) {
+    return new Promise((resolve, reject) => {
+      const f = this.imap.fetch([id], {
+        bodies: '',
+      });
+      f.on('message', (msg) => {
+        this.recvMessage(msg, options).then(resolve).catch(reject);
+      });
+      f.once('error', (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  private fetchResult (results: number[], options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (results.length === 0) return resolve([]);
-      const mailsRecv = []
+      const mailsRecv = [];
       const f = this.imap.fetch(results, {
         bodies: '',
       });
       f.on('message', (msg) => {
-        mailsRecv.push(this.recvMessage(msg));
+        mailsRecv.push(this.recvMessage(msg, options).then((mail) => {
+          return mail;
+        }).catch((err) => {
+          console.error(err);
+        }));
       });
       f.once('error', (err) => {
         reject(err);
       });
       f.once('end', async () => {
-        resolve(await Promise.all(mailsRecv));
+        const mails = await Promise.all(
+          mailsRecv
+        ).catch(reject);
+        resolve(mails);
       });
     });
   }
 
-  private recvMessage (msg) {
+  private recvMessage (msg: Imap.ImapMessage, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       msg.on('body', (stream) => {
         const parser = new MailParser({
         });
         stream.pipe(parser);
         const mail: any = {};
-        parser.on('data', (data) => mail.data = data);
+        options.content && parser.on('data', async (data) => {
+          if (data.type === 'text') {
+            mail.data = data.html;
+          }
+          if (options.attachments && data.type === 'attachment') {
+            mail.attachments = await options.saveAttachments?.(mail.headers, data);
+          }
+          if (mail.headers) parser.destroy();
+        });
         parser.on('headers', (headers) => {
-          mail.header = {};
+          mail.headers = {};
           headers.forEach((value, key) => {
-            mail.header[key] = value;
-          })
+            mail.headers[key] = value;
+          });
+          if (mail.data || !options.content && !options.attachments) parser.destroy();
         });
         parser.on('error', reject);
-        parser.on('end', () => {
+        parser.once('end', () => {
           resolve(mail);
-          parser.end();
+        });
+        parser.once('close', () => {
+          resolve(mail);
         });
       });
-      msg.on('error', reject);
     })
   }
 

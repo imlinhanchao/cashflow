@@ -1,4 +1,4 @@
-import { Controller, Param, Post, UseGuards, Request, Body, Query } from '@nestjs/common';
+import { Controller, Param, Post, UseGuards, Request, Body, Query, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserDto } from 'src/users/users.dto';
@@ -22,10 +22,10 @@ export class MailController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('getUnread')
+  @Get('getUnread')
   @ApiOperation({ summary: '获取未读邮件' })
-  getUnread(@Request() { user }: {user: UserDto}) {
-    return this.mailService.getUnread(user.username);
+  getUnread(@Request() { user }: {user: UserDto}, @Query('count') count: number = -1) {
+    return this.mailService.getUnread(user.username, count);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -36,18 +36,18 @@ export class MailController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('get')
+  @Get('get')
   @ApiOperation({ summary: '获取最新邮件' })
   getLatest(@Request() { user }: {user: UserDto}, @Query('count') count: number) {
     return this.mailService.getLatest(user.username, count);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('search/:text')
+  @Get('search')
   @ApiOperation({ summary: '搜索最新邮件' })
   searchLatest(
     @Request() { user }: {user: UserDto}, 
-    @Param('text') text: string, 
+    @Query('text') text: string, 
     @Query('count') count: number
   ) {
     return this.mailService.searchLatest(user.username, text, count);

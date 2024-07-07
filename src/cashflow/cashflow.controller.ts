@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CashflowDto, QueryDto } from './cashflow.dto';
+import { CashflowDto, QueryDto, SyncDto } from './cashflow.dto';
 import { CashflowService } from './cashflow.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserDto } from 'src/users/users.dto';
@@ -55,6 +55,14 @@ export class CashflowController {
     const cashflow = await this.cashflowService.findOne(id);
     if (user.username != 'admin' && user.id != cashflow.username) throw permissions;
     return this.cashflowService.remove(id);
+  }
+
+  
+  @Post('analysis')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: '同步交易记录' })
+  analysis(@Request() { user }: { user: UserDto }, @Body() sync: SyncDto) {
+    return this.cashflowService.analysis(user.username, sync);
   }
 
 }

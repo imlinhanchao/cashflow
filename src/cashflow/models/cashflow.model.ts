@@ -39,4 +39,6 @@ export class Cashflow extends CommonModel {
   @Column({ comment: '备注', defaultValue: '' })
   remark: string;
 
+  @Column({ comment: '来源', defaultValue: '' })
+  from: string;
 }

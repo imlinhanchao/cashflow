@@ -18,6 +18,7 @@ async function bootstrap() {
   const options: SwaggerCustomOptions = {
     explorer: true,
     customSiteTitle: 'API Hub Docs',
+    jsonDocumentUrl: 'docs/json',
   };
   SwaggerModule.setup('docs', app, document, options);
 

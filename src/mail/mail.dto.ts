@@ -7,3 +7,12 @@ export class MailConfigDto {
   @ApiProperty({ name: 'password', description: '密码', example: '123456' })
   password: string;
 }
+
+export class MailRecvOptions {
+  content?: boolean;
+  attachments?: boolean;
+  saveAttachments?: (header: any, content) => Promise<{
+    filename: string,
+    savePath: string,
+  }>;
+}
