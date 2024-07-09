@@ -154,6 +154,7 @@ export class CashflowService {
           from: 'alipay',
         });
       });
+      this.mailService.getMail(username, mail.id, { markSeen: true });
       fs.unlink(files[0], console.log);
       fs.unlink(mail.attachments.savePath, console.log);
       return await this.create(orderList);
@@ -194,6 +195,7 @@ export class CashflowService {
           from: 'wepay',
         });
       });
+      this.mailService.getMail(username, mail.id, { markSeen: true });
       fs.unlink(files[0], console.log);
       fs.unlink(savePath, console.log);
       return await this.create(orderList);

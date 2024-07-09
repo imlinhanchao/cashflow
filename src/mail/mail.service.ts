@@ -22,6 +22,13 @@ export class MailService {
     return this.mails[user]?.getUnread(count, options);
   }
 
+  getMail (user, uid, options: MailRecvOptions = { content: true }) {
+    if (!this.mails[user]) {
+      throw(new Error('Mail is not connected'));
+    }
+    return this.mails[user]?.getMail(uid, options);
+  }
+
   stop (user) {
     if (!this.mails[user]) {
       throw(new Error('Mail is not connected'));

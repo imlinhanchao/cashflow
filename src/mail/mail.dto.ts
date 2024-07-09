@@ -9,6 +9,7 @@ export class MailConfigDto {
 }
 
 export class MailRecvOptions {
+  markSeen?: boolean;
   content?: boolean;
   attachments?: boolean;
   saveAttachments?: (header: any, content) => Promise<{

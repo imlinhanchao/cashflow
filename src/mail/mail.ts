@@ -101,6 +101,7 @@ export class Mail {
     return new Promise((resolve, reject) => {
       const f = this.imap.fetch([id], {
         bodies: '',
+        markSeen: options.markSeen,
       });
       f.on('message', (msg) => {
         this.recvMessage(msg, options).then(resolve).catch(reject);
@@ -117,6 +118,7 @@ export class Mail {
       const mailsRecv = [];
       const f = this.imap.fetch(results, {
         bodies: '',
+        markSeen: options.markSeen,
       });
       f.on('message', (msg) => {
         mailsRecv.push(this.recvMessage(msg, options).then((mail) => {
@@ -139,11 +141,14 @@ export class Mail {
 
   private recvMessage (msg: Imap.ImapMessage, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
+      const mail: any = {};
+      msg.once('attributes', (attrs) => {
+        mail.id = attrs.uid;
+      });
       msg.on('body', (stream) => {
         const parser = new MailParser({
         });
         stream.pipe(parser);
-        const mail: any = {};
         options.content && parser.on('data', async (data) => {
           if (data.type === 'text') {
             mail.data = data.html;
@@ -166,6 +171,7 @@ export class Mail {
         });
         parser.once('close', () => {
           resolve(mail);
+          stream.resume();
         });
       });
     })
