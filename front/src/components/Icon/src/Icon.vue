@@ -27,8 +27,8 @@
   } from 'vue';
   import SvgIcon from './SvgIcon.vue';
   import Iconify from '@purge-icons/generated';
-  import { isString } from '/@/utils/is';
-  import { propTypes } from '/@/utils/propTypes';
+  import { isString } from '@/utils/is';
+  import { propTypes } from '@/utils/propTypes';
 
   const SVG_END_WITH_FLAG = '|svg';
   export default defineComponent({
@@ -115,7 +115,7 @@
     display: block;
     min-width: 1em;
     min-height: 1em;
-    background-color: @iconify-bg-color;
+    background-color: #5551;
     border-radius: 100%;
   }
 </style>

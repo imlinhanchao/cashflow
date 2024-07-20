@@ -1,25 +1,20 @@
-import type { UserConfig, ConfigEnv } from 'vite';
-import pkg from './package.json';
-import moment from 'moment';
-import { loadEnv } from 'vite';
 import { resolve } from 'path';
-import { generateModifyVars } from './build/generate/generateModifyVars';
-import { createProxy } from './build/vite/proxy';
+import type { ConfigEnv, UserConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
+import { OUTPUT_DIR } from './build/constant';
 import { wrapperEnv } from './build/utils';
 import { createVitePlugins } from './build/vite/plugin';
-import { OUTPUT_DIR } from './build/constant';
+import { createProxy } from './build/vite/proxy';
+import { theme } from 'ant-design-vue';
 
-function pathResolve(dir: string) {
+const { defaultAlgorithm, defaultSeed } = theme;
+
+const mapToken = defaultAlgorithm(defaultSeed);
+function pathResolve(dir) {
   return resolve(process.cwd(), '.', dir);
 }
 
-const { dependencies, devDependencies, name, version } = pkg;
-const __APP_INFO__ = {
-  pkg: { dependencies, devDependencies, name, version },
-  lastBuildTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-};
-
-export default ({ command, mode }: ConfigEnv): UserConfig => {
+export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
 
   const env = loadEnv(mode, root);
@@ -32,22 +27,25 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const isBuild = command === 'build';
 
   return {
-    base: VITE_PUBLIC_PATH,
     root,
+    base: VITE_PUBLIC_PATH,
     resolve: {
+      // 忽略后缀名的配置选项, 添加 .vue 选项时要记得原本默认忽略的选项也要手动写入
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json', '.less', '.css', '.mjs'],
+      // 添加别名
       alias: [
         {
           find: 'vue-i18n',
           replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
         },
-        // /@/xxxx => src/xxxx
+        // @/xxxx => src/xxxx
         {
-          find: /\/@\//,
+          find: /@\//,
           replacement: pathResolve('src') + '/',
         },
-        // /#/xxxx => types/xxxx
+        // #/xxxx => types/xxxx
         {
-          find: /\/#\//,
+          find: /#\//,
           replacement: pathResolve('types') + '/',
         },
       ],
@@ -56,34 +54,30 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       // Listening on all local IPs
       host: true,
       port: VITE_PORT,
+      strictPort: false,
+      open: false,
+      cors: true,
+      hmr: true,
       // Load proxy configuration from .env
       proxy: createProxy(VITE_PROXY),
+    },
+    esbuild: {
+      drop: VITE_DROP_CONSOLE ? ['console', 'debugger'] : [],
     },
     build: {
       target: 'es2015',
       outDir: OUTPUT_DIR,
-      terserOptions: {
-        compress: {
-          keep_infinity: true,
-          // Used to delete console in production environment
-          drop_console: VITE_DROP_CONSOLE,
-        },
-      },
-      // Turning off brotliSize display can slightly reduce packaging time
-      brotliSize: false,
       chunkSizeWarningLimit: 2000,
     },
     define: {
-      // setting vue-i18-next
       // Suppress warning
       __INTLIFY_PROD_DEVTOOLS__: false,
-      __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
 
     css: {
       preprocessorOptions: {
         less: {
-          modifyVars: generateModifyVars(),
+          modifyVars: mapToken,
           javascriptEnabled: true,
         },
       },
@@ -91,17 +85,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
 
     // The vite plugin used by the project. The quantity is large, so it is separately extracted and managed
     plugins: createVitePlugins(viteEnv, isBuild),
-
     optimizeDeps: {
-      // @iconify/iconify: The dependency is dynamically and virtually loaded by @purge-icons/generated, so it needs to be specified explicitly
-      include: [
-        '@iconify/iconify',
-        'ant-design-vue/es/locale/zh_CN',
-        'moment/dist/locale/zh-cn',
-        'ant-design-vue/es/locale/en_US',
-        'moment/dist/locale/eu',
-      ],
-      exclude: ['vue-demi'],
+      include: ['vue', 'vue-router', 'vue-types', '@vueuse/core', 'axios', 'echarts', '@iconify/iconify',],
     },
   };
-};
+});

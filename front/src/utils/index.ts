@@ -1,8 +1,7 @@
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router';
-import type { App, Plugin } from 'vue';
+import type { App, Component, Plugin } from 'vue';
 
-import { unref } from 'vue';
-import { isObject } from '/@/utils/is';
+import { isObject } from '@/utils/is';
 
 export const noop = () => {};
 
@@ -53,17 +52,6 @@ export function openWindow(
   window.open(url, target, feature.join(','));
 }
 
-// dynamic use hook props
-export function getDynamicProps<T, U>(props: T): Partial<U> {
-  const ret: Recordable = {};
-
-  Object.keys(props).map((key) => {
-    ret[key] = unref((props as Recordable)[key]);
-  });
-
-  return ret as Partial<U>;
-}
-
 export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormalized {
   if (!route) return route;
   const { matched, ...opt } = route;
@@ -79,7 +67,7 @@ export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormal
   };
 }
 
-export const withInstall = <T>(component: T, alias?: string) => {
+export const withInstall = <T extends Component>(component: T, alias?: string) => {
   const comp = component as any;
   comp.install = (app: App) => {
     app.component(comp.name || comp.displayName, component);

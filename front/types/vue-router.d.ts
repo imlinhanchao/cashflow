@@ -35,7 +35,7 @@ declare module 'vue-router' {
     // Never show in tab
     hideTab?: boolean;
     // Never show in menu
-    hideMenu?: boolean;
+    hidden?: boolean;
     isLink?: boolean;
     // only build for Menu
     ignoreRoute?: boolean;

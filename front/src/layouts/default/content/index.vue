@@ -1,51 +1,32 @@
 <template>
-  <div :class="[prefixCls, getLayoutContentMode]" v-loading="getOpenPageLoading && getPageLoading">
-    <PageLayout />
-  </div>
+  <a-layout-content>
+    <RouterView>
+      <template #default="{ Component, route }">
+        <transition
+          :name="
+            getTransitionName({
+              route,
+              openCache: true,
+              enableTransition: true,
+              cacheTabs: getCaches,
+              def: 'fade-slide',
+            })
+          "
+          mode="out-in"
+          appear
+        >
+          <keep-alive>
+            <component :is="Component" :key="route.fullPath" />
+          </keep-alive>
+        </transition>
+      </template>
+    </RouterView>
+  </a-layout-content>
 </template>
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import PageLayout from '/@/layouts/page/index.vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-  import { useTransitionSetting } from '/@/hooks/setting/useTransitionSetting';
-  import { useContentViewHeight } from './useContentViewHeight';
 
-  export default defineComponent({
-    name: 'LayoutContent',
-    components: { PageLayout },
-    setup() {
-      const { prefixCls } = useDesign('layout-content');
-      const { getOpenPageLoading } = useTransitionSetting();
-      const { getLayoutContentMode, getPageLoading } = useRootSetting();
+<script lang="ts" setup name="Content">
+  import router from '@/router';
+  import { getTransitionName } from './transition';
 
-      useContentViewHeight();
-      return {
-        prefixCls,
-        getOpenPageLoading,
-        getLayoutContentMode,
-        getPageLoading,
-      };
-    },
-  });
+  const getCaches = ref(router.getRoutes().filter(r => r.name && r.meta.noCache !== false).map(r => r.name as string));
 </script>
-<style lang="less">
-  @prefix-cls: ~'@{namespace}-layout-content';
-
-  .@{prefix-cls} {
-    position: relative;
-    flex: 1 1 auto;
-    min-height: 0;
-
-    &.fixed {
-      width: 1200px;
-      margin: 0 auto;
-    }
-
-    &-loading {
-      position: absolute;
-      top: 200px;
-      z-index: @page-loading-z-index;
-    }
-  }
-</style>

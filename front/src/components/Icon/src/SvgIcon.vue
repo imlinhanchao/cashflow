@@ -1,6 +1,6 @@
 <template>
   <svg
-    :class="[prefixCls, $attrs.class, spin && 'svg-icon-spin']"
+    :class="['svg-icon', $attrs.class, spin && 'svg-icon-spin']"
     :style="getStyle"
     aria-hidden="true"
   >
@@ -10,7 +10,6 @@
 <script lang="ts">
   import type { CSSProperties } from 'vue';
   import { defineComponent, computed } from 'vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
 
   export default defineComponent({
     name: 'SvgIcon',
@@ -33,7 +32,6 @@
       },
     },
     setup(props) {
-      const { prefixCls } = useDesign('svg-icon');
       const symbolId = computed(() => `#${props.prefix}-${props.name}`);
 
       const getStyle = computed((): CSSProperties => {
@@ -45,14 +43,14 @@
           height: s,
         };
       });
-      return { symbolId, prefixCls, getStyle };
+      return { symbolId, getStyle };
     },
   });
 </script>
 <style lang="less" scoped>
-  @prefix-cls: ~'@{namespace}-svg-icon';
+  @prefix-cls: ~'svg-icon';
 
-  .@{prefix-cls} {
+  .svg-icon {
     display: inline-block;
     overflow: hidden;
     vertical-align: -0.15em;

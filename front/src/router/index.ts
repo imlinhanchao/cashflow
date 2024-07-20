@@ -1,10 +1,7 @@
-import type { RouteRecordRaw } from 'vue-router';
-import type { App } from 'vue';
-
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import { basicRoutes } from './routes';
+import { App } from 'vue';
 
-// 白名单应该包含基本静态路由
 const WHITE_NAME_LIST: string[] = [];
 const getRouteNames = (array: any[]) =>
   array.forEach((item) => {
@@ -13,15 +10,11 @@ const getRouteNames = (array: any[]) =>
   });
 getRouteNames(basicRoutes);
 
-// app router
-export const router = createRouter({
+const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
   routes: basicRoutes as unknown as RouteRecordRaw[],
-  strict: true,
-  scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
-// reset router
 export function resetRouter() {
   router.getRoutes().forEach((route) => {
     const { name } = route;
@@ -35,3 +28,5 @@ export function resetRouter() {
 export function setupRouter(app: App<Element>) {
   app.use(router);
 }
+
+export default router;

@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
+    "dev": "cd front && npm run dev",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

@@ -1,13 +1,11 @@
 import type { Router, RouteRecordRaw } from 'vue-router';
 
-import { usePermissionStoreWithOut } from '/@/store/modules/permission';
+import { PageEnum } from '@/enums/pageEnum';
+import { useUserStoreWithOut } from '@/store/modules/user';
 
-import { PageEnum } from '/@/enums/pageEnum';
-import { useUserStoreWithOut } from '/@/store/modules/user';
+import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic';
 
-import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
-
-import { RootRoute } from '/@/router/routes';
+import { asyncRoutes, RootRoute } from '@/router/routes';
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN;
 
@@ -17,7 +15,6 @@ const whitePathList: PageEnum[] = [LOGIN_PATH];
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();
-  const permissionStore = usePermissionStoreWithOut();
   router.beforeEach(async (to, from, next) => {
     if (
       from.path === ROOT_PATH &&
@@ -34,14 +31,10 @@ export function createPermissionGuard(router: Router) {
     // Whitelist can be directly entered
     if (whitePathList.includes(to.path as PageEnum)) {
       if (to.path === LOGIN_PATH && token) {
-        const isSessionTimeout = userStore.getSessionTimeout;
         try {
-          await userStore.afterLoginAction();
-          if (!isSessionTimeout) {
-            next((to.query?.redirect as string) || '/');
-            return;
-          }
-        } catch {}
+          next((to.query?.redirect as string) || '/');
+          return;
+        } catch { }
       }
       next();
       return;
@@ -90,20 +83,15 @@ export function createPermissionGuard(router: Router) {
       }
     }
 
-    if (permissionStore.getIsDynamicAddedRoute) {
-      next();
-      return;
-    }
+    const routes = asyncRoutes;
 
-    const routes = await permissionStore.buildRoutesAction();
+    if (router.hasRoute('Home')) return next();
 
     routes.forEach((route) => {
       router.addRoute(route as unknown as RouteRecordRaw);
     });
 
     router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
-
-    permissionStore.setDynamicAddedRoute(true);
 
     if (to.name === PAGE_NOT_FOUND_ROUTE.name) {
       // 动态添加路由后，此处应当重定向到fullPath，否则会加载404页面内容
