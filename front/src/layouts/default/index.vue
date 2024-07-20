@@ -4,7 +4,7 @@
   import Content from './content/index.vue';
 </script>
 <template>
-  <a-layout>
+  <a-layout class="h-full">
     <Header />
     <Content />
     <Footer />

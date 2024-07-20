@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { PageEnum } from '@/enums/pageEnum';
   import { useUserStore } from '@/store/modules/user';
   import { notification } from 'ant-design-vue';
   import { FormInstance, Rule } from 'ant-design-vue/es/form';
@@ -25,9 +26,10 @@
     if (userInfo) {
       notification.success({
         message: '登录成功',
-        description: `欢迎回来: ${userInfo.realName}`,
+        description: `欢迎回来: ${userInfo.username}`,
         duration: 3,
       });
+      useRouter().replace(PageEnum.BASE_HOME);
     }
   }
 </script>

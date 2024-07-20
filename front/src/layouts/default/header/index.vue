@@ -1,13 +1,17 @@
-<script setup lang="ts">
+<script setup lang="ts" name="Header">
   import Logo from '@/layouts/components/logo/index.vue';
   import Menu from '@/layouts/components/menu/index.vue';
+  import User from '@/layouts/components/user/index.vue';
 </script>
 
 <template>
-  <a-layout-header class="!bg-transparent !px-2">
-    <section class="h-full flex space-x-2">
+  <a-layout-header class="!bg-transparent !px-2 flex justify-between items-center">
+    <section class="h-full flex space-x-2 items-center">
       <Menu @menu-click="$router.push($event)" />
       <Logo />
+    </section>
+    <section>
+      <User />
     </section>
   </a-layout-header>
 </template>

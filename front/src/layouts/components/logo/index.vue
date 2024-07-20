@@ -1,14 +1,12 @@
 <script setup lang="ts" name="Logo">
 import { PageEnum } from '@/enums/pageEnum';
 import { useGlobSetting } from '@/hooks/setting';
-import { useUserStore } from '@/store/modules/user';
 
   const { title } = useGlobSetting();
 
-  const userStore = useUserStore();
   const router = useRouter();
   function goHome() {
-    router.push(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);
+    router.push(PageEnum.BASE_HOME);
   }
 </script>
 

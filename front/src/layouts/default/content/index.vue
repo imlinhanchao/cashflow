@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content>
+  <a-layout-content class="h-full p-5">
     <RouterView>
       <template #default="{ Component, route }">
         <transition
