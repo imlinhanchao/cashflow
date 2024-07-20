@@ -1,19 +1,19 @@
 import { LAYOUT } from '@/router/constant';
 export default [
   {
-    path: '/sync',
+    path: '/data',
     component: LAYOUT,
-    redirect: '/sync/data',
+    redirect: '/data/sync',
     meta: {
-      orderNo: 0,
+      orderNo: 1,
       icon: 'mdi:cloud-sync',
       title: '同步账单',
     },
     children: [
       {
-        path: 'data',
+        path: 'sync',
         name: 'DataSync',
-        component: () => import('/@/views/async/index.vue'),
+        component: () => import('/@/views/sync/index.vue'),
         meta: {
           title: '同步账单',
         },

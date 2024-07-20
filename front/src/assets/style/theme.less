@@ -56,3 +56,44 @@ html[data-theme='light'] {
     color: rgb(0 0 0 / 90%);
   }
 }
+
+@font-face {
+  font-family: HarmonyOS;
+  src:
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Regular-J.woff2) format('woff2'),
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Regular-J.woff) format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: HarmonyOS;
+  src:
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Medium-J.woff2) format('woff2'),
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Medium-J.woff) format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: HarmonyOS;
+  src:
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Bold-J.woff2) format('woff2'),
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Bold-J.woff) format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: HarmonyOS;
+  src:
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Black-J.woff2) format('woff2'),
+    url(//resource.hellofont.cn/font/HarmonyOS_SansSC_Black-J.woff) format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:where(.css-dev-only-do-not-override-19iuou)[class^="ant-layout"], :where(.css-dev-only-do-not-override-19iuou)[class*=" ant-layout"] {
+  font-family: HarmonyOS, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}

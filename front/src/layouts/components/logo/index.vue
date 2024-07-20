@@ -14,7 +14,7 @@ import { useUserStore } from '@/store/modules/user';
 
 <template>
   <div class="anticon h-full py-3" @click="goHome">
-    <img class="h-[90%]" src="../../../assets/images/logo.svg" />
+    <Icon icon="ph:coin-vertical-fill" :size="30" />
     <div class="ml-2 truncate md:opacity-100 text-2xl font-bold">
       {{ title }}
     </div>

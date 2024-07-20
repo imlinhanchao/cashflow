@@ -11,10 +11,32 @@
   }
 
   const menus = computed(() => asyncRoutes.filter((route) => !route.meta?.hidden));
+  function getActiveMenu() {
+    menus.value.forEach((menu) => {
+      if (menu.children && menu.children.length > 1) {
+        menu.children.forEach((child) => {
+          if (child.name === route.name && !route.meta.hidden) {
+            selectedKeys.value = [child.path];
+            openKeys.value = [menu.path];
+          } else if (child.name === route.name) {
+            selectedKeys.value = [menu.path];
+            openKeys.value = [menu.path];
+          }
+        });
+      } else if (menu.name === route.name || menu.children?.[0]?.name === route.name) {
+        selectedKeys.value = [menu.path];
+      }
+    });
+  }
 
+  const route = useRoute();
   const selectedKeys = ref<string[]>([]);
   const openKeys = ref<string[]>([]);
   const defaultSelectedKeys = ref<string[]>([]);
+
+  onMounted(() => {
+    getActiveMenu();
+  })
 
   function handleOpenChange(keys: string[]) {
     openKeys.value = keys;
@@ -24,6 +46,7 @@
   function handleMenuClick({ key }) {
     selectedKeys.value = [key];
     emit('menuClick', key);
+    collapsed.value = false;
   }
 </script>
 

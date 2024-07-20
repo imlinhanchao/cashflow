@@ -6,7 +6,7 @@
 <template>
   <a-layout-header class="!bg-transparent !px-2">
     <section class="h-full flex space-x-2">
-      <Menu />
+      <Menu @menu-click="$router.push($event)" />
       <Logo />
     </section>
   </a-layout-header>

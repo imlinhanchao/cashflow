@@ -13,7 +13,7 @@ Object.keys(modules).forEach((key) => {
   routeModuleList.push(...modList);
 });
 
-export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
+export const asyncRoutes = [...routeModuleList, PAGE_NOT_FOUND_ROUTE];
 
 export const RootRoute: AppRouteRecordRaw = {
   path: '/',
