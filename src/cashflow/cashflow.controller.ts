@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CashflowDto, QueryDto, SyncDto } from './cashflow.dto';
 import { CashflowService } from './cashflow.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserDto } from 'src/users/users.dto';
 import { permissions } from 'src/core/Error';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { decode } from 'iconv-lite';
 @Controller('cashflow')
 @ApiTags('Cashflow')
 export class CashflowController {
@@ -65,4 +67,15 @@ export class CashflowController {
     return this.cashflowService.analysis(user.username, sync);
   }
 
+  @Post('analysisFile')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: '同步文件交易记录' })
+  analysisFile(@Request() { user }: { user: UserDto }, @UploadedFile() file: Express.Multer.File, @Body() sync: SyncDto) {
+    if (sync.type == 'alipay') {
+      return this.cashflowService.readAndSave(decode(file.buffer, 'gb2312').split('\n'), user.username, sync.type);
+    } else {
+      return this.cashflowService.readAndSave(file.buffer.toString('utf-8').split('\n'), user.username, sync.type);
+    }
+  }
 }

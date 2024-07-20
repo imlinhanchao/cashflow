@@ -100,6 +100,63 @@ export class CashflowService {
     }
   }
 
+  async analysisFile(file: string, username: string, from: string): Promise<Cashflow[]> {
+    if (from == 'alipay') {
+      return await this.readAndSave(decode(fs.readFileSync(file), 'gb2312').split('\n'), username, from);
+    } else {
+      return await this.readAndSave(fs.readFileSync(file).toString().split('\n'), username, from);
+    }
+  }
+  async readAndSave(fileLines: string[], username: string, from: string): Promise<Cashflow[]> {
+    const orderList: CashflowDto[] = []
+    let isStart = false;
+    if (from == 'alipay') {
+      fileLines.forEach((line) => {
+        if (line.startsWith('交易时间')) return isStart = true;
+        if (!isStart || !line) return;
+        const [transactionTime, category, counterparty, _, description, type, amount, payment, status, orderNumber, merchantNumber, remark] = line.split(',');
+        orderList.push({
+          username,
+          type: type.trim(),
+          counterparty: counterparty.trim(),
+          description: description.trim(),
+          payment: payment.trim(),
+          amount: amount && parseFloat(amount) || 0,
+          status: status.trim(),
+          category: category.trim(),
+          orderNumber: orderNumber.trim(),
+          merchantNumber: merchantNumber.trim(),
+          transactionTime: transactionTime.trim(),
+          remark: remark.trim(),
+          from: 'alipay',
+        });
+      });
+    } else if (from == 'wepay'){
+      fileLines.forEach((line) => {
+        if (line.startsWith('交易时间')) return isStart = true;
+        if (!isStart || !line) return;
+        const [transactionTime, category, counterparty, description, type, amount, payment, status, orderNumber, merchantNumber, remark] = line.split(',');
+        orderList.push({
+          username,
+          type: type.trim(),
+          counterparty: counterparty.trim(),
+          description: description.trim(),
+          payment: payment.trim(),
+          amount: amount && parseFloat(amount) || 0,
+          status: status.trim(),
+          category: category.trim(),
+          orderNumber: orderNumber.trim(),
+          merchantNumber: merchantNumber.trim(),
+          transactionTime: transactionTime.trim(),
+          remark: remark.trim(),
+          from: 'wepay',
+        });
+      });
+    }
+
+    return await this.create(orderList);
+  }
+
   async analysis(username, sync: SyncDto) {
     let mails =  await this.mailService.getUnread(username, 10);
     if (sync.type == 'alipay' && Array.isArray(mails)) {
@@ -112,7 +169,7 @@ export class CashflowService {
         saveAttachments: (headers, data) => {
           return new Promise((resolve, reject) => {
             if (headers.subject.includes('支付宝交易流水')) {
-              let savePath = path.join(__dirname, 'alipay');
+              let savePath = path.join(__dirname, sync.type);
               fs.mkdirSync(savePath, { recursive: true });
               savePath = path.join(savePath, data.filename);
               data.content.pipe(fs.createWriteStream(savePath));
@@ -130,34 +187,17 @@ export class CashflowService {
       if (!Array.isArray(mails)) return [];
       mail = mails.find((mail) => mail.headers.subject.includes('支付宝交易流水'));
       if (mail.attachments.length == 0) throw new Error('未找到附件');
-      const files = await extractZip(mail.attachments.savePath, sync.password, path.join(__dirname, 'alipay'));
+
+      const files = await extractZip(mail.attachments.savePath, sync.password, path.join(__dirname, sync.type));
       if (files.length == 0) throw new Error('解压失败');
-      let isStart = false;
-      const orderList: CashflowDto[] = []
-      decode(fs.readFileSync(files[0]), 'gb2312').split('\n').forEach((line) => {
-        if (line.startsWith('交易时间')) return isStart = true;
-        if (!isStart || !line) return;
-        const [transactionTime, category, counterparty, _, description, type, amount, payment, status, orderNumber, merchantNumber, remark] = line.split(',');
-        orderList.push({
-          username,
-          type,
-          counterparty,
-          description,
-          payment,
-          amount: amount && parseFloat(amount) || 0,
-          status,
-          category,
-          orderNumber,
-          merchantNumber,
-          transactionTime,
-          remark,
-          from: 'alipay',
-        });
-      });
+      const cashflows = await this.analysisFile(files[0], username, sync.type);
+
       this.mailService.getMail(username, mail.id, { markSeen: true });
+
       fs.unlink(files[0], console.log);
       fs.unlink(mail.attachments.savePath, console.log);
-      return await this.create(orderList);
+
+      return cashflows;
     } else if (sync.type == 'wepay' && Array.isArray(mails)) {
       let mail = mails.find((mail) => mail.headers.subject.includes('微信支付-账单流水'));
       if (!mail) return [];
@@ -166,39 +206,22 @@ export class CashflowService {
         content: true,
       });
       if (!Array.isArray(mails)) return [];
+
       mail = mails.find((mail) => mail.headers.subject.includes('微信支付-账单流水'));
-      let mat = mail.data.match(/"(https:\/\/download.bill.weixin.qq.com[^"]*?)"/);
+      const mat = mail.data.match(/"(https:\/\/download.bill.weixin.qq.com[^"]*?)"/);
       if (!mat) throw new Error('未找到下载链接');
       const url = mat[1];
-      const savePath = await downloadByUrl(url, path.join(__dirname, 'wepay'));
-      const files = await extractZip(savePath, sync.password, path.join(__dirname, 'wepay'));
+      const savePath = await downloadByUrl(url, path.join(__dirname, sync.type));
+
+      const files = await extractZip(savePath, sync.password, path.join(__dirname, sync.type));
       if (files.length == 0) throw new Error('解压失败');
-      let isStart = false;
-      const orderList: CashflowDto[] = []
-      fs.readFileSync(files[0]).toString().split('\n').forEach((line) => {
-        if (line.startsWith('交易时间')) return isStart = true;
-        if (!isStart || !line) return;
-        const [transactionTime, category, counterparty, description, type, amount, payment, status, orderNumber, merchantNumber, remark] = line.split(',');
-        orderList.push({
-          username,
-          type,
-          counterparty,
-          description,
-          payment,
-          amount: amount && parseFloat(amount) || 0,
-          status,
-          category,
-          orderNumber,
-          merchantNumber,
-          transactionTime,
-          remark,
-          from: 'wepay',
-        });
-      });
+      const cashflows = await this.analysisFile(files[0], username, sync.type);
+
       this.mailService.getMail(username, mail.id, { markSeen: true });
+
       fs.unlink(files[0], console.log);
       fs.unlink(savePath, console.log);
-      return await this.create(orderList);
+      return cashflows;
 
     }
     return [];

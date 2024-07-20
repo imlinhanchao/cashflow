@@ -85,5 +85,5 @@ export class SyncDto {
   @ApiProperty({ name: 'type', description: '同步类型', example: 'alipay' })
   type: 'alipay' | 'wepay';
   @ApiProperty({ name: 'password', description: '解压密码', example: '123456' })
-  password: string;
+  password?: string;
 }
