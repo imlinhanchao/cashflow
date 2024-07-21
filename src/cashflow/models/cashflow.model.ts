@@ -1,7 +1,20 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
 import { CommonModel, ID_TYPE } from 'src/core/models/common.model';
 
-@Table
+@Table({
+  indexes: [
+    {
+      fields: ['username']
+    }, {
+      unique: true,
+      fields: ['from', 'orderNumber']
+    }, {
+      fields: ['category']
+    }, {
+      fields: ['counterparty']
+    }
+  ]
+})
 export class Cashflow extends CommonModel {
   @Column({ comment: '用户ID', defaultValue: '', type: ID_TYPE })
   username: string;
@@ -14,7 +27,7 @@ export class Cashflow extends CommonModel {
 
   @Column({ comment: '商品说明', defaultValue: '' })
   description: string;
-
+suoyi
   @Column({ comment: '支付方式', defaultValue: '' })
   payment: string;
 

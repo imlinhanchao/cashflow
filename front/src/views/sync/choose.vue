@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { FormInstance, UploadProps } from 'ant-design-vue';
-  import { SyncModel } from '.';
+  import { SyncModel } from './index.ts';
 import { createLocalStorage } from '@/utils/cache';
 
   const props = withDefaults(

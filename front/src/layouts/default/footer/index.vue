@@ -2,7 +2,7 @@
 
 <template>
   <a-layout-footer class="!p-0">
-    <p>
+    <p class="text-gray-300">
       Copyright © {{ new Date().getFullYear() }}
       <br />
       All Rights Reserved. Power by <a href="https://github.com/imlinhanchao/cashflow" target="_blank">Cashflow</a> Open Source.

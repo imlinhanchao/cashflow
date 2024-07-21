@@ -50,7 +50,7 @@
     "build/**/*.ts",
     "build/**/*.d.ts",
     "vite.config.ts"
-  ],
+, "src/views/sync/index.ts"  ],
   "exclude": [
     "node_modules",
     "dist",

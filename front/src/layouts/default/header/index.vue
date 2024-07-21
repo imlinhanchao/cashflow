@@ -6,12 +6,8 @@
 
 <template>
   <a-layout-header class="!bg-transparent !px-2 flex justify-between items-center">
-    <section class="h-full flex space-x-2 items-center">
-      <Menu @menu-click="$router.push($event)" />
-      <Logo />
-    </section>
-    <section>
-      <User />
-    </section>
+    <Menu @menu-click="$router.push($event)" />
+    <Logo />
+    <User />
   </a-layout-header>
 </template>

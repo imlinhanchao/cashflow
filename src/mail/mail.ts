@@ -8,7 +8,7 @@ export class Mail {
 
   }
 
-  async connect (config: MailConfigDto) {
+  async connect(config: MailConfigDto) {
     return new Promise((resolve, reject) => {
       try {
         this.config = config;
@@ -33,11 +33,11 @@ export class Mail {
     });
   }
 
-  stop () {
+  stop() {
     return this.imap.end();
   }
 
-  async getUnread (n: number=-1, options: MailRecvOptions = { }) {
+  async getUnread(n = -1, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
         return reject('Mail is not connected');
@@ -58,7 +58,7 @@ export class Mail {
   }
 
   // 搜索最新的n封主题包含text的邮件
-  async searchLatest (text: string, n: number, options: MailRecvOptions = {}) {
+  async searchLatest(text: string, n: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
         return reject('Mail is not connected');
@@ -78,7 +78,7 @@ export class Mail {
   }
 
   // 获取最新n封邮件
-  getLatest (n: number, options: MailRecvOptions = {}) {
+  getLatest(n: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
         return reject('Mail is not connected');
@@ -97,22 +97,39 @@ export class Mail {
     });
   }
 
-  getMail (id: number, options: MailRecvOptions = {}) {
+  getMail(id: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
-      const f = this.imap.fetch([id], {
-        bodies: '',
-        markSeen: options.markSeen,
-      });
-      f.on('message', (msg) => {
-        this.recvMessage(msg, options).then(resolve).catch(reject);
-      });
-      f.once('error', (err) => {
-        reject(err);
+      if (!this.imap) {
+        return reject('Mail is not connected');
+      }
+      this.imap.openBox('INBOX', false, (err) => {
+        if (err) {
+          reject(err);
+        }
+        const f = this.imap.fetch([id], {
+          bodies: '',
+          markSeen: options.markSeen,
+        });
+        f.on('message', (msg) => {
+          this.recvMessage(msg, options).then(resolve).catch(reject);
+        });
+        f.once('error', (err) => {
+          reject(err);
+        });
+        if (options.markSeen) {
+          this.imap.setFlags([id], ['\\Seen'], function(err) {
+            if (!err) {
+              console.log("marked as read");
+            } else {
+              console.log(JSON.stringify(err, null, 2));
+            }
+          });
+        }
       });
     });
   }
 
-  private fetchResult (results: number[], options: MailRecvOptions = {}) {
+  private fetchResult(results: number[], options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (results.length === 0) return resolve([]);
       const mailsRecv = [];
@@ -139,7 +156,7 @@ export class Mail {
     });
   }
 
-  private recvMessage (msg: Imap.ImapMessage, options: MailRecvOptions = {}) {
+  private recvMessage(msg: Imap.ImapMessage, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       const mail: any = {};
       msg.once('attributes', (attrs) => {
@@ -177,7 +194,7 @@ export class Mail {
     })
   }
 
-  private parserMail (buffer: string) {
+  private parserMail(buffer: string) {
     return new Promise((resolve, reject) => {
       simpleParser(buffer, (err, parsed: ParsedMail) => {
         if (err) {

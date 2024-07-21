@@ -8,6 +8,7 @@ import { Cashflow } from './models/cashflow.model';
 import { MailService } from 'src/mail/mail.service';
 import { downloadByUrl, extractZip } from './utils';
 import { decode } from 'iconv-lite';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class CashflowService {
@@ -54,6 +55,17 @@ export class CashflowService {
     return cashflow;
   }
 
+  async findOrderNumbers(orderNumbers: string[]): Promise<Cashflow[]> {
+    const cashflows = await this.cashflowModel.findAll({
+      where: {
+        orderNumber: {
+          [Op.in]: orderNumbers,
+        }
+      }
+    })
+    return cashflows;
+  }
+
   async query(data): Promise<QueryRspDto<Cashflow>> {
     // 分页查询，按照交易时间倒序
     const { page, size, ...query } = data;
@@ -93,7 +105,7 @@ export class CashflowService {
       data: await this.cashflowModel.findAll({
         where: query,
         offset: (page - 1) * size,
-        limit: size,
+        limit: size * 1,
         order: [['transactionTime', 'DESC']],
       }),
       total,
@@ -154,20 +166,22 @@ export class CashflowService {
       });
     }
 
-    return await this.create(orderList);
+    const exist = await this.findOrderNumbers(orderList.map((order) => order.orderNumber)).then((data) => data.map((order) => order.orderNumber));
+
+    return await this.create(orderList.filter((order) => !exist.includes(order.orderNumber)));
   }
 
   async analysis(username, sync: SyncDto) {
-    let mails =  await this.mailService.getUnread(username, 10);
+    let mails =  await this.mailService.getUnread(username);
     if (sync.type == 'alipay' && Array.isArray(mails)) {
       let mail = mails.find((mail) => mail.headers.subject.includes('支付宝交易流水'));
-      if (!mail) return [];
-      if (!sync.password) return mail;
+      if (!mail) return null;
+      if (!sync.password) return mail.headers;
       mails =  await this.mailService.getUnread(username, 10, {
         content: true,
         attachments: true,
         saveAttachments: (headers, data) => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve, _reject) => {
             if (headers.subject.includes('支付宝交易流水')) {
               let savePath = path.join(__dirname, sync.type);
               fs.mkdirSync(savePath, { recursive: true });
@@ -200,12 +214,12 @@ export class CashflowService {
       return cashflows;
     } else if (sync.type == 'wepay' && Array.isArray(mails)) {
       let mail = mails.find((mail) => mail.headers.subject.includes('微信支付-账单流水'));
-      if (!mail) return [];
-      if (!sync.password) return mail;
+      if (!mail) return null;
+      if (!sync.password) return mail.headers;
       mails =  await this.mailService.getUnread(username, 10, {
         content: true,
       });
-      if (!Array.isArray(mails)) return [];
+      if (!Array.isArray(mails)) return null;
 
       mail = mails.find((mail) => mail.headers.subject.includes('微信支付-账单流水'));
       const mat = mail.data.match(/"(https:\/\/download.bill.weixin.qq.com[^"]*?)"/);

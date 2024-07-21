@@ -27,7 +27,7 @@ export function downloadByUrl(url: string, saveDir: string): Promise<string> {
       }
 
       const contentDisposition = res.headers.get('content-disposition');
-      let filename = contentDisposition && contentDisposition.match(/filename="*([^";]+)"*;*/)?.[1];
+      const filename = contentDisposition && contentDisposition.match(/filename="*([^";]+)"*;*/)?.[1];
 
       const filePath = path.join(saveDir, filename && decodeURIComponent(filename) || `file-${Date.now()}`);
 

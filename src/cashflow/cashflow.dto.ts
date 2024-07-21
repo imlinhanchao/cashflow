@@ -50,7 +50,7 @@ export class QueryDto {
   @ApiProperty({ name: 'size', description: '每页数量', example: 10 })
   size: number;
   @ApiProperty({ name: 'username', description: '用户名', example: '047f9a52-68e4-4300-8748-70f71267413e' })
-  username: string;
+  username?: string;
   @ApiProperty({ name: 'type', description: '收/支', example: '支出' })
   type?: string;
   @ApiProperty({ name: 'counterparty', description: '交易对方', example: '天虹' })
