@@ -71,9 +71,10 @@ export class CashflowService {
     return this.cashflowModel.findAll({
       where: {
         username: query.username,
-        [query.key]: {
-          [Op.like]: `%${query.value}%`,
-        },
+        [Op.and]: [
+          { [query.key]: { [Op.like]: `%${query.value}%` } },
+          { [query.key]: { [Op.not]: `` } }
+        ],
       },
       attributes: [
         [query.key, 'value'],
@@ -101,22 +102,27 @@ export class CashflowService {
     }
     if (query.remark) {
       query.remark = {
-        $like: `%${query.remark}%`,
+        [Op.like]: `%${query.remark}%`,
+      };
+    }
+    if (query.payment) {
+      query.payment = {
+        [Op.like]: `%${query.payment}%`,
       };
     }
     if (query.category) {
       query.category = {
-        $like: `%${query.category}%`,
+        [Op.like]: `%${query.category}%`,
       };
     }
     if (query.counterparty) {
       query.counterparty = {
-        $like: `%${query.counterparty}%`,
+        [Op.like]: `%${query.counterparty}%`,
       };
     }
     if (query.description) {
       query.description = {
-        $like: `%${query.description}%`,
+        [Op.like]: `%${query.description}%`,
       };
     }
 
