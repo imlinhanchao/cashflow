@@ -5,7 +5,7 @@ import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic';
 import { PageEnum } from '@/enums/pageEnum';
 const modules = import.meta.glob<any>('./modules/**/*.ts', { eager: true });
 
-const routeModuleList: AppRouteModule[] = [];
+export const routeModuleList: AppRouteModule[] = [];
 
 Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {};

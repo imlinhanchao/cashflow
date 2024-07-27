@@ -9,24 +9,23 @@ import { configCompressPlugin } from './compress';
 import { configHtmlPlugin } from './html';
 import { autoImports } from './autoImports';
 import { configSvgIconsPlugin } from './svgSprite';
+import DevTools from 'vite-plugin-vue-devtools';
 
 export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
   const { VITE_LEGACY, VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE } = viteEnv;
 
   const vitePlugins: (PluginOption | PluginOption[])[] = [
-    // VueDevTools(),
     // have to
     vue(),
     vueJsx(),
-    // vue3.3前导入类型报错的临时解决方案
-    // https://github.com/vuejs/core/issues/4294
-    // vueTypeImports(),
     // support name
     vueSetupExtend(),
     // enhance Vite builtin dynamic import
     autoImports(),
     // unocss
     UnoCSS(),
+    // vue-devtools
+    DevTools()
   ];
 
   // TODO 循环引用报错临时解决方案，等待vite升级后删除

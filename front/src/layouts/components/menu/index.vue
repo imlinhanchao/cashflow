@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { asyncRoutes } from '@/router/routes';
+  import { routeModuleList } from '@/router/routes';
   import SubMenuItem from './SubMenuItem.vue';
+  import { transformRouteToMenu } from '@/helper/menuHelper';
 
   const collapsed = ref(false);
   const toggleCollapsed = () => {
@@ -10,7 +11,7 @@
     collapsed.value = false;
   }
 
-  const menus = computed(() => asyncRoutes.filter((route) => !route.meta?.hidden));
+  const menus = computed(() => transformRouteToMenu(routeModuleList));
   function getActiveMenu() {
     menus.value.forEach((menu) => {
       if (menu.children && menu.children.length > 1) {
@@ -36,7 +37,7 @@
 
   onMounted(() => {
     getActiveMenu();
-  })
+  });
 
   function handleOpenChange(keys: string[]) {
     openKeys.value = keys;
@@ -74,7 +75,13 @@
         :subMenuOpenDelay="0.2"
         class="!border-none"
       >
-        <SubMenuItem :item="item" v-for="item in menus" :key="item.name" :name="item.meta.title" :icon="item.meta.icon" />
+        <SubMenuItem
+          :item="item"
+          v-for="item in menus"
+          :key="item.name"
+          :name="item.meta.title"
+          :icon="item.meta.icon"
+        />
       </a-menu>
     </a-drawer>
   </section>
