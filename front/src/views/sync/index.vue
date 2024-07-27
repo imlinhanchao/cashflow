@@ -37,27 +37,33 @@
     if (data.way == 'email') {
       syncText.value = '监听邮件中';
       await waitBillMail;
-    }
-    await modal.confirm({
-      title: '填写对账单解压密码',
-      content: () => (<Form model={data} label-col={{ span: 0 }} wrapper-col={{ span: 24 }} class="my-5">
-        <FormItem>
-          <InputPassword v-model:value={data.archive}  allow-clear placeholder="解压密码" />
-        </FormItem>
-      </Form>),
-      async onOk() {
-        syncText.value = '导入数据中';
-        syncData().then(count => {
-          billCount.value = count;
-          currentStep.value = 2;
-        }).finally(() => {
+      if(!(await modal.confirm({
+        title: '填写对账单解压密码',
+        content: () => (<Form model={data} label-col={{ span: 0 }} wrapper-col={{ span: 24 }} class="my-5">
+          <FormItem>
+            <InputPassword v-model:value={data.archive}  allow-clear placeholder="解压密码" />
+          </FormItem>
+        </Form>),
+        async onOk() {
+          return true;
+        },
+        async onCancel() {
           loading.value = false;
-          delete stepItems[1].icon;
-          data.archive = '';
-          syncText.value = '开始导入';
-        });
-      }
-    })
+          return false;
+        },
+      }))){return false;}
+    }
+    syncText.value = '导入数据中';
+    syncData().then(count => {
+      billCount.value = count;
+      currentStep.value = 2;
+    }).finally(() => {
+      loading.value = false;
+      delete stepItems[1].icon;
+      data.archive = '';
+      delete data.files;
+      syncText.value = '开始导入';
+    });
   }
 
   onMounted(() => {

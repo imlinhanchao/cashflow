@@ -1,4 +1,4 @@
 export interface QueryRspDto<T> {
-  data: T[],
+  rows: T[],
   total: number,
 }

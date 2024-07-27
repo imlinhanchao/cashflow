@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <a-layout-footer class="!p-0">
+  <a-layout-footer class="!px-0 !py-2">
     <p class="text-gray-300">
       Copyright © {{ new Date().getFullYear() }}
       <br />

@@ -6,7 +6,7 @@ export class SyncModel {
   email?: string;
   password?: string;
   archive?: string;
-  file?: File;
+  files?: File[];
   isRemember: boolean = false;
 }
 
@@ -14,7 +14,7 @@ export function useSyncData(config: SyncModel) {
   let isMailConnected = false;
 
   async function syncData() {
-    const list = await (config.way == 'email' ? analysis : analysisFile)({ password: config.archive, type: config.from, file: config.file });
+    const list = await (config.way == 'email' ? analysis : analysisFile)({ password: config.archive, type: config.from, files: config.files });
     return list.length;
   }
 

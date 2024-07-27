@@ -15,8 +15,6 @@ export default [
         name: 'DataList',
         component: () => import('/@/views/list/index.vue'),
         meta: {
-          order: 2,
-          icon: 'solar:bill-list-bold',
           title: '账单历史',
         },
       },

@@ -67,7 +67,7 @@ export class UsersService {
     });
 
     return {
-      data: await this.userModel.findAll({
+      rows: await this.userModel.findAll({
         where: query,
         offset: (page - 1) * size,
         limit: size,

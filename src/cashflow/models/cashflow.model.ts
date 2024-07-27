@@ -1,5 +1,5 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
-import { CommonModel, ID_TYPE } from 'src/core/models/common.model';
+import { CommonModel } from 'src/core/models/common.model';
 
 @Table({
   indexes: [
@@ -16,7 +16,7 @@ import { CommonModel, ID_TYPE } from 'src/core/models/common.model';
   ]
 })
 export class Cashflow extends CommonModel {
-  @Column({ comment: '用户ID', defaultValue: '', type: ID_TYPE })
+  @Column({ comment: '用户ID', defaultValue: '' })
   username: string;
 
   @Column({ comment: '收/支', defaultValue: '' })
@@ -46,7 +46,7 @@ suoyi
   @Column({ comment: '商家订单号', defaultValue: '' })
   merchantNumber: string;
 
-  @Column({ comment: '交易时间', type: DataType.TIME })
+  @Column({ comment: '交易时间', type: DataType.DATE })
   transactionTime: string;
 
   @Column({ comment: '备注', defaultValue: '' })

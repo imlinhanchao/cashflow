@@ -15,8 +15,6 @@ export default [
         name: 'DataSync',
         component: () => import('/@/views/sync/index.vue'),
         meta: {
-          order: 1,
-          icon: 'mdi:cloud-sync',
           title: '同步账单',
         },
       },

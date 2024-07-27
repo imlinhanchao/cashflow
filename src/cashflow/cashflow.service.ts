@@ -3,12 +3,13 @@ import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { QueryRspDto } from 'src/core/Dto/common.dto';
-import { CashflowDto, SyncDto } from './cashflow.dto';
+import { CashflowDto, EnumDto, SyncDto } from './cashflow.dto';
 import { Cashflow } from './models/cashflow.model';
 import { MailService } from 'src/mail/mail.service';
 import { downloadByUrl, extractZip } from './utils';
 import { decode } from 'iconv-lite';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
+import { formatDateTime } from 'src/utils';
 
 @Injectable()
 export class CashflowService {
@@ -66,24 +67,46 @@ export class CashflowService {
     return cashflows;
   }
 
+  async enumField(query: EnumDto) {
+    return this.cashflowModel.findAll({
+      where: {
+        username: query.username,
+        [query.key]: {
+          [Op.like]: `%${query.value}%`,
+        },
+      },
+      attributes: [
+        [query.key, 'value'],
+        [Sequelize.fn('COUNT', Sequelize.col(query.key)), 'total']
+      ],
+      group: query.key,
+      order: [[Sequelize.fn('COUNT', Sequelize.col(query.key)), 'DESC']],
+      offset: 0,
+      limit: query.size * 1,
+    })
+  }
+
   async query(data): Promise<QueryRspDto<Cashflow>> {
     // 分页查询，按照交易时间倒序
     const { page, size, ...query } = data;
     if (query.transactionTimeStart || query.transactionTimeEnd) {
-      query.transactionTime = {
-        $gte: query.transactionTimeStart,
-        $lte: query.transactionTimeEnd,
-      };
+      query.transactionTime = {}
+      query.transactionTimeStart && (query.transactionTime[Op.gte] = query.transactionTimeStart);
+      query.transactionTimeEnd && (query.transactionTime[Op.lte] = query.transactionTimeEnd);
     }
     if (query.amountMin || query.amountMax) {
-      query.amount = {
-        $gte: query.amountMin,
-        $lte: query.amountMax,
-      };
+      query.amount = {}
+      query.amountMin && (query.amount[Op.gte] = query.amountMin);
+      query.amountMax && (query.amount[Op.lte] = query.amountMax);
     }
     if (query.remark) {
       query.remark = {
         $like: `%${query.remark}%`,
+      };
+    }
+    if (query.category) {
+      query.category = {
+        $like: `%${query.category}%`,
       };
     }
     if (query.counterparty) {
@@ -97,17 +120,30 @@ export class CashflowService {
       };
     }
 
+    const keys = ['username', 'type', 'counterparty', 'description', 'payment', 'amount', 'status', 'category', 'orderNumber', 'merchantNumber', 'transactionTime', 'remark', 'from'];
+    Object.keys(query).forEach((key) => {
+      if (!keys.includes(key) || !query[key]) {
+        delete query[key];
+      }
+    });
+
     const total = await this.cashflowModel.count({
       where: query,
     });
 
+    const rows = (await this.cashflowModel.findAll({
+      where: query,
+      offset: (page - 1) * size,
+      limit: size * 1,
+      order: [['transactionTime', 'DESC']],
+    })).map((cashflow) => cashflow.dataValues);
+
+    rows.forEach(d => {
+      d.transactionTime = formatDateTime(d.transactionTime);
+    })
+
     return {
-      data: await this.cashflowModel.findAll({
-        where: query,
-        offset: (page - 1) * size,
-        limit: size * 1,
-        order: [['transactionTime', 'DESC']],
-      }),
+      rows,
       total,
     }
   }
