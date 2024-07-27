@@ -224,6 +224,7 @@ export class CashflowService {
       mail = mails.find((mail) => mail.headers.subject.includes('微信支付-账单流水'));
       const mat = mail.data.match(/"(https:\/\/download.bill.weixin.qq.com[^"]*?)"/);
       if (!mat) throw new Error('未找到下载链接');
+      fs.mkdirSync(path.join(__dirname, sync.type), { recursive: true });
       const url = mat[1];
       const savePath = await downloadByUrl(url, path.join(__dirname, sync.type));
 

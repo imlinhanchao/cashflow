@@ -5,6 +5,7 @@
   import { SyncModel, useSyncData } from '.';
   import { createLocalStorage } from '@/utils/cache';
   import { Form, FormItem, InputPassword, Modal } from 'ant-design-vue';
+  import { LoadingOutlined } from '@ant-design/icons-vue';
 
   const stepItems = reactive<any[]>([
     {
@@ -31,7 +32,7 @@
   async function syncData() {
     if (!(await chooseRef.value?.vaildate())) return false;
     loading.value = true;
-    stepItems[1].status = 'wait';
+    stepItems[1].icon = h(LoadingOutlined);
     const { waitBillMail, syncData } = useSyncData(data);
     if (data.way == 'email') {
       syncText.value = '监听邮件中';
@@ -51,7 +52,9 @@
           currentStep.value = 2;
         }).finally(() => {
           loading.value = false;
-          delete stepItems[1].status;
+          delete stepItems[1].icon;
+          data.archive = '';
+          syncText.value = '开始导入';
         });
       }
     })
@@ -98,7 +101,7 @@
             上一步
           </a-button>
           <a-button type="primary" v-if="currentStep == 0" @click="currentStep++">下一步</a-button>
-          <a-button type="primary" v-if="currentStep == 1" @click="syncData" :loading="loading">开始导入</a-button>
+          <a-button type="primary" v-if="currentStep == 1" @click="syncData" :loading="loading">{{ syncText }}</a-button>
           <contextHolder />
         </section>
       </section>

@@ -22,7 +22,7 @@ export function useSyncData(config: SyncModel) {
     if (!config.email || !config.password) return false;
     if (!isMailConnected)
       isMailConnected = await connectMail({ username: config.email, password: config.password });
-    const mail = await analysis({ type: config.from });
+    const mail = await analysis({ type: config.from }).catch(console.error);
     if (!mail || !mail.subject.includes({ alipay: '支付宝', wepay: '微信' }[config.from])) return false;
     return true;
   }
