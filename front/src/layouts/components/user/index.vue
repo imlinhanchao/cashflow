@@ -4,7 +4,7 @@
   const userStore = useUserStore();
 
   function menuClick({ key }) {
-    switch(key) {
+    switch (key) {
       case 'user':
         break;
       case 'logout':

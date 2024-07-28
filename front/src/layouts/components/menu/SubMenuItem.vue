@@ -1,11 +1,14 @@
 <script lang="ts" setup name="SubMenuItem">
   import BasicMenuItem from './MenuItem.vue';
   import MenuItemContent from './MenuItemContent.vue';
-  withDefaults(defineProps<{
-    icon?: string;
-    name: string;
-    item: any;
-  }>(), {})
+  withDefaults(
+    defineProps<{
+      icon?: string;
+      name: string;
+      item: any;
+    }>(),
+    {},
+  );
 
   function menuHasChildren(menuTreeItem): boolean {
     return (

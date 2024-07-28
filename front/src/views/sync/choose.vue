@@ -100,18 +100,18 @@
 </template>
 
 <style lang="less" scoped>
-.ant-upload-wrapper {
-  :deep(.ant-upload-drag) {
-    height: 200px;
-    .ant-upload {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+  .ant-upload-wrapper {
+    :deep(.ant-upload-drag) {
+      height: 200px;
+      .ant-upload {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+    :deep(.ant-upload-list) {
+      max-height: 200px;
+      overflow: auto;
     }
   }
-  :deep(.ant-upload-list) {
-    max-height: 200px;
-    overflow: auto;
-  }
-}
 </style>

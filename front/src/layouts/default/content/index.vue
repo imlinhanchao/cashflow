@@ -28,5 +28,10 @@
   import router from '@/router';
   import { getTransitionName } from './transition';
 
-  const getCaches = ref(router.getRoutes().filter(r => r.name && r.meta.noCache !== false).map(r => r.name as string));
+  const getCaches = ref(
+    router
+      .getRoutes()
+      .filter((r) => r.name && r.meta.noCache !== false)
+      .map((r) => r.name as string),
+  );
 </script>

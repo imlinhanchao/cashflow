@@ -5,13 +5,14 @@
     <p class="text-gray-300">
       Copyright © {{ new Date().getFullYear() }}
       <br />
-      All Rights Reserved. Power by <a href="https://github.com/imlinhanchao/cashflow" target="_blank">Cashflow</a> Open Source.
+      All Rights Reserved. Power by
+      <a href="https://github.com/imlinhanchao/cashflow" target="_blank">Cashflow</a> Open Source.
     </p>
   </a-layout-footer>
 </template>
 
 <style lang="less" scoped>
-.ant-layout-footer {
-  text-align: center;
-}
+  .ant-layout-footer {
+    text-align: center;
+  }
 </style>

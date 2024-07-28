@@ -6,9 +6,12 @@
 </template>
 <script lang="ts" setup>
   import Icon from '@/components/Icon/index';
-  
-  withDefaults(defineProps<{
-    icon?: string;
-    name: string;
-  }>(), {})
+
+  withDefaults(
+    defineProps<{
+      icon?: string;
+      name: string;
+    }>(),
+    {},
+  );
 </script>

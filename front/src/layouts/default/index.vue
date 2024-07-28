@@ -12,7 +12,7 @@
 </template>
 
 <style lang="less" scoped>
-.ant-layout {
-  min-height: 100vh;
-}
+  .ant-layout {
+    min-height: 100vh;
+  }
 </style>

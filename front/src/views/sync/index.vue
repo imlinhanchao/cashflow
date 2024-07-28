@@ -37,33 +37,41 @@
     if (data.way == 'email') {
       syncText.value = '监听邮件中';
       await waitBillMail;
-      if(!(await modal.confirm({
-        title: '填写对账单解压密码',
-        content: () => (<Form model={data} label-col={{ span: 0 }} wrapper-col={{ span: 24 }} class="my-5">
-          <FormItem>
-            <InputPassword v-model:value={data.archive}  allow-clear placeholder="解压密码" />
-          </FormItem>
-        </Form>),
-        async onOk() {
-          return true;
-        },
-        async onCancel() {
-          loading.value = false;
-          return false;
-        },
-      }))){return false;}
+      if (
+        !(await modal.confirm({
+          title: '填写对账单解压密码',
+          content: () => (
+            <Form model={data} label-col={{ span: 0 }} wrapper-col={{ span: 24 }} class="my-5">
+              <FormItem>
+                <InputPassword v-model:value={data.archive} allow-clear placeholder="解压密码" />
+              </FormItem>
+            </Form>
+          ),
+          async onOk() {
+            return true;
+          },
+          async onCancel() {
+            loading.value = false;
+            return false;
+          },
+        }))
+      ) {
+        return false;
+      }
     }
     syncText.value = '导入数据中';
-    syncData().then(count => {
-      billCount.value = count;
-      currentStep.value = 2;
-    }).finally(() => {
-      loading.value = false;
-      delete stepItems[1].icon;
-      data.archive = '';
-      delete data.files;
-      syncText.value = '开始导入';
-    });
+    syncData()
+      .then((count) => {
+        billCount.value = count;
+        currentStep.value = 2;
+      })
+      .finally(() => {
+        loading.value = false;
+        delete stepItems[1].icon;
+        data.archive = '';
+        delete data.files;
+        syncText.value = '开始导入';
+      });
   }
 
   onMounted(() => {
@@ -107,7 +115,9 @@
             上一步
           </a-button>
           <a-button type="primary" v-if="currentStep == 0" @click="currentStep++">下一步</a-button>
-          <a-button type="primary" v-if="currentStep == 1" @click="syncData" :loading="loading">{{ syncText }}</a-button>
+          <a-button type="primary" v-if="currentStep == 1" @click="syncData" :loading="loading">{{
+            syncText
+          }}</a-button>
           <contextHolder />
         </section>
       </section>

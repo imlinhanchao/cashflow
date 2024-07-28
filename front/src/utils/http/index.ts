@@ -106,7 +106,10 @@ const transform: AxiosTransform = {
     } else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);
-        if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0|| config.data instanceof FormData) {
+        if (
+          (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0) ||
+          config.data instanceof FormData
+        ) {
           config.data = data;
           config.params = params;
         } else {

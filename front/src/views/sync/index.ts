@@ -14,7 +14,11 @@ export function useSyncData(config: SyncModel) {
   let isMailConnected = false;
 
   async function syncData() {
-    const list = await (config.way == 'email' ? analysis : analysisFile)({ password: config.archive, type: config.from, files: config.files });
+    const list = await (config.way == 'email' ? analysis : analysisFile)({
+      password: config.archive,
+      type: config.from,
+      files: config.files,
+    });
     return list.length;
   }
 
@@ -23,13 +27,14 @@ export function useSyncData(config: SyncModel) {
     if (!isMailConnected)
       isMailConnected = await connectMail({ username: config.email, password: config.password });
     const mail = await analysis({ type: config.from }).catch(console.error);
-    if (!mail || !mail.subject.includes({ alipay: '支付宝', wepay: '微信' }[config.from])) return false;
+    if (!mail || !mail.subject.includes({ alipay: '支付宝', wepay: '微信' }[config.from]))
+      return false;
     return true;
   }
 
-  let timer: any =  0;
+  let timer: any = 0;
   let resolve: any = null;
-  const waitBillMail = new Promise((r) => resolve = r);
+  const waitBillMail = new Promise((r) => (resolve = r));
   if (config.way == 'email') {
     const timeout = 2000;
     const checkTimer = async () => {
@@ -37,16 +42,16 @@ export function useSyncData(config: SyncModel) {
       timer = 0;
       resolve();
     };
-    timer = setTimeout(checkTimer, timeout)
+    timer = setTimeout(checkTimer, timeout);
   }
 
   onUnmounted(() => {
     if (timer) clearTimeout(timer);
     stopMail();
-  })
+  });
 
   return {
     waitBillMail,
     syncData,
-  }
+  };
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts" name="Logo">
-import { PageEnum } from '@/enums/pageEnum';
-import { useGlobSetting } from '@/hooks/setting';
+  import { PageEnum } from '@/enums/pageEnum';
+  import { useGlobSetting } from '@/hooks/setting';
 
   const { title } = useGlobSetting();
 

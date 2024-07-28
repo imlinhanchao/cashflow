@@ -16,8 +16,8 @@ export class EnumQuery {
    * 返回数量
    */
   size = 8;
-  
-  constructor(key: string, value: string='') {
+
+  constructor(key: string, value: string = '') {
     this.key = key;
     this.value = value;
   }

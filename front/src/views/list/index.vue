@@ -2,7 +2,7 @@
   import { Cashflow, enumField, search, remove as removeItem } from '@/api/cashflow';
   import { columns } from './index';
   import Item from './item.vue';
-import { message } from 'ant-design-vue';
+  import { message } from 'ant-design-vue';
 
   const data = ref<Cashflow[]>([]);
   const page = reactive({

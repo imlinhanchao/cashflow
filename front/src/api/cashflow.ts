@@ -92,7 +92,7 @@ export interface ISyncConfig {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344455
  */
 export function connectMail(data: IMailAccount) {
-  return defHttp.post<any>({ url: '/mail/connect', params: data, });
+  return defHttp.post<any>({ url: '/mail/connect', params: data });
 }
 
 /**
@@ -102,7 +102,7 @@ export function connectMail(data: IMailAccount) {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344457
  */
 export function stopMail() {
-  return defHttp.post<any>({ url: '/mail/stop', });
+  return defHttp.post<any>({ url: '/mail/stop' });
 }
 
 /**
@@ -112,7 +112,7 @@ export function stopMail() {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344476
  */
 export function create(data: Cashflow[]) {
-  return defHttp.post<any>({ url: '/cashflow/create', params: data, });
+  return defHttp.post<any>({ url: '/cashflow/create', params: data });
 }
 
 /**
@@ -122,7 +122,7 @@ export function create(data: Cashflow[]) {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191425359
  */
 export function analysis(data: ISyncConfig) {
-  return defHttp.post<any>({ url: '/cashflow/analysis', params: data, });
+  return defHttp.post<any>({ url: '/cashflow/analysis', params: data });
 }
 
 /**
@@ -135,7 +135,7 @@ export function analysisFile(sync: ISyncConfig) {
   const data = new FormData();
   data.append('type', sync.type);
   sync.files?.forEach((file) => data.append('files', file));
-  return defHttp.post<any>({ url: '/cashflow/analysisFile', data, });
+  return defHttp.post<any>({ url: '/cashflow/analysisFile', data });
 }
 
 /**
@@ -145,7 +145,7 @@ export function analysisFile(sync: ISyncConfig) {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344477
  */
 export function update(id: string, data: Cashflow) {
-  return defHttp.put<any>({ url: `/cashflow/${id}`, params: data, });
+  return defHttp.put<any>({ url: `/cashflow/${id}`, params: data });
 }
 
 /**
@@ -155,7 +155,7 @@ export function update(id: string, data: Cashflow) {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344478
  */
 export function detail(id: string) {
-  return defHttp.get<any>({ url: `/cashflow/${id}`, });
+  return defHttp.get<any>({ url: `/cashflow/${id}` });
 }
 
 /**
@@ -165,7 +165,7 @@ export function detail(id: string) {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344479
  */
 export function remove(id: string) {
-  return defHttp.delete<any>({ url: `/cashflow/${id}`, });
+  return defHttp.delete<any>({ url: `/cashflow/${id}` });
 }
 
 /**
@@ -178,7 +178,7 @@ export function search(params: any & IPageParam) {
   Object.keys(params).forEach((k) => {
     if (Array.isArray(params[k])) params[k] = params[k].join(',');
   });
-  return defHttp.get<any>({ url: '/cashflow/search', params, });
+  return defHttp.get<any>({ url: '/cashflow/search', params });
 }
 
 /**
@@ -188,5 +188,5 @@ export function search(params: any & IPageParam) {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-198437800
  */
 export function enumField(params: EnumQuery) {
-  return defHttp.get<EnumFieldRsp[]>({ url: '/cashflow/enum', params, });
+  return defHttp.get<EnumFieldRsp[]>({ url: '/cashflow/enum', params });
 }

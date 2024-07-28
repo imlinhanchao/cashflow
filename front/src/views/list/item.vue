@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Cashflow, create, enumField, update } from '@/api/cashflow';
-import { message } from 'ant-design-vue';
+  import { message } from 'ant-design-vue';
   import { FormInstance, Rule } from 'ant-design-vue/es/form';
 
   const emit = defineEmits(['confirm']);
@@ -23,13 +23,13 @@ import { message } from 'ant-design-vue';
     visible.value = true;
   }
   async function save() {
-    if (!(await formRef.value?.validate())) return
-      const res = await (form.id ? update(form.id, form) : create([form]));
-      if (res) {
-        message.success('保存成功！');
-        close();
-        emit('confirm', form);
-      }
+    if (!(await formRef.value?.validate())) return;
+    const res = await (form.id ? update(form.id, form) : create([form]));
+    if (res) {
+      message.success('保存成功！');
+      close();
+      emit('confirm', form);
+    }
   }
 
   defineExpose({
@@ -46,7 +46,14 @@ import { message } from 'ant-design-vue';
     :footer-style="{ textAlign: 'right' }"
     @close="close"
   >
-    <a-form ref="formRef" :model="form" :rules="rules" layout="horizontal" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+    <a-form
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      layout="horizontal"
+      :labelCol="{ span: 8 }"
+      :wrapperCol="{ span: 16 }"
+    >
       <a-form-item label="交易订单号" name="orderNumber">
         <a-input v-model:value="form.orderNumber" allowClear />
       </a-form-item>
@@ -73,7 +80,12 @@ import { message } from 'ant-design-vue';
         <FieldInput field="category" :query="form" :search="enumField" :pre="[]" />
       </a-form-item>
       <a-form-item label="交易时间" name="transactionTime">
-        <a-date-picker show-time v-model:value="form.transactionTime" allowClear valueFormat="YYYY-MM-DD HH:mm:ss" />
+        <a-date-picker
+          show-time
+          v-model:value="form.transactionTime"
+          allowClear
+          valueFormat="YYYY-MM-DD HH:mm:ss"
+        />
       </a-form-item>
       <a-form-item label="交易来源" name="from">
         <a-select v-model:value="form.from">
@@ -91,16 +103,10 @@ import { message } from 'ant-design-vue';
         </a-select>
       </a-form-item>
       <a-form-item label="交易说明" name="description">
-        <a-textarea
-          v-model:value="form.description"
-          :auto-size="{ minRows: 2, maxRows: 5 }"
-        />
+        <a-textarea v-model:value="form.description" :auto-size="{ minRows: 2, maxRows: 5 }" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-textarea
-          v-model:value="form.remark"
-          :auto-size="{ minRows: 2, maxRows: 5 }"
-        />
+        <a-textarea v-model:value="form.remark" :auto-size="{ minRows: 2, maxRows: 5 }" />
       </a-form-item>
     </a-form>
     <template #extra>

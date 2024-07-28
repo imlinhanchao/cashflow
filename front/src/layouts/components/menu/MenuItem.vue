@@ -5,10 +5,12 @@
 </template>
 <script lang="ts" setup>
   import MenuItemContent from './MenuItemContent.vue';
-  withDefaults(defineProps<{
-    icon?: string;
-    name: string;
-    item: any
-  }>(), {})
-
+  withDefaults(
+    defineProps<{
+      icon?: string;
+      name: string;
+      item: any;
+    }>(),
+    {},
+  );
 </script>

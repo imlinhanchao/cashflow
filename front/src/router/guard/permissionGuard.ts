@@ -22,7 +22,7 @@ export function createPermissionGuard(router: Router) {
         try {
           next((to.query?.redirect as string) || '/');
           return;
-        } catch { }
+        } catch {}
       }
       next();
       return;

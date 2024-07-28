@@ -14,7 +14,7 @@
       query: () => ({}),
     },
   );
-  const emit = defineEmits(['prefix'])
+  const emit = defineEmits(['prefix']);
 
   const options = ref<EnumFieldRsp[]>([]);
   const data = ref(props.query);
@@ -56,17 +56,16 @@
     if (!oldValue) return;
     if (!['in', 'notIn'].includes(o) && ['in', 'notIn'].includes(n)) {
       data.value[n + '_' + props.field] = [oldValue];
-    } else if (['in', 'notIn'].includes(o) && !['in', 'notIn'].includes(n)){
+    } else if (['in', 'notIn'].includes(o) && !['in', 'notIn'].includes(n)) {
       data.value[n + '_' + props.field] = oldValue[0] || '';
     } else {
       data.value[n + '_' + props.field] = oldValue;
     }
-  })
+  });
 
   onMounted(() => {
     searchField('');
   });
-
 </script>
 <template>
   <a-input-group compact>
@@ -96,7 +95,7 @@
           class="min-w-30"
         >
           <template #maxTagPlaceholder="values">
-            <a-tooltip :title="values.map(v => v.value).join(', ')">
+            <a-tooltip :title="values.map((v) => v.value).join(', ')">
               <span>+ {{ values.length }} ...</span>
             </a-tooltip>
           </template>
@@ -104,9 +103,16 @@
       </template>
       <span v-else>缺少 Field，请自定义组件</span>
     </slot>
-    <a-select v-if="pre.length > 1" v-model:value="prefix" class="w-14" @change="emit('prefix', $event)">
+    <a-select
+      v-if="pre.length > 1"
+      v-model:value="prefix"
+      class="w-14"
+      @change="emit('prefix', $event)"
+    >
       <a-select-option v-for="p in pre" :key="p" :value="p" :label="prefixs[p]">
-        <a-tooltip :title="prefixMeans[p]"><section>{{ prefixs[p] }}</section></a-tooltip>
+        <a-tooltip :title="prefixMeans[p]"
+          ><section>{{ prefixs[p] }}</section></a-tooltip
+        >
       </a-select-option>
     </a-select>
   </a-input-group>

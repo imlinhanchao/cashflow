@@ -39,7 +39,6 @@ export function transformMenuModule(menuModule: MenuModule): Menu {
   return menuList[0];
 }
 
-
 /**
  * 对菜单项进行排序。
  * @param menus 菜单项数组，每个菜单项是一个应用路由记录对象。
