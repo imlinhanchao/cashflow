@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CashflowDto, QueryDto, SyncDto } from './cashflow.dto';
+import { CashflowDto, SyncDto } from './cashflow.dto';
 import { CashflowService } from './cashflow.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserDto } from 'src/users/users.dto';
 import { permissions } from 'src/core/Error';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
 import { decode } from 'iconv-lite';
 import { EnumDto } from '../core/Dto/enum.dto';
+import { QueryReqDto } from 'src/core/Dto/common.dto';
 @Controller('cashflow')
 @ApiTags('Cashflow')
 export class CashflowController {
@@ -34,12 +34,12 @@ export class CashflowController {
     return this.cashflowService.update(id, cashflow);
   }
 
-  @Get('query')
+  @Get('search')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '搜索交易记录' })
-  query(@Request() { user }: { user: UserDto }, @Query() query: QueryDto) {
+  search(@Request() { user }: { user: UserDto }, @Query() query: QueryReqDto) {
     if (user.username != 'admin') query.username = user.username;
-    return this.cashflowService.query(query);
+    return this.cashflowService.search(query);
   }
 
   @Get('enum')

@@ -7,6 +7,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    FieldInput: typeof import('@/components/FieldInput/index.ts')['default']
+    FieldInputSrcFieldInput: typeof import('@/FieldInput.vue')['default']
     Icon: typeof import('@/components/Icon/index.ts')['default']
     'IconDataIcons.data': typeof import('@/components/Icon/data/icons.data.ts')['default']
     IconsIconCommunity: typeof import('@/components/icons/IconCommunity.vue')['default']

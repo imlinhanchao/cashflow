@@ -1,5 +1,5 @@
 import { defHttp } from '@/utils/http';
-import { IPageParam } from './common';
+import { EnumFieldRsp, EnumQuery, IPageParam } from './common';
 
 export interface IMailAccount {
   /**
@@ -83,88 +83,6 @@ export interface ISyncConfig {
    */
   type: string;
 }
-
-export class CashflowQuery extends IPageParam {
-  /**
-   * 最大金额
-   */
-  amountMax?: number;
-  /**
-   * 最小金额
-   */
-  amountMin?: number;
-  /**
-   * 交易分类
-   */
-  category = '';
-  /**
-   * 交易对方
-   */
-  counterparty = '';
-  /**
-   * 商品说明
-   */
-  description = '';
-  /**
-   * 商家订单号
-   */
-  merchantNumber = '';
-  /**
-   * 交易订单号
-   */
-  orderNumber = '';
-  /**
-   * 支付方式
-   */
-  payment = '';
-  /**
-   * 备注
-   */
-  remark = '';
-  /**
-   * 交易状态
-   */
-  status = '';
-  /**
-   * 交易时间结束
-   */
-  transactionTimeEnd = '';
-  /**
-   * 交易时间开始
-   */
-  transactionTimeStart = '';
-  /**
-   * 收/支
-   */
-  type = '';
-}
-
-export class EnumQuery {
-  /**
-   * 字段名
-   */
-  key = '';
-  /**
-   * 字段名
-   */
-  value = '';
-  /**
-   * 返回数量
-   */
-  size = 8;
-  
-  constructor(key: string, value: string='') {
-    this.key = key;
-    this.value = value;
-  }
-}
-
-export interface EnumFieldRsp {
-  value: string;
-  total: number;
-}
-
-
 
 /**
  * 连接邮箱
@@ -255,8 +173,11 @@ export function remove(id: string) {
  * 接口ID：191344480
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344480
  */
-export function query(params: CashflowQuery) {
-  return defHttp.get<any>({ url: '/cashflow/query', params, });
+export function search(params: any & IPageParam) {
+  Object.keys(params).forEach((k) => {
+    if (Array.isArray(params[k])) params[k] = params[k].join(',');
+  });
+  return defHttp.get<any>({ url: '/cashflow/search', params, });
 }
 
 /**

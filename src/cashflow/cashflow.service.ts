@@ -2,14 +2,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { QueryRspDto } from 'src/core/Dto/common.dto';
+import { QueryReqDto, QueryRspDto } from 'src/core/Dto/common.dto';
 import { CashflowDto, SyncDto } from './cashflow.dto';
 import { Cashflow } from './models/cashflow.model';
 import { MailService } from 'src/mail/mail.service';
-import { downloadByUrl, extractZip } from './utils';
+import { downloadByUrl, extract, markQuery, formatDateTime } from 'src/utils';
 import { decode } from 'iconv-lite';
 import { Op, Sequelize } from 'sequelize';
-import { formatDateTime } from 'src/utils';
 import { EnumDto } from '../core/Dto/enum.dto';
 
 @Injectable()
@@ -86,6 +85,39 @@ export class CashflowService {
       offset: 0,
       limit: query.size * 1,
     })
+  }
+
+  async search(data: QueryReqDto): Promise<QueryRspDto<Cashflow>> {
+    const { page, size, ...query } = data;
+
+    markQuery(query);
+
+    const keys = ['username', 'type', 'counterparty', 'description', 'payment', 'amount', 'status', 'category', 'orderNumber', 'merchantNumber', 'transactionTime', 'remark', 'from'];
+    Object.keys(query).forEach((key) => {
+      if (!keys.includes(key) || !query[key]) {
+        delete query[key];
+      }
+    });
+
+    const total = await this.cashflowModel.count({
+      where: query,
+    });
+
+    const rows = (await this.cashflowModel.findAll({
+      where: query,
+      offset: (page - 1) * size,
+      limit: size * 1,
+      order: [['transactionTime', 'DESC']],
+    })).map((cashflow) => cashflow.dataValues);
+
+    rows.forEach(d => {
+      d.transactionTime = formatDateTime(d.transactionTime);
+    })
+
+    return {
+      rows,
+      total,
+    }
   }
 
   async query(data): Promise<QueryRspDto<Cashflow>> {
@@ -245,7 +277,7 @@ export class CashflowService {
       mail = mails.find((mail) => mail.headers.subject.includes('支付宝交易流水'));
       if (mail.attachments.length == 0) throw new Error('未找到附件');
 
-      const files = await extractZip(mail.attachments.savePath, sync.password, path.join(__dirname, sync.type));
+      const files = await extract(mail.attachments.savePath, sync.password, path.join(__dirname, sync.type));
       if (files.length == 0) throw new Error('解压失败');
       const cashflows = await this.analysisFile(files[0], username, sync.type);
 
@@ -271,7 +303,7 @@ export class CashflowService {
       const url = mat[1];
       const savePath = await downloadByUrl(url, path.join(__dirname, sync.type));
 
-      const files = await extractZip(savePath, sync.password, path.join(__dirname, sync.type));
+      const files = await extract(savePath, sync.password, path.join(__dirname, sync.type));
       if (files.length == 0) throw new Error('解压失败');
       const cashflows = await this.analysisFile(files[0], username, sync.type);
 

@@ -27,7 +27,7 @@ export class Cashflow extends CommonModel {
 
   @Column({ comment: '商品说明', defaultValue: '' })
   description: string;
-suoyi
+
   @Column({ comment: '支付方式', defaultValue: '' })
   payment: string;
 

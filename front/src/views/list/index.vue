@@ -1,11 +1,8 @@
 <script setup lang="ts">
   import {
     Cashflow,
-    CashflowQuery,
     enumField,
-    EnumFieldRsp,
-    EnumQuery,
-    query as queryList,
+    search,
   } from '@/api/cashflow';
   import { columns } from './index';
 
@@ -32,38 +29,23 @@
     },
   }));
 
-  const query = reactive(new CashflowQuery());
+  const query = ref<any>({ type: '' });
   function queryTable() {
-    return queryList({ ...query, ...page }).then((res) => {
+    return search({ ...query.value, ...page }).then((res) => {
       data.value = res.rows;
       page.total = res.total;
     });
   }
   function reset() {
-    Object.assign(query, new CashflowQuery());
+    query.value = { type: '' };
     page.page = 1;
     queryTable();
   }
 
   onMounted(() => {
     queryTable();
-    Object.keys(autoOption.value).forEach((k) => {
-      searchField(k, '', autoOption.value[k]);
-    });
   });
 
-  const autoOption = ref<Recordable<EnumFieldRsp[]>>({
-    category: [],
-    payment: [],
-    counterparty: [],
-    status: [],
-    description: [],
-  });
-  function searchField(key: string, value: string, options: EnumFieldRsp[]) {
-    enumField(new EnumQuery(key, value)).then((res) => {
-      options.splice(0, options.length, ...res);
-    });
-  }
 </script>
 
 <template>
@@ -80,69 +62,39 @@
             </a-select>
           </a-form-item>
           <a-form-item label="交易状态" class="my-2">
-            <a-auto-complete
-              class="!w-40"
-              v-model:value="query.status"
-              :options="autoOption.status"
-              @search="searchField('status', $event, autoOption.status)"
-              allowClear
-            />
+            <FieldInput field="status" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
           </a-form-item>
           <a-form-item label="金额">
             <section class="flex items-center space-x-1">
-              <a-input-number v-model:value="query.amountMin" />
+              <a-input-number v-model:value="query.gte_amount" />
               <span>~</span>
-              <a-input-number v-model:value="query.amountMax" />
+              <a-input-number v-model:value="query.lte_amount" />
             </section>
           </a-form-item>
           <a-form-item label="交易时间">
             <section class="flex items-center space-x-1">
-              <a-date-picker show-time v-model:value="query.transactionTimeStart" allowClear />
+              <a-date-picker show-time v-model:value="query.gte_transactionTime" allowClear />
               <span>~</span>
-              <a-date-picker show-time v-model:value="query.transactionTimeEnd" allowClear />
+              <a-date-picker show-time v-model:value="query.lte_transactionTime" allowClear />
             </section>
           </a-form-item>
           <a-form-item label="交易分类">
-            <a-auto-complete
-              class="!w-40"
-              v-model:value="query.category"
-              :options="autoOption.category"
-              @search="searchField('category', $event, autoOption.category)"
-              allowClear
-            />
+            <FieldInput field="category" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
           </a-form-item>
           <a-form-item label="支付方式">
-            <a-auto-complete
-              class="!w-40"
-              v-model:value="query.payment"
-              :options="autoOption.payment"
-              @search="searchField('payment', $event, autoOption.payment)"
-              allowClear
-            />
+            <FieldInput field="payment" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
           </a-form-item>
           <a-form-item label="交易对方">
-            <a-auto-complete
-              class="!w-40"
-              v-model:value="query.counterparty"
-              :options="autoOption.counterparty"
-              @search="searchField('counterparty', $event, autoOption.counterparty)"
-              allowClear
-            />
+            <FieldInput field="counterparty" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
           </a-form-item>
           <a-form-item label="商品说明">
-            <a-auto-complete
-              class="!w-40"
-              v-model:value="query.description"
-              :options="autoOption.description"
-              @search="searchField('description', $event, autoOption.description)"
-              allowClear
-            />
+            <FieldInput field="description" :search="enumField" :query="query" :pre="['like']" />
           </a-form-item>
           <a-form-item label="商家订单号">
-            <a-input v-model:value="query.merchantNumber" allowClear />
+            <FieldInput field="merchantNumber" :search="enumField" :query="query" />
           </a-form-item>
           <a-form-item label="交易订单号">
-            <a-input v-model:value="query.orderNumber" allowClear />
+            <FieldInput field="orderNumber" :search="enumField" :query="query" />
           </a-form-item>
         </section>
         <section class="flex items-center space-x-2">
@@ -177,7 +129,7 @@
   .ant-table-wrapper {
     :deep(.ant-pagination) {
       margin-bottom: 0;
-      margin-right: 1em;
+      padding-right: 1em;
     }
   }
 </style>
