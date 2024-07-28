@@ -1,11 +1,8 @@
 <script setup lang="ts">
-  import {
-    Cashflow,
-    enumField,
-    search,
-  } from '@/api/cashflow';
+  import { Cashflow, enumField, search, remove as removeItem } from '@/api/cashflow';
   import { columns } from './index';
   import Item from './item.vue';
+import { message } from 'ant-design-vue';
 
   const data = ref<Cashflow[]>([]);
   const page = reactive({
@@ -42,6 +39,12 @@
     page.page = 1;
     queryTable();
   }
+  function remove(record) {
+    removeItem(record.id).then(() => {
+      queryTable();
+      message.success('删除成功！');
+    });
+  }
 
   onMounted(() => {
     queryTable();
@@ -55,7 +58,6 @@
     { value: 'card', title: '信用卡', icon: 'majesticons:creditcard-hand-line' },
     { value: 'cash', title: '现金', icon: 'la:money-bill-alt' },
   ]);
-  
 </script>
 
 <template>
@@ -64,20 +66,48 @@
       <a-form class="no-error !flex-nowrap justify-between" layout="inline">
         <section class="flex flex-wrap space-y-2">
           <a-form-item class="my-2">
-            <FieldInput field="from" :search="enumField" :query="query" :pre="['eq', 'in', 'notIn']">
+            <FieldInput
+              field="from"
+              :search="enumField"
+              :query="query"
+              :pre="['eq', 'in', 'notIn']"
+            >
               <template #default="{ prefix }">
-                <a-select allowClear v-model:value="query[prefix + '_from']" :max-tag-count="1" :mode="prefix == 'eq' ? 'combobox' : 'multiple'" :class="{'w-36': prefix != 'eq', 'w-20': prefix == 'eq'}">
+                <a-select
+                  allowClear
+                  v-model:value="query[prefix + '_from']"
+                  :max-tag-count="1"
+                  :mode="prefix == 'eq' ? 'combobox' : 'multiple'"
+                  :class="{ 'w-36': prefix != 'eq', 'w-20': prefix == 'eq' }"
+                >
                   <a-select-option v-if="prefix == 'eq'" value="">全部</a-select-option>
                   <a-select-option v-for="f in froms" :key="f.value" :value="f.value">
-                    <a-tooltip :title="prefix != 'eq' ? '' : f.title"><section class="flex h-full items-center space-x-1 justify-between"><Icon :icon="f.icon" /> <span v-if="prefix != 'eq'">{{ f.title }}</span></section></a-tooltip>
+                    <a-tooltip :title="prefix != 'eq' ? '' : f.title">
+                      <section class="flex h-full items-center space-x-1 justify-between">
+                        <Icon :icon="f.icon" />
+                        <span v-if="prefix != 'eq'">{{ f.title }}</span>
+                      </section>
+                    </a-tooltip>
                   </a-select-option>
                   <template v-if="prefix != 'eq'" #tagRender="{ value, closable, onClose }">
-                    <a-tag v-if="froms.find(f => f.value == value)" :closable="closable" style="margin-right: 3px" @close="onClose">
-                      <Icon :icon="froms.find(f => f.value == value)!.icon" />
+                    <a-tag
+                      v-if="froms.find((f) => f.value == value)"
+                      :closable="closable"
+                      style="margin-right: 3px"
+                      @close="onClose"
+                    >
+                      <Icon :icon="froms.find((f) => f.value == value)!.icon" />
                     </a-tag>
                   </template>
                   <template v-if="prefix != 'eq'" #maxTagPlaceholder="values">
-                    <a-tooltip :title="froms.filter(f => values.some(v => v.value == f.value)).map(f => f.title).join(', ')">
+                    <a-tooltip
+                      :title="
+                        froms
+                          .filter((f) => values.some((v) => v.value == f.value))
+                          .map((f) => f.title)
+                          .join(', ')
+                      "
+                    >
                       <span>+ {{ values.length }} ...</span>
                     </a-tooltip>
                   </template>
@@ -94,7 +124,12 @@
             </a-select>
           </a-form-item>
           <a-form-item label="交易状态" class="my-2">
-            <FieldInput field="status" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
+            <FieldInput
+              field="status"
+              :search="enumField"
+              :query="query"
+              :pre="['like', 'eq', 'in', 'notIn']"
+            />
           </a-form-item>
           <a-form-item label="金额">
             <section class="flex items-center space-x-1">
@@ -105,19 +140,46 @@
           </a-form-item>
           <a-form-item label="交易时间">
             <section class="flex items-center space-x-1">
-              <a-date-picker show-time v-model:value="query.gte_transactionTime" allowClear />
+              <a-date-picker
+                show-time
+                v-model:value="query.gte_transactionTime"
+                allowClear
+                class="max-w-[35vw]"
+                valueFormat="YYYY-MM-DD HH:mm:ss"
+              />
               <span>~</span>
-              <a-date-picker show-time v-model:value="query.lte_transactionTime" allowClear />
+              <a-date-picker
+                show-time
+                v-model:value="query.lte_transactionTime"
+                allowClear
+                class="max-w-[35vw]"
+                valueFormat="YYYY-MM-DD HH:mm:ss"
+              />
             </section>
           </a-form-item>
           <a-form-item label="交易分类">
-            <FieldInput field="category" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
+            <FieldInput
+              field="category"
+              :search="enumField"
+              :query="query"
+              :pre="['like', 'eq', 'in', 'notIn']"
+            />
           </a-form-item>
           <a-form-item label="支付方式">
-            <FieldInput field="payment" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
+            <FieldInput
+              field="payment"
+              :search="enumField"
+              :query="query"
+              :pre="['like', 'eq', 'in', 'notIn']"
+            />
           </a-form-item>
           <a-form-item label="交易对方">
-            <FieldInput field="counterparty" :search="enumField" :query="query" :pre="['like', 'eq', 'in', 'notIn']" />
+            <FieldInput
+              field="counterparty"
+              :search="enumField"
+              :query="query"
+              :pre="['like', 'eq', 'in', 'notIn']"
+            />
           </a-form-item>
           <a-form-item label="商品说明">
             <FieldInput field="description" :search="enumField" :query="query" :pre="['like']" />
@@ -148,16 +210,37 @@
         </section>
       </a-form>
     </header>
-    <main class="flex-1 overflow-auto">
+    <main class="flex-1 overflow-auto min-h-[50vh]">
       <a-table sticky :columns="columns" :data-source="data" :pagination="pagination">
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex === 'from'">
-            <Icon v-if="record.from == 'wepay'" icon="ri:wechat-pay-line" />
-            <Icon v-else-if="record.from == 'alipay'" icon="ant-design:alipay-outlined" />
+            <Icon
+              v-if="froms.find((f) => f.value == record.from)"
+              :icon="froms.find((f) => f.value == record.from)!.icon"
+            />
             <span v-else>{{ record.from }}</span>
           </template>
-        </template></a-table
-      >
+          <template v-if="column.key === 'action'">
+            <a-tooltip title="编辑">
+              <a-button type="link" @click="itemRef?.open(record)" class="!px-2">
+                <Icon icon="fluent:notepad-edit-16-regular" />
+              </a-button>
+            </a-tooltip>
+            <a-popconfirm
+              title="你确定要删除这一项吗？"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="remove(record)"
+            >
+              <a-tooltip title="删除">
+                <a-button type="link" danger class="!px-2">
+                  <Icon icon="gg:trash" />
+                </a-button>
+              </a-tooltip>
+            </a-popconfirm>
+          </template>
+        </template>
+      </a-table>
     </main>
     <Item ref="itemRef" @confirm="queryTable" />
   </article>
@@ -168,6 +251,7 @@
     :deep(.ant-pagination) {
       margin-bottom: 0;
       padding-right: 1em;
+      z-index: 2;
     }
   }
 </style>
