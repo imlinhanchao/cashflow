@@ -8,8 +8,9 @@ import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic';
 import { asyncRoutes } from '@/router/routes';
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN;
+const REGISTER_PATH = PageEnum.BASE_REGISTER;
 
-const whitePathList: PageEnum[] = [LOGIN_PATH];
+const whitePathList: PageEnum[] = [LOGIN_PATH, REGISTER_PATH];
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();

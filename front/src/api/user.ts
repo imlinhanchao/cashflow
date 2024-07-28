@@ -52,22 +52,23 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 }
 
 /**
- * /users/register
- * POST /users/register
- * 接口ID：67732796
- * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-67732796
+ * /auth/register
+ * POST /auth/register
+ * 接口ID：67732797
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-67732797
  */
 export interface RegisterParams {
   username: string;
+  nickname: string;
   password: string;
   email: string;
 }
 
-export function registerApi(params: RegisterParams, mode: ErrorMessageMode = 'modal') {
+export function registerAccount(data: RegisterParams, mode: ErrorMessageMode = 'modal') {
   return defHttp.post<string>(
     {
-      url: '/users/register',
-      params,
+      url: '/auth/register',
+      data,
     },
     {
       errorMessageMode: mode,
