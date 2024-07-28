@@ -50,8 +50,17 @@
     });
   }
 
-  watch(prefix, (_, o) => {
+  watch(prefix, (n, o) => {
+    let oldValue = data.value[o + '_' + props.field];
     delete data.value[o + '_' + props.field];
+    if (!oldValue) return;
+    if (!['in', 'notIn'].includes(o) && ['in', 'notIn'].includes(n)) {
+      data.value[n + '_' + props.field] = [oldValue];
+    } else if (['in', 'notIn'].includes(o) && !['in', 'notIn'].includes(n)){
+      data.value[n + '_' + props.field] = oldValue[0] || '';
+    } else {
+      data.value[n + '_' + props.field] = oldValue;
+    }
   })
 
   onMounted(() => {
@@ -61,12 +70,12 @@
 </script>
 <template>
   <a-input-group compact>
-    <slot :query="data" :field="field" :options="options" :search="searchField">
+    <slot :query="data" :prefix="prefix" :field="field" :options="options" :search="searchField">
       <template v-if="field">
         <a-auto-complete
           v-if="!['in', 'notIn'].includes(prefix)"
           class="!w-40"
-          v-model:value="data[prefix + '_' + field]"
+          v-model:value="data[prefix ? prefix + '_' + field : field]"
           :options="options"
           @search="searchField"
           allowClear

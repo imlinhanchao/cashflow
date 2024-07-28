@@ -17,13 +17,18 @@ export function markQuery(query: Record<string, any>): any {
   
   Object.keys(query).forEach((key) => {
     const [prefix, field] = key.split('_');
-    if (prefixs[prefix]) {
+    if (prefixs[prefix] && query[key]) {
       query[field] = {
         [prefixs[prefix]]: query[key]
       }
       if (arrayPrefixs.includes(prefix)) {
         query[field] = {
           [prefixs[prefix]]: query[key].split(',')
+        }
+      }
+      if (prefix == 'like') {
+        query[field] = {
+          [prefixs[prefix]]: `%${query[key]}%`
         }
       }
       delete query[key];

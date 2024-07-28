@@ -16,6 +16,7 @@ export interface IMailAccount {
  * CashflowDto
  */
 export class Cashflow {
+  id?: string;
   /**
    * 金额
    */
@@ -29,7 +30,7 @@ export class Cashflow {
    */
   counterparty: string = '';
   /**
-   * 商品说明
+   * 交易说明
    */
   description: string = '';
   /**
@@ -55,7 +56,7 @@ export class Cashflow {
   /**
    * 交易状态
    */
-  status: string = '';
+  status: string = '支付成功';
   /**
    * 交易时间
    */
@@ -63,7 +64,7 @@ export class Cashflow {
   /**
    * 收/支
    */
-  type: string = '';
+  type: string = '支出';
 }
 
 /**

@@ -5,6 +5,7 @@
     search,
   } from '@/api/cashflow';
   import { columns } from './index';
+  import Item from './item.vue';
 
   const data = ref<Cashflow[]>([]);
   const page = reactive({
@@ -29,7 +30,7 @@
     },
   }));
 
-  const query = ref<any>({ type: '' });
+  const query = ref<any>({ type: '', eq_from: '' });
   function queryTable() {
     return search({ ...query.value, ...page }).then((res) => {
       data.value = res.rows;
@@ -37,7 +38,7 @@
     });
   }
   function reset() {
-    query.value = { type: '' };
+    query.value = { type: '', eq_from: '' };
     page.page = 1;
     queryTable();
   }
@@ -46,6 +47,15 @@
     queryTable();
   });
 
+  const itemRef = ref<InstanceType<typeof Item>>();
+  const froms = reactive([
+    { value: 'alipay', title: '支付宝', icon: 'ant-design:alipay-outlined' },
+    { value: 'wepay', title: '微信支付', icon: 'ri:wechat-pay-line' },
+    { value: 'bank', title: '银行卡', icon: 'ion:card' },
+    { value: 'card', title: '信用卡', icon: 'majesticons:creditcard-hand-line' },
+    { value: 'cash', title: '现金', icon: 'la:money-bill-alt' },
+  ]);
+  
 </script>
 
 <template>
@@ -53,8 +63,30 @@
     <header class="pb-2">
       <a-form class="no-error !flex-nowrap justify-between" layout="inline">
         <section class="flex flex-wrap space-y-2">
-          <a-form-item label="收/支" class="my-2">
-            <a-select v-model:value="query.type" style="width: 100px">
+          <a-form-item class="my-2">
+            <FieldInput field="from" :search="enumField" :query="query" :pre="['eq', 'in', 'notIn']">
+              <template #default="{ prefix }">
+                <a-select allowClear v-model:value="query[prefix + '_from']" :max-tag-count="1" :mode="prefix == 'eq' ? 'combobox' : 'multiple'" :class="{'w-36': prefix != 'eq', 'w-20': prefix == 'eq'}">
+                  <a-select-option v-if="prefix == 'eq'" value="">全部</a-select-option>
+                  <a-select-option v-for="f in froms" :key="f.value" :value="f.value">
+                    <a-tooltip :title="prefix != 'eq' ? '' : f.title"><section class="flex h-full items-center space-x-1 justify-between"><Icon :icon="f.icon" /> <span v-if="prefix != 'eq'">{{ f.title }}</span></section></a-tooltip>
+                  </a-select-option>
+                  <template v-if="prefix != 'eq'" #tagRender="{ value, closable, onClose }">
+                    <a-tag v-if="froms.find(f => f.value == value)" :closable="closable" style="margin-right: 3px" @close="onClose">
+                      <Icon :icon="froms.find(f => f.value == value)!.icon" />
+                    </a-tag>
+                  </template>
+                  <template v-if="prefix != 'eq'" #maxTagPlaceholder="values">
+                    <a-tooltip :title="froms.filter(f => values.some(v => v.value == f.value)).map(f => f.title).join(', ')">
+                      <span>+ {{ values.length }} ...</span>
+                    </a-tooltip>
+                  </template>
+                </a-select>
+              </template>
+            </FieldInput>
+          </a-form-item>
+          <a-form-item label="收/支">
+            <a-select v-model:value="query.type" class="!w-26">
               <a-select-option value="">全部</a-select-option>
               <a-select-option value="收入">收入</a-select-option>
               <a-select-option value="支出">支出</a-select-option>
@@ -108,6 +140,11 @@
               <Icon icon="icon-park-outline:clear" />
             </a-button>
           </a-tooltip>
+          <a-tooltip title="添加交易">
+            <a-button type="primary" shape="circle" @click="itemRef?.open()">
+              <Icon icon="ic:sharp-post-add" />
+            </a-button>
+          </a-tooltip>
         </section>
       </a-form>
     </header>
@@ -122,6 +159,7 @@
         </template></a-table
       >
     </main>
+    <Item ref="itemRef" @confirm="queryTable" />
   </article>
 </template>
 
