@@ -50,4 +50,4 @@ npm run build
 
 ## 👀 界面
 
-  
+![](./preview.webp)
