@@ -1,11 +1,11 @@
-import { Controller, Param, Post, UseGuards, Request, Body, Query, Get } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Body, Query, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserDto } from 'src/users/users.dto';
 import { MailConfigDto } from './mail.dto';
 import { MailService } from './mail.service';
 
-@Controller('mail')
+@Controller('api/mail')
 @ApiTags('Mail')
 export class MailController {
   constructor(
@@ -24,7 +24,7 @@ export class MailController {
   @UseGuards(JwtAuthGuard)
   @Get('getUnread')
   @ApiOperation({ summary: '获取未读邮件' })
-  getUnread(@Request() { user }: {user: UserDto}, @Query('count') count: number = -1) {
+  getUnread(@Request() { user }: {user: UserDto}, @Query('count') count = -1) {
     return this.mailService.getUnread(user.username, count);
   }
 

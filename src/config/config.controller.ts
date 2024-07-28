@@ -5,7 +5,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { permissions } from 'src/core/Error';
 import { UserDto } from 'src/users/users.dto';
 
-@Controller('config')
+@Controller('api/config')
 @ApiTags('Config')
 export class InitConfigController {
   private readonly configService: ConfigService;
@@ -23,7 +23,7 @@ export class InitConfigController {
   }
 }
 
-@Controller('config')
+@Controller('api/config')
 @ApiTags('Config')
 export class ConfigController {
   private readonly configService: ConfigService;

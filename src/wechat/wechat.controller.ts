@@ -4,7 +4,7 @@ import { WechatService } from './wechat.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserDto } from 'src/users/users.dto';
 
-@Controller('wechat')
+@Controller('api/wechat')
 @ApiTags('WeChat')
 export class WechatController {
   wechatService: WechatService;

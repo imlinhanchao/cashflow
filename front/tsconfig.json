@@ -37,7 +37,8 @@
       "#/*": [
         "types/*"
       ]
-    }
+    },
+    "noEmit": true
   },
   "include": [
     "tests/**/*.ts",

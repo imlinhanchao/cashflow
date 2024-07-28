@@ -9,7 +9,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { decode } from 'iconv-lite';
 import { EnumDto } from '../core/Dto/enum.dto';
 import { QueryReqDto } from 'src/core/Dto/common.dto';
-@Controller('cashflow')
+@Controller('api/cashflow')
 @ApiTags('Cashflow')
 export class CashflowController {
 

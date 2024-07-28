@@ -5,9 +5,16 @@ import { CfgAppModule } from './cfg.module';
 import { hasConfigFile } from './config/config.module';
 import { AllExceptionFilter } from './core/filters/all-exception.filter';
 import { ResponseInterceptor } from './core/interceptors/response.interceptor';
+import * as express from 'express';
+import { join } from 'path';
+import { ExpressAdapter } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(hasConfigFile() ? (await import('./app.module')).AppModule : CfgAppModule);
+  const server = express();
+  const app = await NestFactory.create(
+    hasConfigFile() ? (await import('./app.module')).AppModule : CfgAppModule,
+    new ExpressAdapter(server)
+  );
 
   const config = new DocumentBuilder()
     .setTitle('API Hub')
@@ -27,6 +34,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   app.enableCors();
+
+  server.use('/', express.static(join(__dirname, 'public')));
   
   await app.listen(7894);
   console.log(`Application is running on: ${await app.getUrl()}`);

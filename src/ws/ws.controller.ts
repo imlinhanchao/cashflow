@@ -4,7 +4,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { WsService } from './ws.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@Controller('websocket')
+@Controller('api/websocket')
 @ApiTags('WebSocket')
 export class WsController {
   constructor(private readonly eventsService: WsService) {}
