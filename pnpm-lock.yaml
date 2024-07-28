@@ -1306,8 +1306,8 @@ packages:
   aws4@1.12.0:
     resolution: {integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==}
 
-  axios@1.3.5:
-    resolution: {integrity: sha512-glL/PvG/E+xCWwV8S6nCHcrfg1exGx7vxyUIivIA1iL7BIh6bePylCfVHwp6k13ao7SATxB6imau2kqY+I67kw==}
+  axios@1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
 
   babel-jest@28.1.3:
     resolution: {integrity: sha512-epUaPOEWMk3cWX0M/sPvCHHCe9fMFAa/9hXEgKP8nFfNl/jlGkE9ucq9NqkZGXLDduCJYS0UvSlPUwC0S+rH6Q==}
@@ -2104,8 +2104,8 @@ packages:
   flatted@3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
 
-  follow-redirects@1.15.2:
-    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+  follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -5959,9 +5959,9 @@ snapshots:
 
   aws4@1.12.0: {}
 
-  axios@1.3.5(debug@2.6.9):
+  axios@1.6.8(debug@2.6.9):
     dependencies:
-      follow-redirects: 1.15.2(debug@2.6.9)
+      follow-redirects: 1.15.6(debug@2.6.9)
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -6926,7 +6926,7 @@ snapshots:
 
   flatted@3.2.7: {}
 
-  follow-redirects@1.15.2(debug@2.6.9):
+  follow-redirects@1.15.6(debug@2.6.9):
     optionalDependencies:
       debug: 2.6.9
 
@@ -9348,7 +9348,7 @@ snapshots:
 
   wechat4u@0.7.11:
     dependencies:
-      axios: 1.3.5(debug@2.6.9)
+      axios: 1.6.8(debug@2.6.9)
       bl: 1.2.3
       debug: 2.6.9
       form-data: 2.5.1

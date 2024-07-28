@@ -16,13 +16,13 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<User | null> {
     const user = await this.usersService.findOne(username);
     if (!user) {
-      throw new Error('User or password is wrong');
+      throw new Error('用户名或密码错误！');
     }
     pass = createHash('sha256').update(pass + salt).digest('hex');
     if (user && user.password === pass) {
       return this.usersService.clearUnSaftyFields(user);
     }
-    throw new Error('User or password is wrong');
+    throw new Error('用户名或密码错误！');
   }
 
   async login(user: any) {

@@ -18,11 +18,15 @@ export interface RequestOptions {
   urlPrefix?: string;
   // Error message prompt type
   errorMessageMode?: ErrorMessageMode;
+  // Success message prompt type
+  successMessageMode?: SuccessMessageMode;
   // Whether to add a timestamp
   joinTime?: boolean;
   ignoreCancelToken?: boolean;
   // Whether to send token in header
   withToken?: boolean;
+  // 请求重试机制
+  retryRequest?: RetryRequest;
 }
 
 export interface Result<T = any> {
