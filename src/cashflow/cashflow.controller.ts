@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CashflowDto, EnumDto, QueryDto, SyncDto } from './cashflow.dto';
+import { CashflowDto, QueryDto, SyncDto } from './cashflow.dto';
 import { CashflowService } from './cashflow.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserDto } from 'src/users/users.dto';
@@ -8,6 +8,7 @@ import { permissions } from 'src/core/Error';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { decode } from 'iconv-lite';
+import { EnumDto } from '../core/Dto/enum.dto';
 @Controller('cashflow')
 @ApiTags('Cashflow')
 export class CashflowController {

@@ -11,6 +11,9 @@ export class Mail {
   async connect(config: MailConfigDto) {
     return new Promise((resolve, reject) => {
       try {
+        if (this.imap) {
+          this.imap.end();
+        }
         this.config = config;
         this.imap = new Imap({
           user: this.config.username,

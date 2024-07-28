@@ -1,4 +1,4 @@
-import { analysis, analysisFile, connectMail } from '@/api/cashflow';
+import { analysis, analysisFile, connectMail, stopMail } from '@/api/cashflow';
 
 export class SyncModel {
   from: 'alipay' | 'wepay' = 'alipay';
@@ -42,6 +42,7 @@ export function useSyncData(config: SyncModel) {
 
   onUnmounted(() => {
     if (timer) clearTimeout(timer);
+    stopMail();
   })
 
   return {

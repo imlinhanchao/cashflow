@@ -3,13 +3,14 @@ import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { QueryRspDto } from 'src/core/Dto/common.dto';
-import { CashflowDto, EnumDto, SyncDto } from './cashflow.dto';
+import { CashflowDto, SyncDto } from './cashflow.dto';
 import { Cashflow } from './models/cashflow.model';
 import { MailService } from 'src/mail/mail.service';
 import { downloadByUrl, extractZip } from './utils';
 import { decode } from 'iconv-lite';
 import { Op, Sequelize } from 'sequelize';
 import { formatDateTime } from 'src/utils';
+import { EnumDto } from '../core/Dto/enum.dto';
 
 @Injectable()
 export class CashflowService {
