@@ -5,6 +5,7 @@
   import Logo from '@/layouts/components/logo/index.vue';
   import { useTitle } from '@/hooks/web/useTitle';
   import { useConfig } from './config';
+  import { randStr } from '@/utils';
 
   const formData = reactive<Config & { password?: string; email?: string }>(new Config());
   const formRef = ref<FormInstance>();
@@ -50,21 +51,21 @@
       {
         required: true,
         message: '请输入数据盐',
-        trigger: 'blur',
+        trigger: 'change',
       },
     ],
     'jwtConstants.secret': [
       {
         required: true,
         message: '请输入JWT Secret',
-        trigger: 'blur',
+        trigger: 'change',
       },
     ],
     password: [
       {
         required: true,
         message: '请输入管理员密码',
-        trigger: 'blur',
+        trigger: 'change',
       },
     ],
     email: [
@@ -165,12 +166,18 @@
           <template #prefix>
             <Icon icon="tabler:salt" title="数据加密盐" />
           </template>
+          <template #suffix>
+            <Icon icon="ri:dice-fill" class="cursor-pointer" title="随机生成" @click="formData.salt = randStr()" />
+          </template>
         </a-input>
       </a-form-item>
       <a-form-item :name="['jwtConstants', 'secret']" :rules="rules['jwtConstants.secret']">
         <a-input v-model:value="formData.jwtConstants.secret" placeholder="JWT Secret" allow-clear>
           <template #prefix>
             <Icon icon="fa-solid:user-secret" title="JWT Secret" />
+          </template>
+          <template #suffix>
+            <Icon icon="ri:dice-fill" class="cursor-pointer" title="随机生成" @click="formData.jwtConstants.secret = randStr()" />
           </template>
         </a-input>
       </a-form-item>

@@ -77,3 +77,13 @@ export const withInstall = <T extends Component>(component: T, alias?: string) =
   };
   return component as T & Plugin;
 };
+
+export function randStr(size: number = 16) {
+  const seed = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let s = '';
+  for (let i = 0; i < size; i++) {
+    s += seed.charAt(Math.floor(Math.random() * seed.length));
+  }
+  return s;
+
+}
