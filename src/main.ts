@@ -37,7 +37,7 @@ async function bootstrap() {
 
   server.use('/', express.static(join(__dirname, 'public')));
   
-  await app.listen(7894);
+  await app.listen(process.env.PORT || 7894);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
