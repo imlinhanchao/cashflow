@@ -28,4 +28,12 @@ export function useTitle() {
     },
     { immediate: true },
   );
+
+  function setTitle(tTitle: string) {
+    pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;
+  }
+
+  return {
+    setTitle,
+  }
 }

@@ -4,11 +4,16 @@
   import { notification } from 'ant-design-vue';
   import { FormInstance, Rule } from 'ant-design-vue/es/form';
   import Logo from '@/layouts/components/logo/index.vue';
+  import Config from './Config.vue';
+  import { isConfig } from '@/api/config';
 
   const formData = reactive({
     username: '',
     password: '',
   });
+
+  const hasConfig = ref(true);
+  isConfig().then((res) => (hasConfig.value = res));
 
   const formRef = ref<FormInstance>();
   const loading = ref(false);
@@ -51,7 +56,8 @@
 </script>
 <template>
   <article class="flex items-center justify-center h-full w-full">
-    <a-card>
+    <Config v-if="!hasConfig" />
+    <a-card v-else>
       <template #title>
         <h2 class="text-center"><Logo /></h2>
       </template>

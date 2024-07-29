@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { WsAdapter } from '@nestjs/platform-ws';
 import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger';
 import { CfgAppModule } from './cfg.module';
-import { hasConfigFile } from './config/config.module';
+import { hasConfigFile } from './utils';
 import { AllExceptionFilter } from './core/filters/all-exception.filter';
 import { ResponseInterceptor } from './core/interceptors/response.interceptor';
 import * as express from 'express';

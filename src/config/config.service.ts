@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
-export class ConfigService {
-
+export class InitConfigService {
   readonly configKeys = [ 'database', 'jwtConstants', 'salt' ];
   readonly configPath = path.resolve(__dirname, './config.json')
 
@@ -23,6 +23,7 @@ export class ConfigService {
     }
     fs.writeFileSync(this.configPath, JSON.stringify(config));
     setTimeout(() => process.exit(0), 2000);
+
     return 'Config saved';
   }
 
@@ -35,5 +36,35 @@ export class ConfigService {
     config.database.password = '******';
     config.database.username = '******';
     return config;
+  }
+}
+
+@Injectable()
+export class ConfigService extends InitConfigService {
+  constructor(
+    private readonly usersService: UsersService,
+  ) {
+    super()
+  }
+
+  isConfig(): boolean {
+    const has = super.isConfig();
+    if (has) {
+      const config = this.resolveConfig();
+      if (config.password) {
+        this.usersService.create({
+          username: 'admin',
+          nickname: '超级管理员',
+          password: config.password,
+          email: config.email,
+        }).then(() => {
+          delete config.password;
+          delete config.email;
+          fs.writeFileSync(this.configPath, JSON.stringify(config));
+        })
+      }
+    }
+
+    return has;
   }
 }

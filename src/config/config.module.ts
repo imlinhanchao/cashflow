@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
-import { InitConfigController, ConfigController } from './config.controller';
+import { ConfigController } from './config.controller';
 import { ConfigService } from './config.service';
-import * as fs from 'fs';
-import * as path from 'path'
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  controllers: [hasConfigFile() ? ConfigController : InitConfigController],
-  providers: [ConfigService]
+  controllers: [ConfigController],
+  providers: [ConfigService],
+  imports: [UsersModule],
 })
 export class ConfigModule {}
-
-export function hasConfigFile() {
-  return fs.existsSync(path.resolve(__dirname, './config.json'));
-}

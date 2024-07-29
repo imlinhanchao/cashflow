@@ -26,3 +26,7 @@ export function downloadByUrl(url: string, saveDir: string): Promise<string> {
     .catch(reject);
   });
 }
+
+export function hasConfigFile() {
+  return fs.existsSync(path.resolve(__dirname, '../config/config.json'));
+}

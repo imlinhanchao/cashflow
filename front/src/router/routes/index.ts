@@ -27,7 +27,7 @@ export const RootRoute: AppRouteRecordRaw = {
 export const LoginRoute: AppRouteRecordRaw = {
   path: PageEnum.BASE_LOGIN,
   name: 'Login',
-  component: () => import('/@/views/login/Login.vue'),
+  component: () => import('/@/views/sys/Login.vue'),
   meta: {
     title: '登录',
   },
@@ -36,7 +36,7 @@ export const LoginRoute: AppRouteRecordRaw = {
 export const RegisterRoute: AppRouteRecordRaw = {
   path: PageEnum.BASE_REGISTER,
   name: 'Register',
-  component: () => import('/@/views/login/Register.vue'),
+  component: () => import('/@/views/sys/Register.vue'),
   meta: {
     title: '注册',
   },

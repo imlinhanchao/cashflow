@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from './config/config.module';
+import { InitConfigModule } from './config/init.module';
 
 @Module({
-  imports: [ConfigModule]
+  imports: [InitConfigModule]
 })
 export class CfgAppModule {}

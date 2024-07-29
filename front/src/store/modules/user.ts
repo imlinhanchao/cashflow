@@ -72,7 +72,12 @@ export const useUserStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
-      const userInfo = await getUserInfo();
+      const userInfo = await getUserInfo().catch(() => {
+        this.setToken('')
+      });
+      if (!userInfo) {
+        return null;
+      }
       this.setUserInfo(userInfo);
       return userInfo;
     },

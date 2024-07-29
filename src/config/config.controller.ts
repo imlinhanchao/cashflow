@@ -1,19 +1,25 @@
 import { Body, Request, Controller, Post, UseGuards, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ConfigService } from './config.service';
+import { ConfigService, InitConfigService } from './config.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { permissions } from 'src/core/Error';
+import { config_already, permissions } from 'src/core/Error';
 import { UserDto } from 'src/users/users.dto';
 
 @Controller('api/config')
 @ApiTags('Config')
 export class InitConfigController {
-  private readonly configService: ConfigService;
+  protected readonly configService: InitConfigService;
 
   constructor(
-    configService: ConfigService,
+    configService: InitConfigService,
   ) {
     this.configService = configService;
+  }
+
+  @Get('has')
+  @ApiOperation({ summary: '是否存在配置档' })
+  has() {
+    return this.configService.isConfig();
   }
 
   @Post('')
@@ -25,21 +31,25 @@ export class InitConfigController {
 
 @Controller('api/config')
 @ApiTags('Config')
-export class ConfigController {
-  private readonly configService: ConfigService;
-
+export class ConfigController extends InitConfigController {
   constructor(
     configService: ConfigService,
   ) {
-    this.configService = configService;
+    super(configService);
+  }
+
+  @Post('update')
+  @ApiOperation({ summary: '修改配置档' })
+  @UseGuards(JwtAuthGuard)
+  reset(@Request() { user }: { user: UserDto }, @Body() config: any) {
+    if (user.username != 'admin') throw permissions;
+    return this.configService.saveConfig(config);
   }
 
   @Post('')
   @ApiOperation({ summary: '新建配置档' })
-  @UseGuards(JwtAuthGuard)
-  create(@Request() { user }: { user: UserDto }, @Body() config: any) {
-    if (user.username != 'admin') throw permissions;
-    return this.configService.saveConfig(config);
+  create(@Body() _: any): string {
+    throw config_already;
   }
 
   @Get('')

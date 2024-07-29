@@ -1,4 +1,4 @@
-import { hasConfigFile } from "./config.module";
+import { hasConfigFile } from 'src/utils';
 
 let config: any = {};
 if (hasConfigFile()) {
