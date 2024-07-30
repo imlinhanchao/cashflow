@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://s.hancel.org">
-    <img width="200" src="./front/src/assets/images/logo.svg">
+    <img width="200" src="./front/src/assets/icons/logo.svg">
   </a>
 </p>
 
