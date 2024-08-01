@@ -128,6 +128,9 @@ const transform: AxiosTransform = {
         config.url = config.url + params;
         config.params = undefined;
       }
+      if (config.data instanceof FormData) {
+        config.headers['Content-Type'] = ContentTypeEnum.FORM_DATA;
+      }
     }
     return config;
   },
