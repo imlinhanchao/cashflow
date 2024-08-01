@@ -227,15 +227,15 @@ export class CashflowService {
           username,
           type: type.trim(),
           counterparty: counterparty.trim(),
-          description: description.trim(),
+          description: description.replace(/^"|"$/g, '').trim(),
           payment: payment.trim(),
-          amount: amount && parseFloat(amount) || 0,
+          amount: amount && parseFloat(amount.replace(/¥/, '')) || 0,
           status: status.trim(),
           category: category.trim(),
           orderNumber: orderNumber.trim(),
           merchantNumber: merchantNumber.trim(),
           transactionTime: transactionTime.trim(),
-          remark: remark.trim(),
+          remark: remark.replace(/^"|"$/g, '').trim(),
           from: 'wepay',
         });
       });
