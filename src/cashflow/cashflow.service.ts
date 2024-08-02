@@ -56,12 +56,13 @@ export class CashflowService {
     return cashflow;
   }
 
-  async findOrderNumbers(orderNumbers: string[]): Promise<Cashflow[]> {
+  async findOrderNumbers(orderNumbers: string[], username): Promise<Cashflow[]> {
     const cashflows = await this.cashflowModel.findAll({
       where: {
         orderNumber: {
           [Op.in]: orderNumbers,
-        }
+        },
+        username
       }
     })
     return cashflows;
@@ -241,7 +242,7 @@ export class CashflowService {
       });
     }
 
-    const exist = await this.findOrderNumbers(orderList.map((order) => order.orderNumber)).then((data) => data.map((order) => order.orderNumber));
+    const exist = await this.findOrderNumbers(orderList.map((order) => order.orderNumber), username).then((data) => data.map((order) => order.orderNumber));
 
     return await this.create(orderList.filter((order) => !exist.includes(order.orderNumber)));
   }
