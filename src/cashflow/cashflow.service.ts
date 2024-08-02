@@ -2,11 +2,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { QueryReqDto, QueryRspDto } from 'src/core/Dto/common.dto';
+import { DataSourceDto, QueryReqDto, QueryRspDto } from 'src/core/Dto/common.dto';
 import { CashflowDto, SyncDto } from './cashflow.dto';
 import { Cashflow } from './models/cashflow.model';
 import { MailService } from 'src/mail/mail.service';
-import { downloadByUrl, extract, markQuery, formatDateTime } from 'src/utils';
+import { downloadByUrl, extract, markQuery, formatDateTime, markWhere, markFields, markOrder } from 'src/utils';
 import { decode } from 'iconv-lite';
 import { Op, Sequelize } from 'sequelize';
 import { EnumDto } from '../core/Dto/enum.dto';
@@ -88,6 +88,21 @@ export class CashflowService {
     })
   }
 
+  async where(params: DataSourceDto, username: string) {
+    const rows = (await this.cashflowModel.findAll({
+      attributes: markFields(params.fields),
+      where: { ...markWhere(params.where), username },
+      order: markOrder(params.order),
+      group: params.group,
+      offset: params.index || 0,
+      limit: params.count,
+    })).map((cashflow) => cashflow.dataValues);
+
+    rows.forEach(this.format);
+
+    return rows;
+  }
+
   async search(data: QueryReqDto): Promise<QueryRspDto<Cashflow>> {
     const { page, size, ...query } = data;
 
@@ -111,9 +126,7 @@ export class CashflowService {
       order: [['transactionTime', 'DESC']],
     })).map((cashflow) => cashflow.dataValues);
 
-    rows.forEach(d => {
-      d.transactionTime = formatDateTime(d.transactionTime);
-    })
+    rows.forEach(this.format);
 
     return {
       rows,
@@ -178,14 +191,17 @@ export class CashflowService {
       order: [['transactionTime', 'DESC']],
     })).map((cashflow) => cashflow.dataValues);
 
-    rows.forEach(d => {
-      d.transactionTime = formatDateTime(d.transactionTime);
-    })
+    rows.forEach(this.format);
 
     return {
       rows,
       total,
     }
+  }
+
+  private format(data: Cashflow) {
+    data.transactionTime = formatDateTime(data.transactionTime);
+    return data;
   }
 
   async analysisFile(file: string, username: string, from: string): Promise<Cashflow[]> {

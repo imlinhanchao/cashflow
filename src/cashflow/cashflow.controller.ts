@@ -8,7 +8,7 @@ import { permissions } from 'src/core/Error';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { decode } from 'iconv-lite';
 import { EnumDto } from '../core/Dto/enum.dto';
-import { QueryReqDto } from 'src/core/Dto/common.dto';
+import { DataSourceDto, QueryReqDto } from 'src/core/Dto/common.dto';
 @Controller('api/cashflow')
 @ApiTags('Cashflow')
 export class CashflowController {
@@ -40,6 +40,13 @@ export class CashflowController {
   search(@Request() { user }: { user: UserDto }, @Query() query: QueryReqDto) {
     if (user.username != 'admin') query.username = user.username;
     return this.cashflowService.search(query);
+  }
+
+  @Post('where')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: '高级搜索' })
+  where(@Request() { user }: { user: UserDto }, @Body() query: DataSourceDto) {
+    return this.cashflowService.where(query, user.username);
   }
 
   @Get('enum')

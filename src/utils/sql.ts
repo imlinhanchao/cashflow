@@ -1,4 +1,5 @@
-import { Op } from 'sequelize';
+import { FindAttributeOptions, Op, Order, col, fn } from 'sequelize';
+import { DataFieldDto, DataOrderDto, SQLFn, SQLWhereDto, SQLWhereItem } from 'src/core/Dto/common.dto';
 
 export function markQuery(query: Record<string, any>): any {
   const prefixs = {
@@ -35,4 +36,50 @@ export function markQuery(query: Record<string, any>): any {
     }
   })
   return query;
+}
+
+export function markWhere(where?: SQLWhereDto) {
+  if (!where) return {};
+  const op = where.relational == 'and' ? Op.and : Op.or;
+  return {
+    [op]: where.items.map((item) => {
+      if ((item as SQLWhereDto).relational) {
+        return markWhere(item as SQLWhereDto);
+      } else {
+        return markQuery(item as SQLWhereItem);
+      }
+    })
+  }
+}
+
+export function markFields(fields: DataFieldDto[]): FindAttributeOptions {
+  return fields.map((field) => {
+    if (field.fun) {
+      return [markFnField(field.fun), field.label];
+    } else {
+      return [field.field, field.label];
+    }
+  })
+}
+
+export function markOrder(fields: DataOrderDto[]): Order {
+  return fields.map((field) => {
+    if (field.fun) {
+      return [markFnField(field.fun), field.order];
+    } else {
+      return [field.field, field.order];
+    }
+  })
+}
+
+export function markFnField(field: SQLFn) {
+  return fn(field.name, ...field.params.map((param) => {
+    if (param.type == 'value') {
+      return param.value;
+    } else if (param.type == 'col') {
+      return col(param.value as string);
+    } else {
+      return markFnField(param.value as SQLFn);
+    }
+  }));
 }
