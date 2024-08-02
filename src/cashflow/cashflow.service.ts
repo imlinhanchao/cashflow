@@ -222,7 +222,7 @@ export class CashflowService {
       fileLines.forEach((line) => {
         if (line.startsWith('交易时间')) return isStart = true;
         if (!isStart || !line) return;
-        const [transactionTime, category, counterparty, description, type, amount, payment, status, orderNumber, merchantNumber, remark] = line.split(',');
+        const [transactionTime, category, counterparty, description, type, amount, payment, status, orderNumber, merchantNumber, remark] = line.trim().split(',');
         orderList.push({
           username,
           type: type.trim(),
