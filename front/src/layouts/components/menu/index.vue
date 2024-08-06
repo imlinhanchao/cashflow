@@ -75,13 +75,14 @@
         :subMenuOpenDelay="0.2"
         class="!border-none"
       >
-        <SubMenuItem
-          :item="item"
-          v-for="item in menus"
-          :key="item.name"
-          :name="item.meta.title"
-          :icon="item.meta.icon"
-        />
+        <template v-for="item in menus" :key="item.name">
+          <SubMenuItem
+            v-if="!item.meta.hidden"
+            :item="item"
+            :name="item.meta.title"
+            :icon="item.meta.icon"
+          />
+        </template>
       </a-menu>
     </a-drawer>
   </section>

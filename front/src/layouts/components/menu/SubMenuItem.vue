@@ -14,7 +14,7 @@
     return (
       Reflect.has(menuTreeItem, 'children') &&
       !!menuTreeItem.children &&
-      menuTreeItem.children.length > 1
+      menuTreeItem.children.filter(m => !m.meta.hidden).length > 1
     );
   }
 </script>

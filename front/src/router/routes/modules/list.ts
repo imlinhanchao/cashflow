@@ -1,9 +1,9 @@
 import { LAYOUT } from '@/router/constant';
 export default [
   {
-    path: '/list',
+    path: '/bill',
     component: LAYOUT,
-    redirect: '/data/list',
+    redirect: '/bill/search',
     meta: {
       order: 2,
       icon: 'solar:bill-list-bold',
@@ -11,9 +11,9 @@ export default [
     },
     children: [
       {
-        path: '/data/list',
-        name: 'DataList',
-        component: () => import('/@/views/list/index.vue'),
+        path: '/bill/search',
+        name: 'BillSearch',
+        component: () => import('/@/views/bill/index.vue'),
         meta: {
           title: '账单历史',
         },

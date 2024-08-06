@@ -12,11 +12,6 @@ export interface QueryReqDto {
   [key: string]: any;
 }
 
-export interface StatisticDto {
-  source: Record<string, DataSourceDto>;
-  options: any;
-}
-
 export class SQLFn {
   @ApiProperty({ name: 'name', description: '函数名' })
   name: string;
@@ -72,4 +67,24 @@ export class DataSourceDto {
   index?: number;
   @ApiProperty({ name: 'count', description: '查询数量' })
   count?: number;
+}
+
+export class SearchField {
+  @ApiProperty({ name: 'fields', description: '查询字段' })
+  field: string;
+  @ApiProperty({ name: 'label', description: '字段显示名' })
+  label: string;
+  @ApiProperty({ name: 'component', description: '组件名' })
+  component: string;
+  @ApiProperty({ name: 'attrs', description: '组件属性' })
+  attrs: Record<string, any>;
+}
+
+export class StatisticDto {
+  @ApiProperty({ name: 'source', description: '数据源' })
+  source: Record<string, DataSourceDto>;
+  @ApiProperty({ name: 'search', description: '搜索字段' })
+  search: SearchField[];
+  @ApiProperty({ name: 'options', description: 'echart配置' })
+  options: any;
 }

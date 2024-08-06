@@ -31,47 +31,53 @@
   const billCount = ref(0);
   async function syncData() {
     if (!(await chooseRef.value?.vaildate())) return false;
-    loading.value = true;
-    stepItems[1].icon = h(LoadingOutlined);
-    const { waitBillMail, syncData } = useSyncData(data);
-    if (data.way == 'email') {
-      syncText.value = '监听邮件中';
-      await waitBillMail;
-      if (
-        !(await modal.confirm({
-          title: '填写对账单解压密码',
-          content: () => (
-            <Form model={data} label-col={{ span: 0 }} wrapper-col={{ span: 24 }} class="my-5">
-              <FormItem>
-                <InputPassword v-model:value={data.archive} allow-clear placeholder="解压密码" />
-              </FormItem>
-            </Form>
-          ),
-          async onOk() {
-            return true;
-          },
-          async onCancel() {
-            loading.value = false;
-            return false;
-          },
-        }))
-      ) {
-        return false;
+    try {
+      loading.value = true;
+      stepItems[1].icon = h(LoadingOutlined);
+      const { waitBillMail, syncData } = useSyncData(data);
+      if (data.way == 'email') {
+        syncText.value = '监听邮件中';
+        await waitBillMail;
+        if (
+          !(await modal.confirm({
+            title: '填写对账单解压密码',
+            content: () => (
+              <Form model={data} label-col={{ span: 0 }} wrapper-col={{ span: 24 }} class="my-5">
+                <FormItem>
+                  <InputPassword v-model:value={data.archive} allow-clear placeholder="解压密码" />
+                </FormItem>
+              </Form>
+            ),
+            async onOk() {
+              return true;
+            },
+            async onCancel() {
+              loading.value = false;
+              return false;
+            },
+          }))
+        ) {
+          return false;
+        }
       }
+      syncText.value = '导入数据中';
+      await syncData()
+        .then((count) => {
+          billCount.value = count;
+          currentStep.value = 2;
+        })
+        .finally(() => {
+          loading.value = false;
+          delete stepItems[1].icon;
+          data.archive = '';
+          delete data.files;
+          syncText.value = '开始导入';
+        });
+    } catch (e) {
+      loading.value = false;
+      delete stepItems[1].icon;
+      syncText.value = '开始导入';
     }
-    syncText.value = '导入数据中';
-    syncData()
-      .then((count) => {
-        billCount.value = count;
-        currentStep.value = 2;
-      })
-      .finally(() => {
-        loading.value = false;
-        delete stepItems[1].icon;
-        data.archive = '';
-        delete data.files;
-        syncText.value = '开始导入';
-      });
   }
 
   onMounted(() => {

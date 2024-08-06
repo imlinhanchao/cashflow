@@ -17,7 +17,8 @@ export function markQuery(query: Record<string, any>): any {
   const arrayPrefixs = ['in', 'notIn', 'between'];
   
   Object.keys(query).forEach((key) => {
-    const [prefix, field] = key.split('_');
+    const [prefix, ...fields] = key.split('_');
+    const field = fields.join('_');
     if (prefixs[prefix] && query[key]) {
       query[field] = {
         [prefixs[prefix]]: query[key]

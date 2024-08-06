@@ -33,14 +33,18 @@ export function useSyncData(config: SyncModel) {
   }
 
   let timer: any = 0;
-  let resolve: any = null;
-  const waitBillMail = new Promise((r) => (resolve = r));
+  let resolve: any = null, reject: any = null;
+  const waitBillMail = new Promise((r, j) => (resolve = r, reject = j));
   if (config.way == 'email') {
     const timeout = 2000;
     const checkTimer = async () => {
-      if (!(await checkMail())) return setTimeout(checkTimer, timeout);
-      timer = 0;
-      resolve();
+      try {
+        if (!(await checkMail())) return setTimeout(checkTimer, timeout);
+        timer = 0;
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
     };
     timer = setTimeout(checkTimer, timeout);
   }
