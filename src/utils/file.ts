@@ -27,6 +27,8 @@ export function downloadByUrl(url: string, saveDir: string): Promise<string> {
   });
 }
 
+export const configPath = path.resolve(__dirname, '../../config.json');
+
 export function hasConfigFile() {
-  return fs.existsSync(path.resolve(__dirname, '../config/config.json'));
+  return fs.existsSync(configPath);
 }

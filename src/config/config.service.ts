@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import * as path from 'path';
 import { UsersService } from 'src/users/users.service';
+import { configPath } from 'src/utils';
 
 @Injectable()
 export class InitConfigService {
   readonly configKeys = [ 'database', 'jwtConstants', 'salt' ];
-  readonly configPath = path.resolve(__dirname, './config.json')
+  readonly configPath = configPath;
 
   isConfig(): boolean {
     return fs.existsSync(this.configPath) && this.checkConfig(this.resolveConfig()).length === 0;

@@ -1,8 +1,8 @@
-import { hasConfigFile } from 'src/utils';
+import { configPath, hasConfigFile } from 'src/utils';
 
 let config: any = {};
 if (hasConfigFile()) {
-  config = require('./config.json');
+  config = require(configPath);
 }
 
 export const database = config.database;
