@@ -2,7 +2,7 @@
   import { FormInstance } from 'ant-design-vue';
   import { SQLFn, SQLFnParam } from '@/api/data';
   import Fn from './fn.vue';
-import FieldSelect from './fieldSelect.vue';
+  import FieldSelect from './fieldSelect.vue';
 
   const props = withDefaults(
     defineProps<{
@@ -47,7 +47,7 @@ import FieldSelect from './fieldSelect.vue';
   };
 
   async function validate() {
-    return (await fnRef.value?.validate()) && (await formRef.value?.validate());
+    return (await formRef.value?.validate()) && (!fnRef.value || (await fnRef.value?.validate()));
   }
 
   defineExpose({
@@ -70,10 +70,14 @@ import FieldSelect from './fieldSelect.vue';
         <a-select v-model:value="p.type" @change="typeChange($event, p)">
           <a-select-option value="col">字段</a-select-option>
           <a-select-option value="value">常数</a-select-option>
+          <a-select-option value="string">字符串</a-select-option>
           <a-select-option value="fn">函数</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item v-if="p.type == 'value'" label="　值" :name="['params', i, 'value']" :rules="rules.value">
+        <a-input-number v-model:value="p.value" />
+      </a-form-item>
+      <a-form-item v-if="p.type == 'string'" label="　值" :name="['params', i, 'value']" :rules="rules.value">
         <a-input v-model:value="p.value" />
       </a-form-item>
       <a-form-item v-else-if="p.type == 'col'" label="字段" :name="['params', i, 'value']" :rules="rules.value">

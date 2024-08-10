@@ -28,12 +28,7 @@ export class DataSource {
   /**
    * 查询 SQL Where 条件
    */
-  where: SQLWhere = {
-    items: [{
-      type: '支出'
-    }],
-    relational: 'and',
-  };
+  where = new SQLWhere([{ type: '支出' }]);
 }
 
 /**
@@ -140,6 +135,10 @@ export enum Type {
    * 值
    */
   Value = "value",
+  /**
+   * 字符串
+   */
+  String = "string",
 }
 
 /**

@@ -3,12 +3,12 @@
   import Fn from './fn.vue';
   import { FormInstance } from 'ant-design-vue';
   import FieldSelect from './fieldSelect.vue';
-import { clone } from '@/utils';
+  import { clone } from '@/utils';
 
   const data = ref<DataField>(new DataField());
   const emit = defineEmits<{
-    (ev: 'confirm', value: DataField): void
-  }>()
+    (ev: 'confirm', value: DataField): void;
+  }>();
 
   const visible = ref(false);
   const isFunction = computed(() => !!data.value.fun);
@@ -16,13 +16,16 @@ import { clone } from '@/utils';
   function functionSwitch(checked) {
     if (checked && !data.value.fun) {
       data.value.fun = new SQLFn();
+    } else {
+      delete data.value.fun
     }
   }
 
   const formRef = ref<FormInstance>();
+  const fnRef = ref<InstanceType<typeof Fn>>();
   const rules = {
-    field: [{ required: true, message: '请输入字段', trigger: 'blur' }],
-    label: [{ required: true, message: '请输入标签', trigger: 'blur' }],
+    field: [{ required: true, message: '请选择字段', trigger: 'change' }],
+    label: [{ required: true, message: '请输入标签', trigger: 'change' }],
   };
 
   let resolve: (value: DataField) => void;
@@ -42,7 +45,7 @@ import { clone } from '@/utils';
     if (!(await formRef.value?.validate())) return;
     if (!isFunction.value) {
       delete data.value.fun;
-    }
+    } else if (!(await fnRef.value?.validate())) return;
     emit('confirm', data.value);
     resolve?.(data.value);
     close();
@@ -55,19 +58,19 @@ import { clone } from '@/utils';
 </script>
 
 <template>
-  <a-modal :visible="visible" title="数据源字段" @cancel="close" @ok="save">
+  <a-modal v-model:open="visible" title="数据源字段" @cancel="close" @ok="save">
     <section class="overflow-auto h-[70vh]">
       <a-form ref="formRef" :model="data" :rules="rules">
         <a-form-item label="函数字段">
-          <a-switch :checked="isFunction" @click="functionSwitch" />
+          <a-switch :checked="isFunction" @change="functionSwitch" />
         </a-form-item>
         <a-form-item v-if="!isFunction" label="字段" name="field">
-          <FieldSelect v-model="data.field" />
+          <FieldSelect v-model="data.field" @change="data.label = $event.label" />
         </a-form-item>
         <a-form-item label="标签" name="label">
           <a-input v-model:value="data.label" />
         </a-form-item>
-        <a-form-item v-if="isFunction" label="函数表达式">
+        <a-form-item v-if="isFunction" label="函数表达式" name="fun">
           {{ data.fun?.toString() }}
         </a-form-item>
         <Fn ref="fnRef" v-model="data.fun" v-if="isFunction" />

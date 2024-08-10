@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  const model = defineModel<string>();
+  const model = defineModel<string | string[]>();
   const fields = {
     amount: '金额',
     type: '收/支',
@@ -14,9 +14,15 @@
     remark: '备注',
     from: '来源',
   };
+  const emit = defineEmits(['change'])
+
+  function onChange(value) {
+    if (Array.isArray(value)) emit('change', value.map((k) => ({ field: k, label: fields[k] })))
+    else emit('change', { field: value, label: fields[value] })
+  }
 </script>
 <template>
-  <a-select v-model:value="model">
+  <a-select v-model:value="model" @change="onChange" v-bind="$attrs">
     <a-select-option v-for="(val, key) in fields" :value="key" :key="key">
       <span class="inline-block">{{ val }}</span>
       <span class="inline-block text-gray-400 ml-2">{{ key }}</span>
