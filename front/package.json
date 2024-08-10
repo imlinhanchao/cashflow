@@ -49,6 +49,7 @@
     "npm-run-all2": "^6.2.0",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
+    "run-p": "^0.0.0",
     "typescript": "~5.4.0",
     "unocss": "^0.58.9",
     "unplugin-auto-import": "^0.18.0",

@@ -114,6 +114,9 @@ importers:
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
+      run-p:
+        specifier: ^0.0.0
+        version: 0.0.0
       typescript:
         specifier: ~5.4.0
         version: 5.4.5
@@ -3278,6 +3281,9 @@ packages:
   run-applescript@7.0.0:
     resolution: {integrity: sha512-9by4Ij99JUr/MCFBUkDKLWK3G9HVXmabKz9U5MlIAIuvuzkiOicRYs8XJLxX+xahD+mLiiCYDqF9dKAgtzKP1A==}
     engines: {node: '>=18'}
+
+  run-p@0.0.0:
+    resolution: {integrity: sha512-ZLiUUVOXJcM/S1hMnm6Ooc1zAgAx98Mmn1qyA+y3WNeK7hOTGAusVR5r3uOQJ0NuUxZt7J9vNusYNNVgKPSbww==}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -7436,6 +7442,8 @@ snapshots:
       fsevents: 2.3.3
 
   run-applescript@7.0.0: {}
+
+  run-p@0.0.0: {}
 
   run-parallel@1.2.0:
     dependencies:
