@@ -85,5 +85,18 @@ export function randStr(size: number = 16) {
     s += seed.charAt(Math.floor(Math.random() * seed.length));
   }
   return s;
+}
 
+export function clone<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return (value.map((item) => clone(item)) as unknown) as T;
+  }
+  if (isObject(value)) {
+    const target: any = {};
+    for (const key in value) {
+      target[key] = clone(value[key]);
+    }
+    return target;
+  }
+  return value;
 }

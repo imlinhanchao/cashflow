@@ -2,6 +2,7 @@
   import { FormInstance } from 'ant-design-vue';
   import { SQLFn, SQLFnParam } from '@/api/data';
   import Fn from './fn.vue';
+import FieldSelect from './fieldSelect.vue';
 
   const props = withDefaults(
     defineProps<{
@@ -76,20 +77,7 @@
         <a-input v-model:value="p.value" />
       </a-form-item>
       <a-form-item v-else-if="p.type == 'col'" label="字段" :name="['params', i, 'value']" :rules="rules.value">
-        <a-select v-model:value="p.value">
-          <a-select-option value="amount">金额</a-select-option>
-          <a-select-option value="type">收/支</a-select-option>
-          <a-select-option value="counterparty">交易对方</a-select-option>
-          <a-select-option value="description">商品说明</a-select-option>
-          <a-select-option value="payment">支付方式</a-select-option>
-          <a-select-option value="status">交易状态</a-select-option>
-          <a-select-option value="category">交易分类</a-select-option>
-          <a-select-option value="orderNumber">交易订单号</a-select-option>
-          <a-select-option value="merchantNumber">商家订单号</a-select-option>
-          <a-select-option value="transactionTime">交易时间</a-select-option>
-          <a-select-option value="remark">备注</a-select-option>
-          <a-select-option value="from">来源</a-select-option>
-        </a-select>
+        <FieldSelect v-model="p.value as string" />
       </a-form-item>
       <Fn ref="fnRef" v-else v-model="p.value as SQLFn" />
     </section>
