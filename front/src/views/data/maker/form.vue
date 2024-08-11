@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { DataSource } from '@/api/data';
   import Field from './field.vue';
+  import Where from './where.vue';
 
   const props = withDefaults(
     defineProps<{
@@ -31,5 +32,9 @@
       </a-tag>
       <Field ref="fieldRef" />
     </a-form-item>
+    <a-form-item label="条件">
+      {{ data.where.toString() }}
+    </a-form-item>
+    <Where v-model="data.where" />
   </a-form>
 </template>

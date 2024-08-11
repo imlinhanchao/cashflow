@@ -7,6 +7,7 @@
       query?: any;
       search?: (params: EnumQuery) => Promise<EnumFieldRsp[]>;
       pre: ('between' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ne' | 'eq' | 'in' | 'notIn')[];
+      prefix?: string;
     }>(),
     {
       pre: () => ['like', 'eq'],
@@ -18,7 +19,7 @@
 
   const options = ref<EnumFieldRsp[]>([]);
   const data = ref(props.query);
-  const prefix = ref(props.pre[0]);
+  const prefix = ref(props.prefix || props.pre[0]);
   const prefixs = reactive({
     between: '~',
     gt: '>',
@@ -63,12 +64,18 @@
     }
   });
 
+  watch(() => props.pre, (val) => {
+    if (!val.includes(prefix.value)) prefix.value = val[0];
+  })
+
+  watch(() => props.field, () => searchField(''))
+
   onMounted(() => {
     searchField('');
   });
 </script>
 <template>
-  <a-input-group compact>
+  <a-input-group v-bind="$attrs" compact>
     <slot :query="data" :prefix="prefix" :field="field" :options="options" :search="searchField">
       <template v-if="field">
         <a-auto-complete
@@ -111,7 +118,7 @@
     >
       <a-select-option v-for="p in pre" :key="p" :value="p" :label="prefixs[p]">
         <a-tooltip :title="prefixMeans[p]"
-          ><section>{{ prefixs[p] }}</section></a-tooltip
+        ><section>{{ prefixs[p] }}</section></a-tooltip
         >
       </a-select-option>
     </a-select>

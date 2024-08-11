@@ -28,7 +28,7 @@ export class DataSource {
   /**
    * 查询 SQL Where 条件
    */
-  where = new SQLWhere([{ type: '支出' }]);
+  where = new SQLWhere([{ eq_type: '支出' }]);
 }
 
 /**
