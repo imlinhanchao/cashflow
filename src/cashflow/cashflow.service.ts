@@ -95,7 +95,7 @@ export class CashflowService {
       order: markOrder(params.order),
       group: params.group,
       offset: params.index || 0,
-      limit: params.count,
+      limit: params.count || undefined,
     })).map((cashflow) => cashflow.dataValues);
 
     rows.forEach(this.format);

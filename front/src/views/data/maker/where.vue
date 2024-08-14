@@ -37,7 +37,10 @@
   function updateWhere(it: { oldKey: string; key: string; val: any }, index) {
     delete model.value.items[index][it.oldKey];
     Object.assign(model.value.items[index], it.val);
-    editItems.value.splice(editItems.value.findIndex(e => e.key == it.key), 1);
+    editItems.value.splice(
+      editItems.value.findIndex((e) => e.key == it.key),
+      1,
+    );
   }
   function removeActive() {
     activeItems.value.forEach((item) =>
@@ -68,7 +71,11 @@
         <a-dropdown :trigger="['click']">
           <Icon icon="icon-park:down" class="cursor-pointer" />
           <template #overlay>
-            <a-menu selectable :selectedKeys="[model.relational]" @click="model.relational = $event.key">
+            <a-menu
+              selectable
+              :selectedKeys="[model.relational]"
+              @click="model.relational = $event.key"
+            >
               <a-menu-item key="and">
                 <a href="javascript:;">And</a>
               </a-menu-item>
@@ -109,7 +116,13 @@
                 class="group-hover:inline hidden"
                 type="link"
                 size="small"
-                @click.stop="editItems.push({ oldKey: field, key: field.split('_').slice(1).join('_'), val: { [field]: val } })"
+                @click.stop="
+                  editItems.push({
+                    oldKey: field,
+                    key: field.split('_').slice(1).join('_'),
+                    val: { [field]: val },
+                  })
+                "
               >
                 <Icon icon="fluent:edit-20-regular" size="12" />
               </a-button>
@@ -130,10 +143,23 @@
                 :search="enumField"
                 :prefix="field.split('_')[0]"
               />
-              <a-button size="small" type="link" @click.stop="updateWhere(editItems.find(e => field == e.oldKey)!, i)">
+              <a-button
+                size="small"
+                type="link"
+                @click.stop="updateWhere(editItems.find((e) => field == e.oldKey)!, i)"
+              >
                 <Icon icon="ic:baseline-check" />
               </a-button>
-              <a-button size="small" type="link" @click.stop="editItems.splice(editItems.findIndex(e => field == e.oldKey), 1)">
+              <a-button
+                size="small"
+                type="link"
+                @click.stop="
+                  editItems.splice(
+                    editItems.findIndex((e) => field == e.oldKey),
+                    1,
+                  )
+                "
+              >
                 <Icon icon="ic:baseline-close" />
               </a-button>
             </span>
@@ -159,12 +185,12 @@
             size="small"
             :search="enumField"
           />
-          <a-button size="small" type="link" @click="addWhere(it)"
-          ><Icon icon="ic:baseline-check"
-          /></a-button>
-          <a-button size="small" type="link" @click="newItems.splice(newItems.indexOf(it), 1)"
-          ><Icon icon="ic:baseline-close"
-          /></a-button>
+          <a-button size="small" type="link" @click="addWhere(it)">
+            <Icon icon="ic:baseline-check" />
+          </a-button>
+          <a-button size="small" type="link" @click="newItems.splice(newItems.indexOf(it), 1)">
+            <Icon icon="ic:baseline-close" />
+          </a-button>
         </span>
       </section>
       <section class="toolbar absolute">
@@ -175,13 +201,14 @@
           <a-button size="small" type="link"><Icon icon="tabler:logic-and" /></a-button>
         </a-tooltip>
         <a-popconfirm
-          title="是否确认删除选中条件?"
-          ok-text="是"
-          cancel-text="否"
+          title="是否要删除选中所有条件?"
+          ok-text="删了吧"
+          cancel-text="先不要"
           @confirm="removeActive"
+          v-if="activeItems.length > 0"
         >
           <span>
-            <a-tooltip title="删除" v-if="activeItems.length > 0" @click="removeActive">
+            <a-tooltip title="删除">
               <a-button size="small" type="link"><Icon icon="tabler:trash-x" /></a-button>
             </a-tooltip>
           </span>
