@@ -1,3 +1,6 @@
+import { defHttp } from "@/utils/http";
+import { IPageParam } from "./common";
+
 /**
  * DataSourceDto
  */
@@ -29,6 +32,12 @@ export class DataSource {
    * 查询 SQL Where 条件
    */
   where = new SQLWhere([{ eq_type: '支出' }]);
+
+  from(data: DataSource) {
+    Object.assign(this, data);
+    data.where = new SQLWhere(data.where.items, data.where.relational);
+    return this;
+  }
 }
 
 /**
@@ -204,7 +213,7 @@ export class SQLWhere {
   }
 
   constructor(items: (Recordable<any> | SQLWhere)[] = [], relational: 'and' | 'or' = 'and') {
-    this.items = items;
+    this.items = items.map(item => item.relational ? new SQLWhere(item.items, item.relational) : item);
     this.relational = relational;
   }
 
@@ -252,4 +261,57 @@ export class SQLWhere {
 
     }).join(' and ');
   }
+}
+
+/**
+ * 新建数据源
+ * POST /api/datasrc/create
+ * 接口ID：204907425
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-204907425
+ */
+export function create(data: DataSource[]) {
+  return defHttp.post<any>({ url: '/datasrc/create', data });
+}
+
+/**
+ * 更新数据源
+ * PUT /api/datasrc/{id}
+ * 接口ID：204907426
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-204907426
+ */
+export function update(id: string, data: DataSource) {
+  return defHttp.put<any>({ url: `/datasrc/${id}`, data });
+}
+
+/**
+ * 获取数据源
+ * GET /api/datasrc/{id}
+ * 接口ID：204907427
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-204907427
+ */
+export function getDetail(id: string) {
+  return defHttp.get<DataSource>({ url: `/datasrc/get/${id}` });
+}
+
+/**
+ * 删除数据源
+ * DELETE /api/datasrc/{id}
+ * 接口ID：204907428
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-204907428
+ */
+export function remove(id: string) {
+  return defHttp.delete<any>({ url: `/datasrc/${id}` });
+}
+
+/**
+ * 搜索数据源
+ * GET /api/datasrc/search
+ * 接口ID：204907429
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-204907429
+ */
+export function search(params: any & IPageParam) {
+  Object.keys(params).forEach((k) => {
+    if (Array.isArray(params[k])) params[k] = params[k].join(',');
+  });
+  return defHttp.get<any>({ url: '/datasrc/search', params });
 }

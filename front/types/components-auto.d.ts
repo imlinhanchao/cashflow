@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     FieldInput: typeof import('@/components/FieldInput/index.ts')['default']
     FieldInputSrcFieldInput: typeof import('@/FieldInput.vue')['default']
     Icon: typeof import('@/components/Icon/index.ts')['default']

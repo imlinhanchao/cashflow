@@ -7,6 +7,7 @@ import { database } from './config';
 import { CashflowModule } from './cashflow/cashflow.module';
 import { MailModule } from './mail/mail.module';
 import { ConfigModule } from './config/config.module';
+import { DatasrcModule } from './datasrc/datasrc.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ConfigModule } from './config/config.module';
     CashflowModule,
     MailModule,
     ConfigModule,
+    DatasrcModule,
   ]
 })
 export class AppModule {}

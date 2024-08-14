@@ -1,5 +1,6 @@
 import { defHttp } from '@/utils/http';
 import { EnumFieldRsp, EnumQuery, IPageParam } from './common';
+import { DataSource } from './data';
 
 export interface IMailAccount {
   /**
@@ -189,4 +190,14 @@ export function search(params: any & IPageParam) {
  */
 export function enumField(params: EnumQuery) {
   return defHttp.get<EnumFieldRsp[]>({ url: '/cashflow/enum', params });
+}
+
+/**
+ * 高级搜索
+ * POST /cashflow/where
+ * 接口ID：200667898
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-200667898
+ */
+export function advancedSearch(data: DataSource)  {
+  return defHttp.post<any[]>({ url: '/cashflow/where', data });
 }

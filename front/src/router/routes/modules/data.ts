@@ -11,7 +11,7 @@ export default [
     },
     children: [
       {
-        path: '/data/source',
+        path: 'source',
         name: 'DataSource',
         component: () => import('/@/views/data/index.vue'),
         meta: {
@@ -19,11 +19,20 @@ export default [
         },
       },
       {
-        path: '/data/maker',
+        path: 'maker',
         name: 'DataMaker',
         component: () => import('/@/views/data/maker/index.vue'),
         meta: {
           title: '数据源制作',
+          hidden: true,
+        },
+      },
+      {
+        path: ':id',
+        name: 'DataDetail',
+        component: () => import('/@/views/data/maker/index.vue'),
+        meta: {
+          title: '数据源详情',
           hidden: true,
         },
       },

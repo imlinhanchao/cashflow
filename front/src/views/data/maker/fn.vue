@@ -56,7 +56,7 @@
 </script>
 
 <template>
-  <a-form ref="formRef" class="p-3 border border-dashed border-gray-500 rounded-md" :model="data" :rules="rules">
+  <a-form ref="formRef" class="p-3 border border-dashed border-gray-500 rounded-md mb-2" :model="data" :rules="rules">
     <a-form-item label="SQL 函数名" name="name">
       <a-input v-model:value="data.name" />
     </a-form-item>
