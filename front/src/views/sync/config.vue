@@ -33,7 +33,7 @@
           <Icon icon="i-mingcute:mail-line" /> 邮箱接收对账单
         </a-radio-button>
         <a-radio-button value="file">
-          <Icon icon="i-hugeicons:csv-02" size="1.3em" /> 直接上传对账单
+          <Icon icon="i-hugeicons:csv-01" size="1.3em" /> 直接上传对账单
         </a-radio-button>
       </a-radio-group>
     </a-form-item>

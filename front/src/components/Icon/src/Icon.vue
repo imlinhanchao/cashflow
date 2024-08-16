@@ -10,7 +10,7 @@
     }>(),
     {
       icon: '',
-      size: 16,
+      size: 16
     },
   );
 
@@ -36,10 +36,14 @@
 
     return props.icon;
   });
+
+  const fontSize = computed(() => {
+    return isNumber(props.size) || !isNaN(Number(props.size)) ? `${props.size}px` : props.size;
+  });
 </script>
 
 <template>
-  <i class="com-icon" :style="{ fontSize: isNumber(Number(size)) ? size + 'px' : size, color }">
+  <i class="com-icon" :style="{ fontSize, color }">
     <!-- 组件：对象/函数/ant-icon-xxx -->
     <component v-if="isComp" :is="icon" />
 
