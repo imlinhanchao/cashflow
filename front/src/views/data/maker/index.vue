@@ -8,7 +8,7 @@
   const route = useRoute();
 
   const data = ref<any[]>([]);
-  const source = ref<DataSource>();
+  const source = ref<DataSource>(new DataSource());
   async function save(data: DataSource) {
     await create([data]);
     message.success('保存成功！');
@@ -17,7 +17,7 @@
 
   if (route.params.id) {
     getDetail(route.params.id as string).then((res) => {
-      source.value = Object.assign(new DataSource(), res);
+      source.value = DataSource.from(res);
     });
   }
 </script>

@@ -19,9 +19,12 @@
     (ev: 'query', data: any[]): void;
   }>();
 
-  watch(() => props.modelValue, (val) => {
-    if (val) data.value = val;
-  });
+  watch(
+    () => props.modelValue,
+    (val) => {
+      if (val) data.value = val;
+    },
+  );
 
   const data = ref(props.modelValue || new DataSource());
   const fieldRef = ref<InstanceType<typeof Field>>();
@@ -68,9 +71,9 @@
         class="group !inline-flex items-center"
         @close="data.fields.splice(i, 1)"
       >
-        <a-tooltip :title="f.fun?.toString()"
-        ><span>{{ f.label }}</span></a-tooltip
-        >
+        <a-tooltip :title="f.name">
+          <span><Icon v-if="f.fun" icon="fluent:braces-24-filled" /> {{ f.label }}</span>
+        </a-tooltip>
         <Icon
           class="!group-hover:inline !hidden cursor-pointer"
           icon="fluent:edit-20-regular"
@@ -86,21 +89,22 @@
       </a-button>
     </a-form-item>
     <Transition name="fade-slide">
-      <KeepAlive
-      ><Where
-        v-if="editWhere"
-        v-model="data.where"
-        class="mb-3 rounded-md bg-white border-1 border-black border-dashed py-2"
-      /></KeepAlive>
+      <KeepAlive>
+        <Where
+          v-if="editWhere"
+          v-model="data.where"
+          class="mb-3 rounded-md bg-white border-1 border-black border-dashed py-2"
+        />
+      </KeepAlive>
     </Transition>
     <a-form-item label="排序">
       <a-button type="link" @click="orderRef?.open().then((f) => data.order.push(f))">
         <Icon icon="ic:outline-add-circle" />
       </a-button>
       <a-tag v-for="(f, i) in data.order" :key="i" closable class="group !inline-flex items-center">
-        <a-tooltip :title="f.fun?.toString()"
-        ><span>{{ f.field || f.fun?.toString() }}</span></a-tooltip
-        >
+        <a-tooltip :title="f.fun?.toString()">
+          <span>{{ f.name }}</span>
+        </a-tooltip>
         <Icon icon="ri:sort-alphabet-asc" v-if="f.order == 'ASC'" />
         <Icon icon="ri:sort-alphabet-desc" v-if="f.order == 'DESC'" />
         <Icon

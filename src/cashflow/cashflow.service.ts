@@ -200,7 +200,7 @@ export class CashflowService {
   }
 
   private format(data: Cashflow) {
-    data.transactionTime = formatDateTime(data.transactionTime);
+    if (data.transactionTime) data.transactionTime = formatDateTime(data.transactionTime);
     return data;
   }
 

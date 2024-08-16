@@ -1,5 +1,21 @@
 import { defHttp } from "@/utils/http";
 import { IPageParam } from "./common";
+import { isNumber, isString } from "@/utils";
+
+export const fieldMaps = {
+  amount: '金额',
+  type: '收/支',
+  counterparty: '交易对方',
+  description: '商品说明',
+  payment: '支付方式',
+  status: '交易状态',
+  category: '交易分类',
+  orderNumber: '交易订单号',
+  merchantNumber: '商家订单号',
+  transactionTime: '交易时间',
+  remark: '备注',
+  from: '来源',
+};
 
 /**
  * DataSourceDto
@@ -33,10 +49,12 @@ export class DataSource {
    */
   where = new SQLWhere([{ eq_type: '支出' }]);
 
-  from(data: DataSource) {
-    Object.assign(this, data);
-    data.where = new SQLWhere(data.where.items, data.where.relational);
-    return this;
+  static from(data: DataSource) {
+    const src = Object.assign(new DataSource(), data);
+    src.where = new SQLWhere(data.where.items, data.where.relational);
+    src.fields = data.fields.map(field => new DataField(field.field, field.label, field.fun));
+    src.order = data.order.map(order => new DataOrder(order.field, order.order, order.fun));
+    return src;
   }
 }
 
@@ -57,10 +75,14 @@ export class DataField {
    */
   label: string;
 
+  get name() {
+    return this.fun?.toString() || fieldMaps[this.field];
+  }
+
   constructor(field: string = '', label: string = '', fun: SQLFn | undefined = undefined) {
     this.field = field;
     this.label = label;
-    this.fun = fun;
+    this.fun = SQLFn.from(fun);
   }
 }
 
@@ -79,7 +101,9 @@ export class SQLFnParam {
 
   constructor(type: Type = Type.Col, value: number | SQLFn | string = '') {
     this.type = type;
-    this.value = value;
+    if (isNumber(value)) this.value = value;
+    else if (isString(value)) this.value = value;
+    else this.value = SQLFn.from(value)!;
   }
 
   static col(value: string) {
@@ -96,7 +120,7 @@ export class SQLFnParam {
 
   toString() {
     if (this.type === Type.Col) {
-      return '`' + this.value + '`';
+      return '`' + fieldMaps[this.value as string] + '`';
     } else if (this.type === Type.Fn) {
       return this.value.toString();
     } else {
@@ -125,6 +149,13 @@ export class SQLFn {
 
   toString() {
     return this.name ? `${this.name}(${this.params.map(param => param.toString()).join(', ')})` : '?';
+  }
+
+  static from(data?: SQLFn) {
+    if (!data) return data;
+    const fn = Object.assign(new SQLFn(), data);
+    fn.params = data.params.map(param => new SQLFnParam(param.type, param.value));
+    return fn;
   }
 }
 
@@ -170,7 +201,11 @@ export class DataOrder {
   constructor(field: string = '', order: Order = Order.Desc, fun?: SQLFn) {
     this.field = field;
     this.order = order;
-    this.fun = fun;
+    this.fun = SQLFn.from(fun);
+  }
+
+  get name() {
+    return this.fun?.toString() || fieldMaps[this.field];
   }
 }
 
@@ -237,7 +272,7 @@ export class SQLWhere {
       } else {
         return SQLWhere.formula(item);
       }
-    }).join(` ${where.relational} `);
+    }).join(` ${{ and: '和', or: '或' }[where.relational]} `);
   }
 
   /**
@@ -251,15 +286,15 @@ export class SQLWhere {
       const field = fields.join('_');
       if (prefixs[prefix] && query[key]) {
         if (prefix == 'like') {
-          return `${field} like '%${query[key]}%'`;
+          return `${fieldMaps[field]} like '%${query[key]}%'`;
         } else if (Array.isArray(query[key])) {
-          return `${field} ${prefixs[prefix]} (${query[key].join(',')})`;
+          return `${fieldMaps[field]} ${prefixs[prefix]} (${query[key].join(',')})`;
         } else {
-          return `${field} ${prefixs[prefix]} ${typeof query[key] === 'string' ? `'${query[key]}'` : query[key]}`;
+          return `${fieldMaps[field]} ${prefixs[prefix]} ${typeof query[key] === 'string' ? `'${query[key]}'` : query[key]}`;
         }
       }
 
-    }).join(' and ');
+    }).join(' 和 ');
   }
 }
 
