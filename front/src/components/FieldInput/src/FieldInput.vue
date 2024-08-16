@@ -7,7 +7,7 @@
       query?: any;
       search?: (params: EnumQuery) => Promise<EnumFieldRsp[]>;
       pre: ('between' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ne' | 'eq' | 'in' | 'notIn')[];
-      prefix?: string;
+      prefix?: 'between' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ne' | 'eq' | 'in' | 'notIn';
     }>(),
     {
       pre: () => ['like', 'eq'],
@@ -123,9 +123,9 @@
       @change="emit('prefix', $event)"
     >
       <a-select-option v-for="p in pre" :key="p" :value="p" :label="prefixs[p]">
-        <a-tooltip :title="prefixMeans[p]"
-          ><section>{{ prefixs[p] }}</section></a-tooltip
-        >
+        <a-tooltip :title="prefixMeans[p]">
+          <section>{{ prefixs[p] }}</section>
+        </a-tooltip>
       </a-select-option>
     </a-select>
   </a-input-group>

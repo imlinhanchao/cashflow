@@ -14,6 +14,7 @@ import router, { setupRouter } from './router';
 import { setupStore } from './store';
 import { setupGlobDirectives } from './directives';
 import { setupRouterGuard } from './router/guard';
+import { setupGlobIcon } from './helper/iconHelper';
 
 async function bootstrap() {
   const app = createApp(App);
@@ -31,6 +32,8 @@ async function bootstrap() {
 
   // Register global directive
   setupGlobDirectives(app);
+
+  setupGlobIcon(app);
 
   app.mount('#app');
 }

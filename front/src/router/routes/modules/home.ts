@@ -6,7 +6,7 @@ export default [
     redirect: '/home',
     meta: {
       orderNo: 0,
-      icon: 'ph:coin-vertical-fill',
+      icon: 'i-ph:coin-vertical-fill',
       title: '首页',
     },
     children: [

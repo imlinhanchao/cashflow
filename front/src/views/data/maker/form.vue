@@ -62,7 +62,7 @@
     </a-form-item>
     <a-form-item label="字段" name="fields">
       <a-button type="link" @click="fieldRef?.open().then((f) => data.fields.push(f))">
-        <Icon icon="ic:outline-add-circle" />
+        <Icon icon="i-ic:outline-add-circle" />
       </a-button>
       <a-tag
         v-for="(f, i) in data.fields"
@@ -72,11 +72,11 @@
         @close="data.fields.splice(i, 1)"
       >
         <a-tooltip :title="f.name">
-          <span><Icon v-if="f.fun" icon="fluent:braces-24-filled" /> {{ f.label }}</span>
+          <span><Icon v-if="f.fun" icon="i-fluent:braces-24-filled" /> {{ f.label }}</span>
         </a-tooltip>
         <Icon
           class="!group-hover:inline !hidden cursor-pointer"
-          icon="fluent:edit-20-regular"
+          icon="i-fluent:edit-20-regular"
           @click="fieldRef?.open(f).then((f) => (data.fields[i] = f))"
         />
       </a-tag>
@@ -85,7 +85,7 @@
     <a-form-item label="条件">
       <span>{{ data.where.toString() }}</span>
       <a-button type="link" @click="editWhere = !editWhere">
-        <Icon class="cursor-pointer ml-5" icon="fluent:edit-20-regular" />
+        <Icon class="cursor-pointer ml-5" icon="i-fluent:edit-20-regular" />
       </a-button>
     </a-form-item>
     <Transition name="fade-slide">
@@ -99,17 +99,17 @@
     </Transition>
     <a-form-item label="排序">
       <a-button type="link" @click="orderRef?.open().then((f) => data.order.push(f))">
-        <Icon icon="ic:outline-add-circle" />
+        <Icon icon="i-ic:outline-add-circle" />
       </a-button>
       <a-tag v-for="(f, i) in data.order" :key="i" closable class="group !inline-flex items-center">
         <a-tooltip :title="f.fun?.toString()">
           <span>{{ f.name }}</span>
         </a-tooltip>
-        <Icon icon="ri:sort-alphabet-asc" v-if="f.order == 'ASC'" />
-        <Icon icon="ri:sort-alphabet-desc" v-if="f.order == 'DESC'" />
+        <Icon icon="i-ri:sort-alphabet-asc" v-if="f.order == 'ASC'" />
+        <Icon icon="i-ri:sort-alphabet-desc" v-if="f.order == 'DESC'" />
         <Icon
           class="!group-hover:inline !hidden cursor-pointer"
-          icon="fluent:edit-20-regular"
+          icon="i-fluent:edit-20-regular"
           @click="orderRef?.open(f).then((f) => (data.order[i] = f))"
         />
       </a-tag>

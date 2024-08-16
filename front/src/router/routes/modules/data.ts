@@ -6,7 +6,7 @@ export default [
     redirect: '/data/source',
     meta: {
       order: 3,
-      icon: 'ph:database-fill',
+      icon: 'i-ph:database-fill',
       title: '数据源',
     },
     children: [

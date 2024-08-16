@@ -69,7 +69,7 @@
           {{ model.relational }}
         </span>
         <a-dropdown :trigger="['click']">
-          <Icon icon="icon-park:down" class="cursor-pointer" />
+          <Icon icon="i-icon-park:down" class="cursor-pointer" />
           <template #overlay>
             <a-menu
               selectable
@@ -87,7 +87,7 @@
         </a-dropdown>
         <Icon
           :size="12"
-          icon="gg:add"
+          icon="i-gg:add"
           class="hover:text-blue-500 cursor-pointer"
           @click="newItems.push({ key: '', val: {} })"
         />
@@ -124,7 +124,7 @@
                   })
                 "
               >
-                <Icon icon="fluent:edit-20-regular" size="12" />
+                <Icon icon="i-fluent:edit-20-regular" size="12" />
               </a-button>
             </span>
             <span v-else class="formula flex flex-nowrap" @click.stop>
@@ -148,7 +148,7 @@
                 type="link"
                 @click.stop="updateWhere(editItems.find((e) => field == e.oldKey)!, i)"
               >
-                <Icon icon="ic:baseline-check" />
+                <Icon icon="i-ic:baseline-check" />
               </a-button>
               <a-button
                 size="small"
@@ -160,7 +160,7 @@
                   )
                 "
               >
-                <Icon icon="ic:baseline-close" />
+                <Icon icon="i-ic:baseline-close" />
               </a-button>
             </span>
           </section>
@@ -186,19 +186,19 @@
             :search="enumField"
           />
           <a-button size="small" type="link" @click="addWhere(it)">
-            <Icon icon="ic:baseline-check" />
+            <Icon icon="i-ic:baseline-check" />
           </a-button>
           <a-button size="small" type="link" @click="newItems.splice(newItems.indexOf(it), 1)">
-            <Icon icon="ic:baseline-close" />
+            <Icon icon="i-ic:baseline-close" />
           </a-button>
         </span>
       </section>
       <section class="toolbar absolute">
         <a-tooltip title="OR" v-if="activeItems.length > 1" @click="logicActive('or')">
-          <a-button size="small" type="link"><Icon icon="tabler:logic-or" /></a-button>
+          <a-button size="small" type="link"><Icon icon="i-tabler:logic-or" /></a-button>
         </a-tooltip>
         <a-tooltip title="AND" v-if="activeItems.length > 1" @click="logicActive('and')">
-          <a-button size="small" type="link"><Icon icon="tabler:logic-and" /></a-button>
+          <a-button size="small" type="link"><Icon icon="i-tabler:logic-and" /></a-button>
         </a-tooltip>
         <a-popconfirm
           title="是否要删除选中所有条件?"
@@ -209,7 +209,7 @@
         >
           <span>
             <a-tooltip title="删除">
-              <a-button size="small" type="link"><Icon icon="tabler:trash-x" /></a-button>
+              <a-button size="small" type="link"><Icon icon="i-tabler:trash-x" /></a-button>
             </a-tooltip>
           </span>
         </a-popconfirm>

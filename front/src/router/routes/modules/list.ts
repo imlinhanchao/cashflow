@@ -6,7 +6,7 @@ export default [
     redirect: '/bill/search',
     meta: {
       order: 2,
-      icon: 'solar:bill-list-bold',
+      icon: 'i-solar:bill-list-bold',
       title: '账单历史',
     },
     children: [

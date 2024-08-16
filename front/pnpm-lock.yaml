@@ -11,9 +11,9 @@ importers:
       '@ant-design/icons-vue':
         specifier: ^7.0.1
         version: 7.0.1(vue@3.4.32(typescript@5.4.5))
-      '@iconify/iconify':
-        specifier: ^3.1.1
-        version: 3.1.1
+      '@iconify/json':
+        specifier: ^2.2.237
+        version: 2.2.237
       '@unocss/reset':
         specifier: ^0.58.5
         version: 0.58.9
@@ -981,6 +981,9 @@ packages:
   '@iconify/iconify@3.1.1':
     resolution: {integrity: sha512-1nemfyD/OJzh9ALepH7YfuuP8BdEB24Skhd8DXWh0hzcOxImbb1ZizSZkpCzAwSZSGcJFmscIBaBQu+yLyWaxQ==}
     deprecated: no longer maintained, switch to modern iconify-icon web component
+
+  '@iconify/json@2.2.237':
+    resolution: {integrity: sha512-lMK5I9JX90L2LR18Lz6C5XrivxxAGejdJvFQI7TQkj03WcaxRJlciPbQb6z4nX+DS1T6k591ZQ2/hyRVbjqrgA==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -4889,6 +4892,11 @@ snapshots:
   '@iconify/iconify@3.1.1':
     dependencies:
       '@iconify/types': 2.0.0
+
+  '@iconify/json@2.2.237':
+    dependencies:
+      '@iconify/types': 2.0.0
+      pathe: 1.1.2
 
   '@iconify/types@2.0.0': {}
 

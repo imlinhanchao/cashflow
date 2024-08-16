@@ -58,13 +58,13 @@
         </a-form-item>
         <a-tooltip title="搜索">
           <a-button type="primary" shape="circle" @click="queryTable">
-            <Icon icon="ion:search-sharp" />
+            <Icon icon="i-ion:search-sharp" />
           </a-button>
         </a-tooltip>
       </section>
       <section>
         <a-button type="primary" shape="circle" @click="$router.push('/data/maker')"
-          ><Icon icon="majesticons:data-plus-line"
+        ><Icon icon="i-majesticons:data-plus-line"
         /></a-button>
       </section>
     </header>
@@ -77,7 +77,7 @@
           <template v-if="column.key === 'action'">
             <a-tooltip title="编辑">
               <a-button type="link" @click="$router.push('/data/' + record.id)" class="!px-2">
-                <Icon icon="fluent:notepad-edit-16-regular" />
+                <Icon icon="i-fluent:notepad-edit-16-regular" />
               </a-button>
             </a-tooltip>
             <a-popconfirm
@@ -88,7 +88,7 @@
             >
               <a-tooltip title="删除">
                 <a-button type="link" danger class="!px-2">
-                  <Icon icon="gg:trash" />
+                  <Icon icon="i-gg:trash" />
                 </a-button>
               </a-tooltip>
             </a-popconfirm>

@@ -6,7 +6,7 @@ export default [
     redirect: '/sync/data',
     meta: {
       order: 1,
-      icon: 'mdi:cloud-sync',
+      icon: 'i-mdi:cloud-sync',
       title: '同步账单',
     },
     children: [

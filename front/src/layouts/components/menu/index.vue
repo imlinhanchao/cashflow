@@ -54,8 +54,8 @@
 <template>
   <section class="flex items-center">
     <a-button type="link" @click="toggleCollapsed" class="!text-inherit hover:text-primary">
-      <Icon icon="ri:menu-fold-3-fill" v-if="collapsed" size="20" />
-      <Icon icon="ri:menu-unfold-3-fill" v-else size="20" />
+      <Icon icon="i-ri:menu-fold-3-fill" v-if="collapsed" size="20" />
+      <Icon icon="i-ri:menu-unfold-3-fill" v-else size="20" />
     </a-button>
     <a-drawer
       placement="left"

@@ -89,7 +89,7 @@
           class="w-full flex flex-col"
         >
           <p class="ant-upload-drag-icon">
-            <Icon icon="vscode-icons:file-type-excel2" :size="50" />
+            <Icon icon="i-vscode-icons:file-type-excel2" :size="50" />
           </p>
           <p class="ant-upload-text">点击或拖拽对账单到此区域上传</p>
           <p class="ant-upload-hint"> 支持单个文件上传，仅支持 .csv 格式文件 </p>

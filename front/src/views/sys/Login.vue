@@ -70,7 +70,7 @@
             class="max-w-80"
           >
             <template #prefix>
-              <Icon icon="mdi:user" />
+              <Icon icon="i-mdi:user" />
             </template>
           </a-input>
         </a-form-item>
@@ -82,7 +82,7 @@
             class="max-w-80"
           >
             <template #prefix>
-              <Icon icon="bxs:lock-alt" />
+              <Icon icon="i-bxs:lock-alt" />
             </template>
           </a-input-password>
         </a-form-item>

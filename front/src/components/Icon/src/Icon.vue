@@ -1,121 +1,71 @@
-<template>
-  <SvgIcon
-    :size="size"
-    :name="getSvgIcon"
-    v-if="isSvgIcon"
-    :class="[$attrs.class, 'anticon']"
-    :spin="spin"
-  />
-  <span
-    v-else
-    ref="elRef"
-    :class="[$attrs.class, 'app-iconify anticon', spin && 'app-iconify-spin']"
-    :style="getWrapStyle"
-  ></span>
-</template>
-<script lang="ts">
-  import type { PropType } from 'vue';
-  import {
-    defineComponent,
-    ref,
-    watch,
-    onMounted,
-    nextTick,
-    unref,
-    computed,
-    CSSProperties,
-  } from 'vue';
-  import SvgIcon from './SvgIcon.vue';
-  import Iconify from '@purge-icons/generated';
-  import { isString } from '@/utils/is';
-  import { propTypes } from '@/utils/propTypes';
+<script setup lang="ts">
+  import { computed, unref, RenderFunction } from 'vue';
+  import { isNumber, isString, isObject, isFunction } from '@/utils';
 
-  const SVG_END_WITH_FLAG = '|svg';
-  export default defineComponent({
-    name: 'Icon',
-    components: { SvgIcon },
-    props: {
-      // icon name
-      icon: propTypes.string,
-      // icon color
-      color: propTypes.string,
-      // icon size
-      size: {
-        type: [String, Number] as PropType<string | number>,
-        default: 16,
-      },
-      spin: propTypes.bool.def(false),
-      prefix: propTypes.string.def(''),
+  const props = withDefaults(
+    defineProps<{
+      icon: string | Recordable | RenderFunction;
+      color?: string;
+      size?: number | string;
+    }>(),
+    {
+      icon: '',
+      size: 16,
     },
-    setup(props) {
-      const elRef = ref<ElRef>(null);
+  );
 
-      const isSvgIcon = computed(() => props.icon?.endsWith(SVG_END_WITH_FLAG));
-      const getSvgIcon = computed(() => props.icon.replace(SVG_END_WITH_FLAG, ''));
-      const getIconRef = computed(() => `${props.prefix ? props.prefix + ':' : ''}${props.icon}`);
+  const isComp = computed(
+    () =>
+      isObject(props.icon) ||
+      isFunction(props.icon) ||
+      (isString(props.icon) && props.icon.startsWith(`ant-icon-`)),
+  );
 
-      const update = async () => {
-        if (unref(isSvgIcon)) return;
+  const isSVG = computed(() => isString(props.icon) && props.icon.startsWith('svg-icon:'));
+  const symbolId = computed(() => {
+    return isString(props.icon) && unref(isSVG)
+      ? `#icon-${props.icon.split('svg-icon:')[1]}`
+      : props.icon;
+  });
 
-        const el = unref(elRef);
-        if (!el) return;
+  // iconify
+  const iconifyClass = computed(() => {
+    if (unref(isComp) || unref(isSVG) || !props.icon || !isString(props.icon)) return '';
 
-        await nextTick();
-        const icon = unref(getIconRef);
-        if (!icon) return;
+    if (!props.icon.startsWith('i-')) console.error(`Iconify图标 ${props.icon} 需以 i- 开头`);
 
-        const svg = Iconify.renderSVG(icon, {});
-        if (svg) {
-          el.textContent = '';
-          el.appendChild(svg);
-        } else {
-          const span = document.createElement('span');
-          span.className = 'iconify';
-          span.dataset.icon = icon;
-          el.textContent = '';
-          el.appendChild(span);
-        }
-      };
-
-      const getWrapStyle = computed((): CSSProperties => {
-        const { size, color } = props;
-        let fs = size;
-        if (isString(size)) {
-          fs = parseInt(size, 10);
-        }
-
-        return {
-          fontSize: `${fs}px`,
-          color: color,
-          display: 'inline-flex',
-        };
-      });
-
-      watch(() => props.icon, update, { flush: 'post' });
-
-      onMounted(update);
-
-      return { elRef, getWrapStyle, isSvgIcon, getSvgIcon };
-    },
+    return props.icon;
   });
 </script>
+
+<template>
+  <i class="com-icon" :style="{ fontSize: isNumber(Number(size)) ? size + 'px' : size, color }">
+    <!-- 组件：对象/函数/ant-icon-xxx -->
+    <component v-if="isComp" :is="icon" />
+
+    <!-- svg图标 -->
+    <svg v-else-if="isSVG" aria-hidden="true">
+      <use :xlink:href="symbolId" />
+    </svg>
+
+    <!-- iconify图标 -->
+    <span v-else :class="iconifyClass"></span>
+  </i>
+</template>
+
 <style lang="less">
-  .app-iconify {
-    display: inline-block;
-    // vertical-align: middle;
-
-    &-spin {
-      svg {
-        animation: loadingCircle 1s infinite linear;
-      }
-    }
-  }
-
-  span.iconify {
-    display: block;
-    min-width: 1em;
-    min-height: 1em;
-    background-color: #5551;
-    border-radius: 100%;
+  .com-icon {
+    --color: inherit;
+    height: 1em;
+    width: 1em;
+    line-height: 1em;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    fill: currentColor;
+    color: var(--color);
+    font-size: inherit;
+    vertical-align: -0.2em;
   }
 </style>

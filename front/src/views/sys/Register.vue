@@ -85,7 +85,7 @@
             class="max-w-80"
           >
             <template #prefix>
-              <Icon icon="mdi:user" />
+              <Icon icon="i-mdi:user" />
             </template>
           </a-input>
         </a-form-item>
@@ -97,7 +97,7 @@
             class="max-w-80"
           >
             <template #prefix>
-              <Icon icon="ph:star-fill" />
+              <Icon icon="i-ph:star-fill" />
             </template>
           </a-input>
         </a-form-item>
@@ -109,7 +109,7 @@
             class="max-w-80"
           >
             <template #prefix>
-              <Icon icon="bxs:lock-alt" />
+              <Icon icon="i-bxs:lock-alt" />
             </template>
           </a-input-password>
         </a-form-item>
@@ -122,7 +122,7 @@
             type="email"
           >
             <template #prefix>
-              <Icon icon="tabler:mail-filled" />
+              <Icon icon="i-tabler:mail-filled" />
             </template>
           </a-input>
         </a-form-item>

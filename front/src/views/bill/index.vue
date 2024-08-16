@@ -194,17 +194,17 @@
         <section class="flex items-center space-x-2">
           <a-tooltip title="搜索">
             <a-button type="primary" shape="circle" @click="queryTable">
-              <Icon icon="ion:search-sharp" />
+              <Icon icon="i-ion:search-sharp" />
             </a-button>
           </a-tooltip>
           <a-tooltip title="重置">
             <a-button type="primary" shape="circle" @click="reset">
-              <Icon icon="icon-park-outline:clear" />
+              <Icon icon="i-icon-park-outline:clear" />
             </a-button>
           </a-tooltip>
           <a-tooltip title="添加交易">
             <a-button type="primary" shape="circle" @click="itemRef?.open()">
-              <Icon icon="ic:sharp-post-add" />
+              <Icon icon="i-ic:sharp-post-add" />
             </a-button>
           </a-tooltip>
         </section>
@@ -223,7 +223,7 @@
           <template v-if="column.key === 'action'">
             <a-tooltip title="编辑">
               <a-button type="link" @click="itemRef?.open(record)" class="!px-2">
-                <Icon icon="fluent:notepad-edit-16-regular" />
+                <Icon icon="i-fluent:notepad-edit-16-regular" />
               </a-button>
             </a-tooltip>
             <a-popconfirm
@@ -234,7 +234,7 @@
             >
               <a-tooltip title="删除">
                 <a-button type="link" danger class="!px-2">
-                  <Icon icon="gg:trash" />
+                  <Icon icon="i-gg:trash" />
                 </a-button>
               </a-tooltip>
             </a-popconfirm>

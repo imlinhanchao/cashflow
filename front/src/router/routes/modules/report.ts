@@ -6,7 +6,7 @@ export default [
     redirect: '/report/list',
     meta: {
       order: 4,
-      icon: 'fluent:data-trending-20-filled',
+      icon: 'i-fluent:data-trending-20-filled',
       title: '统计报表',
     },
     children: [

@@ -12,7 +12,7 @@
 
 <template>
   <div class="anticon h-full py-3" @click="goHome">
-    <Icon icon="ph:coin-vertical-fill" :size="30" />
+    <Icon icon="i-ph:coin-vertical-fill" :size="30" />
     <div class="ml-2 truncate md:opacity-100 text-2xl font-bold">
       {{ title }}
     </div>

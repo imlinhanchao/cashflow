@@ -126,7 +126,7 @@
             style="width: 65%"
           >
             <template #prefix>
-              <Icon icon="mdi:network" title="数据库地址" />
+              <Icon icon="i-mdi:network" title="数据库地址" />
             </template>
           </a-input>
           <a-input
@@ -142,21 +142,21 @@
       <a-form-item :name="['database', 'database']" :rules="rules['database.database']">
         <a-input v-model:value="formData.database.database" placeholder="数据库名" allow-clear>
           <template #prefix>
-            <Icon icon="mdi:database" title="数据库名" />
+            <Icon icon="i-mdi:database" title="数据库名" />
           </template>
         </a-input>
       </a-form-item>
       <a-form-item :name="['database', 'username']" :rules="rules['database.username']">
         <a-input v-model:value="formData.database.username" placeholder="登录名" allow-clear>
           <template #prefix>
-            <Icon icon="mdi:user" title="数据库登录名" />
+            <Icon icon="i-mdi:user" title="数据库登录名" />
           </template>
         </a-input>
       </a-form-item>
       <a-form-item :name="['database', 'password']" :rules="rules['database.password']">
         <a-input-password v-model:value="formData.database.password" placeholder="密码" allow-clear>
           <template #prefix>
-            <Icon icon="bxs:lock-alt" title="数据库密码" />
+            <Icon icon="i-bxs:lock-alt" title="数据库密码" />
           </template>
         </a-input-password>
       </a-form-item>
@@ -164,11 +164,11 @@
       <a-form-item name="salt">
         <a-input v-model:value="formData.salt" placeholder="数据盐" allow-clear>
           <template #prefix>
-            <Icon icon="tabler:salt" title="数据加密盐" />
+            <Icon icon="i-tabler:salt" title="数据加密盐" />
           </template>
           <template #suffix>
             <Icon
-              icon="ri:dice-fill"
+              icon="i-ri:dice-fill"
               class="cursor-pointer"
               title="随机生成"
               @click="formData.salt = randStr()"
@@ -179,11 +179,11 @@
       <a-form-item :name="['jwtConstants', 'secret']" :rules="rules['jwtConstants.secret']">
         <a-input v-model:value="formData.jwtConstants.secret" placeholder="JWT Secret" allow-clear>
           <template #prefix>
-            <Icon icon="fa-solid:user-secret" title="JWT Secret" />
+            <Icon icon="i-fa-solid:user-secret" title="JWT Secret" />
           </template>
           <template #suffix>
             <Icon
-              icon="ri:dice-fill"
+              icon="i-ri:dice-fill"
               class="cursor-pointer"
               title="随机生成"
               @click="formData.jwtConstants.secret = randStr()"
@@ -195,14 +195,14 @@
       <a-form-item name="password">
         <a-input-password v-model:value="formData.password" placeholder="管理员密码" allow-clear>
           <template #prefix>
-            <Icon icon="bxs:lock-alt" title="管理员密码" />
+            <Icon icon="i-bxs:lock-alt" title="管理员密码" />
           </template>
         </a-input-password>
       </a-form-item>
       <a-form-item name="email">
         <a-input v-model:value="formData.email" placeholder="管理员邮箱" allow-clear>
           <template #prefix>
-            <Icon icon="tabler:mail-filled" />
+            <Icon icon="i-tabler:mail-filled" />
           </template>
         </a-input>
       </a-form-item>
