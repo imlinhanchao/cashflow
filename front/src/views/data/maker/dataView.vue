@@ -3,7 +3,11 @@
     data: any[];
   }>();
 
-  const columns = computed(() => props.data.length ? Object.keys(props.data[0]).map((key) => ({ title: key, dataIndex: key })) : []);
+  const columns = computed(() =>
+    props.data.length
+      ? Object.keys(props.data[0]).map((key) => ({ title: key, dataIndex: key }))
+      : [],
+  );
 </script>
 
 <template>

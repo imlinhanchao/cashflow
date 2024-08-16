@@ -167,7 +167,12 @@
             <Icon icon="tabler:salt" title="数据加密盐" />
           </template>
           <template #suffix>
-            <Icon icon="ri:dice-fill" class="cursor-pointer" title="随机生成" @click="formData.salt = randStr()" />
+            <Icon
+              icon="ri:dice-fill"
+              class="cursor-pointer"
+              title="随机生成"
+              @click="formData.salt = randStr()"
+            />
           </template>
         </a-input>
       </a-form-item>
@@ -177,7 +182,12 @@
             <Icon icon="fa-solid:user-secret" title="JWT Secret" />
           </template>
           <template #suffix>
-            <Icon icon="ri:dice-fill" class="cursor-pointer" title="随机生成" @click="formData.jwtConstants.secret = randStr()" />
+            <Icon
+              icon="ri:dice-fill"
+              class="cursor-pointer"
+              title="随机生成"
+              @click="formData.jwtConstants.secret = randStr()"
+            />
           </template>
         </a-input>
       </a-form-item>

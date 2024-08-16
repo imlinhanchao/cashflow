@@ -33,8 +33,9 @@ export function useSyncData(config: SyncModel) {
   }
 
   let timer: any = 0;
-  let resolve: any = null, reject: any = null;
-  const waitBillMail = new Promise((r, j) => (resolve = r, reject = j));
+  let resolve: any = null,
+    reject: any = null;
+  const waitBillMail = new Promise((r, j) => ((resolve = r), (reject = j)));
   if (config.way == 'email') {
     const timeout = 2000;
     const checkTimer = async () => {

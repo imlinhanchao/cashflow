@@ -40,7 +40,7 @@
       message.success('删除成功！');
     });
   }
-  
+
   onMounted(() => {
     queryTable();
   });
@@ -64,7 +64,7 @@
       </section>
       <section>
         <a-button type="primary" shape="circle" @click="$router.push('/data/maker')"
-        ><Icon icon="majesticons:data-plus-line"
+          ><Icon icon="majesticons:data-plus-line"
         /></a-button>
       </section>
     </header>
@@ -72,15 +72,11 @@
       <a-table sticky :columns="columns" :data-source="data" :pagination="pagination">
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'fields'">
-            <span>{{ record.fields.map(f => f.label).join(', ') }}</span>
+            <span>{{ record.fields.map((f) => f.label).join(', ') }}</span>
           </template>
           <template v-if="column.key === 'action'">
             <a-tooltip title="编辑">
-              <a-button
-                type="link"
-                @click="$router.push('/data/' + record.id)"
-                class="!px-2"
-              >
+              <a-button type="link" @click="$router.push('/data/' + record.id)" class="!px-2">
                 <Icon icon="fluent:notepad-edit-16-regular" />
               </a-button>
             </a-tooltip>

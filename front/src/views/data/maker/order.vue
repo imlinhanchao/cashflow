@@ -17,7 +17,7 @@
     if (checked && !data.value.fun) {
       data.value.fun = new SQLFn();
     } else {
-      delete data.value.fun
+      delete data.value.fun;
     }
   }
 

@@ -1,6 +1,6 @@
-import { defHttp } from "@/utils/http";
-import { IPageParam } from "./common";
-import { isNumber, isString } from "@/utils";
+import { defHttp } from '@/utils/http';
+import { IPageParam } from './common';
+import { isNumber, isString } from '@/utils';
 
 export const fieldMaps = {
   amount: '金额',
@@ -52,15 +52,15 @@ export class DataSource {
   static from(data: DataSource) {
     const src = Object.assign(new DataSource(), data);
     src.where = new SQLWhere(data.where.items, data.where.relational);
-    src.fields = data.fields.map(field => new DataField(field.field, field.label, field.fun));
-    src.order = data.order.map(order => new DataOrder(order.field, order.order, order.fun));
+    src.fields = data.fields.map((field) => new DataField(field.field, field.label, field.fun));
+    src.order = data.order.map((order) => new DataOrder(order.field, order.order, order.fun));
     return src;
   }
 }
 
 /**
-* DataFieldDto
-*/
+ * DataFieldDto
+ */
 export class DataField {
   /**
    * 字段
@@ -87,8 +87,8 @@ export class DataField {
 }
 
 /**
-* SQLFnParam
-*/
+ * SQLFnParam
+ */
 export class SQLFnParam {
   /**
    * 参数类型
@@ -124,14 +124,18 @@ export class SQLFnParam {
     } else if (this.type === Type.Fn) {
       return this.value.toString();
     } else {
-      return isNaN(Number(this.value)) ? `'${this.value}'` : this.value === 'true' || this.value === 'false' ? this.value : this.value;
+      return isNaN(Number(this.value))
+        ? `'${this.value}'`
+        : this.value === 'true' || this.value === 'false'
+          ? this.value
+          : this.value;
     }
   }
 }
 
 /**
-* 字段函数
-*/
+ * 字段函数
+ */
 export class SQLFn {
   /**
    * 函数名
@@ -148,42 +152,44 @@ export class SQLFn {
   }
 
   toString() {
-    return this.name ? `${this.name}(${this.params.map(param => param.toString()).join(', ')})` : '?';
+    return this.name
+      ? `${this.name}(${this.params.map((param) => param.toString()).join(', ')})`
+      : '?';
   }
 
   static from(data?: SQLFn) {
     if (!data) return data;
     const fn = Object.assign(new SQLFn(), data);
-    fn.params = data.params.map(param => new SQLFnParam(param.type, param.value));
+    fn.params = data.params.map((param) => new SQLFnParam(param.type, param.value));
     return fn;
   }
 }
 
 /**
-* 参数类型
-*/
+ * 参数类型
+ */
 export enum Type {
   /**
    * 字段
    */
-  Col = "col",
+  Col = 'col',
   /**
    * 函数
    */
-  Fn = "fn",
+  Fn = 'fn',
   /**
    * 值
    */
-  Value = "value",
+  Value = 'value',
   /**
    * 字符串
    */
-  String = "string",
+  String = 'string',
 }
 
 /**
-* 排序字段
-*/
+ * 排序字段
+ */
 export class DataOrder {
   /**
    * 字段
@@ -210,11 +216,11 @@ export class DataOrder {
 }
 
 /**
-* 排序，排序方式
-*/
+ * 排序，排序方式
+ */
 export enum Order {
-  Asc = "ASC",
-  Desc = "DESC",
+  Asc = 'ASC',
+  Desc = 'DESC',
 }
 
 const prefixs = {
@@ -228,11 +234,11 @@ const prefixs = {
   eq: '=',
   in: 'in',
   notIn: 'not in',
-}
+};
 
 /**
-* 查询条件
-*/
+ * 查询条件
+ */
 export class SQLWhere {
   /**
    * 条件
@@ -248,7 +254,9 @@ export class SQLWhere {
   }
 
   constructor(items: (Recordable<any> | SQLWhere)[] = [], relational: 'and' | 'or' = 'and') {
-    this.items = items.map(item => item.relational ? new SQLWhere(item.items, item.relational) : item);
+    this.items = items.map((item) =>
+      item.relational ? new SQLWhere(item.items, item.relational) : item,
+    );
     this.relational = relational;
   }
 
@@ -263,38 +271,41 @@ export class SQLWhere {
   /**
    * 查询条件转字符串
    * @param where 查询条件
-   * @returns 
+   * @returns
    */
   static expression(where: SQLWhere): string {
-    return where.items.map(item => {
-      if (item instanceof SQLWhere || item.relational) {
-        return `(${SQLWhere.expression(item as SQLWhere)})`;
-      } else {
-        return SQLWhere.formula(item);
-      }
-    }).join(` ${{ and: '和', or: '或' }[where.relational]} `);
+    return where.items
+      .map((item) => {
+        if (item instanceof SQLWhere || item.relational) {
+          return `(${SQLWhere.expression(item as SQLWhere)})`;
+        } else {
+          return SQLWhere.formula(item);
+        }
+      })
+      .join(` ${{ and: '和', or: '或' }[where.relational]} `);
   }
 
   /**
    * 单位表达式转字符串
    * @param query 单位表达式
-   * @returns 
+   * @returns
    */
   static formula(query: Recordable<any>) {
-    return Object.keys(query).map(key => {
-      const [prefix, ...fields] = key.split('_');
-      const field = fields.join('_');
-      if (prefixs[prefix] && query[key]) {
-        if (prefix == 'like') {
-          return `${fieldMaps[field]} like '%${query[key]}%'`;
-        } else if (Array.isArray(query[key])) {
-          return `${fieldMaps[field]} ${prefixs[prefix]} (${query[key].join(',')})`;
-        } else {
-          return `${fieldMaps[field]} ${prefixs[prefix]} ${typeof query[key] === 'string' ? `'${query[key]}'` : query[key]}`;
+    return Object.keys(query)
+      .map((key) => {
+        const [prefix, ...fields] = key.split('_');
+        const field = fields.join('_');
+        if (prefixs[prefix] && query[key]) {
+          if (prefix == 'like') {
+            return `${fieldMaps[field]} like '%${query[key]}%'`;
+          } else if (Array.isArray(query[key])) {
+            return `${fieldMaps[field]} ${prefixs[prefix]} (${query[key].join(',')})`;
+          } else {
+            return `${fieldMaps[field]} ${prefixs[prefix]} ${typeof query[key] === 'string' ? `'${query[key]}'` : query[key]}`;
+          }
         }
-      }
-
-    }).join(' 和 ');
+      })
+      .join(' 和 ');
   }
 }
 

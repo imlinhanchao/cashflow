@@ -63,14 +63,24 @@
       </template>
       <a-form ref="formRef" :model="formData" :rules="rules">
         <a-form-item name="username">
-          <a-input v-model:value="formData.username" placeholder="用户名" allow-clear class="max-w-80">
+          <a-input
+            v-model:value="formData.username"
+            placeholder="用户名"
+            allow-clear
+            class="max-w-80"
+          >
             <template #prefix>
               <Icon icon="mdi:user" />
             </template>
           </a-input>
         </a-form-item>
         <a-form-item name="password">
-          <a-input-password v-model:value="formData.password" placeholder="密码" allow-clear class="max-w-80">
+          <a-input-password
+            v-model:value="formData.password"
+            placeholder="密码"
+            allow-clear
+            class="max-w-80"
+          >
             <template #prefix>
               <Icon icon="bxs:lock-alt" />
             </template>

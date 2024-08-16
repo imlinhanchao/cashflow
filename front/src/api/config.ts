@@ -1,10 +1,9 @@
-
 import { defHttp } from '@/utils/http';
 
 export class Config {
   database = new Database();
   jwtConstants = new JwtConstants();
-  salt: string  = '';
+  salt: string = '';
 }
 
 export class Database {
@@ -26,7 +25,7 @@ export class JwtConstants {
   接口地址：https://app.apifox.com/link/project/2424992/apis/api-191339750
  */
 export function initConfig(data: Config) {
-  return defHttp.post<string>({ url: '/config', data, });
+  return defHttp.post<string>({ url: '/config', data });
 }
 
 /**
@@ -36,7 +35,7 @@ export function initConfig(data: Config) {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-198366674
  */
 export function getConfig() {
-  return defHttp.get<Config>({ url: '/config', });
+  return defHttp.get<Config>({ url: '/config' });
 }
 
 /**
@@ -46,7 +45,7 @@ export function getConfig() {
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-198511969
  */
 export function updateConfig(data: Config) {
-  return defHttp.post<string>({ url: '/config/update', data, });
+  return defHttp.post<string>({ url: '/config/update', data });
 }
 
 /**

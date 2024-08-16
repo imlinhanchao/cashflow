@@ -15,7 +15,10 @@ export abstract class AxiosTransform {
    * @description: Process configuration before request
    * @description: Process configuration before request
    */
-  beforeRequestHook?: (config: InternalAxiosRequestConfig, options: RequestOptions) => InternalAxiosRequestConfig;
+  beforeRequestHook?: (
+    config: InternalAxiosRequestConfig,
+    options: RequestOptions,
+  ) => InternalAxiosRequestConfig;
 
   /**
    * @description: Request successfully processed

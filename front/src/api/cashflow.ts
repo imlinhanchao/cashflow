@@ -198,6 +198,6 @@ export function enumField(params: EnumQuery) {
  * 接口ID：200667898
  * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-200667898
  */
-export function advancedSearch(data: DataSource)  {
+export function advancedSearch(data: DataSource) {
   return defHttp.post<any[]>({ url: '/cashflow/where', data });
 }

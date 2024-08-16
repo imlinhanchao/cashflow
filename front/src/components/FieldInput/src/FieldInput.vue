@@ -64,11 +64,17 @@
     }
   });
 
-  watch(() => props.pre, (val) => {
-    if (!val.includes(prefix.value)) prefix.value = val[0];
-  })
+  watch(
+    () => props.pre,
+    (val) => {
+      if (!val.includes(prefix.value)) prefix.value = val[0];
+    },
+  );
 
-  watch(() => props.field, () => searchField(''))
+  watch(
+    () => props.field,
+    () => searchField(''),
+  );
 
   onMounted(() => {
     searchField('');
@@ -118,7 +124,7 @@
     >
       <a-select-option v-for="p in pre" :key="p" :value="p" :label="prefixs[p]">
         <a-tooltip :title="prefixMeans[p]"
-        ><section>{{ prefixs[p] }}</section></a-tooltip
+          ><section>{{ prefixs[p] }}</section></a-tooltip
         >
       </a-select-option>
     </a-select>

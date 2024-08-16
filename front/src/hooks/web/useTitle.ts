@@ -35,5 +35,5 @@ export function useTitle() {
 
   return {
     setTitle,
-  }
+  };
 }
