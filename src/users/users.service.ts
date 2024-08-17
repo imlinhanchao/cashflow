@@ -1,39 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { UserDto, UserUpdateDto } from './users.dto';
-import { User } from './models/user.model';
-import { createHash } from 'crypto';
-import { salt } from 'src/config';
-import { QueryRspDto } from 'src/core/Dto/common.dto';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
+import { UserDto, UserUpdateDto } from "./users.dto";
+import { User } from "./models/user.model";
+import { createHash } from "crypto";
+import { salt } from "src/config";
+import { QueryRspDto } from "src/core/Dto/common.dto";
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectModel(User)
-    private readonly userModel: typeof User,
+    private readonly userModel: typeof User
   ) {}
 
   async create(user: UserDto): Promise<User> {
-    user.password = createHash('sha256').update(user.password + salt).digest('hex');
+    user.password = createHash("sha256")
+      .update(user.password + salt)
+      .digest("hex");
     if (await this.findOne(user.username)) {
-      throw new Error('User already exists');
+      throw new Error("User already exists");
     }
     return await this.userModel.create({
-      ...user
+      ...user,
     });
   }
 
   async update(username, user: UserUpdateDto): Promise<User> {
     const userToUpdate = await this.findOne(username);
     if (!userToUpdate) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
-    if (user.password && userToUpdate.password != createHash('sha256').update(user.oldPassword + salt).digest('hex')) {
-      throw new Error('The Old Password was wrong');
+    if (
+      user.password &&
+      userToUpdate.password !=
+        createHash("sha256")
+          .update(user.oldPassword + salt)
+          .digest("hex")
+    ) {
+      throw new Error("The Old Password was wrong");
     }
 
-    const updateField = ['nickname', 'email', 'password'];
+    const updateField = ["nickname", "email", "password"];
     updateField.forEach((field) => {
       if (user[field]) {
         userToUpdate[field] = user[field];
@@ -71,9 +78,7 @@ export class UsersService {
         where: query,
         offset: (page - 1) * size,
         limit: size,
-        order: [
-          ['createdAt', 'DESC']
-        ]
+        order: [["createdAt", "DESC"]],
       }),
       total,
     };
@@ -91,13 +96,13 @@ export class UsersService {
   async remove(username: string): Promise<void> {
     const user = await this.findOne(username);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
     await user.destroy();
   }
 
   clearUnSaftyFields(user: User) {
-    user.password = '******';
+    user.password = "******";
     return user;
   }
 }

@@ -1,13 +1,15 @@
 <script setup lang="tsx">
   import { EnumFieldRsp, EnumQuery } from '@/api/common';
 
+  type Operate = 'between' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ne' | 'eq' | 'in' | 'notIn';
+
   const props = withDefaults(
     defineProps<{
       field?: string;
       query?: any;
       search?: (params: EnumQuery) => Promise<EnumFieldRsp[]>;
-      pre: ('between' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ne' | 'eq' | 'in' | 'notIn')[];
-      prefix?: 'between' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ne' | 'eq' | 'in' | 'notIn';
+      pre: Operate[];
+      prefix?: string;
     }>(),
     {
       pre: () => ['like', 'eq'],
@@ -67,7 +69,7 @@
   watch(
     () => props.pre,
     (val) => {
-      if (!val.includes(prefix.value)) prefix.value = val[0];
+      if (!val.includes(prefix.value as Operate)) prefix.value = val[0];
     },
   );
 

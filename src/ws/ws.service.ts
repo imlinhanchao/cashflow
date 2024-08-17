@@ -1,15 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
-import { WebSocket } from 'ws';
-import { SocketDto } from './ws.dto';
+import { Injectable } from "@nestjs/common";
+import { AuthService } from "src/auth/auth.service";
+import { WebSocket } from "ws";
+import { SocketDto } from "./ws.dto";
 
 @Injectable()
 export class WsService {
-
   clientChannels = new Map<string, SocketDto[]>();
 
-  constructor(private readonly authServices: AuthService) {
-  }
+  constructor(private readonly authServices: AuthService) {}
 
   channelConnect(socket: SocketDto) {
     const clients = this.clientChannels.get(socket.channel) || [];
@@ -20,7 +18,7 @@ export class WsService {
 
   channelDisconnect(socket: WebSocket) {
     this.clientChannels.forEach((clients, channel) => {
-      const index = clients.findIndex(client => client.socket === socket);
+      const index = clients.findIndex((client) => client.socket === socket);
       if (index >= 0) {
         clients.splice(index, 1);
         this.clientChannels.set(channel, clients);
@@ -31,7 +29,7 @@ export class WsService {
   searchChannel(socket: WebSocket) {
     let client: SocketDto = null;
     this.clientChannels.forEach((clients, channel) => {
-      client = clients.find(client => client.socket === socket);
+      client = clients.find((client) => client.socket === socket);
       if (client == null) return client;
       return false;
     });
@@ -40,14 +38,14 @@ export class WsService {
 
   channelSend(channel: string, data: any) {
     const clients = this.clientChannels.get(channel) || [];
-    clients.forEach(client => {
+    clients.forEach((client) => {
       client.socket.send(JSON.stringify(data));
     });
   }
 
   channelClose(channel: string) {
     const clients = this.clientChannels.get(channel) || [];
-    clients.forEach(client => {
+    clients.forEach((client) => {
       client.socket.close();
     });
     this.clientChannels.delete(channel);
@@ -55,7 +53,7 @@ export class WsService {
 
   channelCloseAll() {
     this.clientChannels.forEach((clients, channel) => {
-      clients.forEach(client => {
+      clients.forEach((client) => {
         client.socket.close();
       });
     });
@@ -67,18 +65,23 @@ export class WsService {
   }
 
   socketList(channel: string) {
-    return this.clientChannels.get(channel).map(client => client.user).filter(client => !!client) || [];
+    return (
+      this.clientChannels
+        .get(channel)
+        .map((client) => client.user)
+        .filter((client) => !!client) || []
+    );
   }
 
   socketClose(channel: string, username: string): void | PromiseLike<void> {
     const clients = this.clientChannels.get(channel) || [];
-    const closeIndexs = []
+    const closeIndexs = [];
     clients.forEach((client, index) => {
-      if(client.user && client.user.username !== username) return;
-      else if(!client.user && username === 'anonymous')
-      closeIndexs.push(index);
+      if (client.user && client.user.username !== username) return;
+      else if (!client.user && username === "anonymous")
+        closeIndexs.push(index);
     });
-    closeIndexs.forEach(index => {
+    closeIndexs.forEach((index) => {
       clients[index].socket.close();
       clients.splice(index, 1);
     });
@@ -86,6 +89,8 @@ export class WsService {
 
   searchSocket(channel: string, username: string) {
     const clients = this.clientChannels.get(channel) || [];
-    return clients.find(client => client.user && client.user.username === username);
+    return clients.find(
+      (client) => client.user && client.user.username === username
+    );
   }
 }

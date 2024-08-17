@@ -1,12 +1,10 @@
-import * as Imap from 'imap';
-import { simpleParser, ParsedMail, MailParser } from 'mailparser';
-import { MailConfigDto, MailRecvOptions } from './mail.dto';
+import * as Imap from "imap";
+import { simpleParser, ParsedMail, MailParser } from "mailparser";
+import { MailConfigDto, MailRecvOptions } from "./mail.dto";
 
 export class Mail {
   private imap: Imap;
-  constructor(private config?: MailConfigDto) {
-
-  }
+  constructor(private config?: MailConfigDto) {}
 
   async connect(config: MailConfigDto) {
     return new Promise((resolve, reject) => {
@@ -18,17 +16,17 @@ export class Mail {
         this.imap = new Imap({
           user: this.config.username,
           password: this.config.password,
-          host: 'imap.qq.com',
+          host: "imap.qq.com",
           port: 993,
           tls: true,
-          tlsOptions: { rejectUnauthorized: false }
+          tlsOptions: { rejectUnauthorized: false },
         });
-        this.imap.once('ready', () => {
+        this.imap.once("ready", () => {
           resolve(true);
-        })
-        this.imap.once('error', (err) => {
+        });
+        this.imap.once("error", (err) => {
           reject(err);
-        })
+        });
         this.imap.connect();
       } catch (error) {
         reject(error);
@@ -43,18 +41,23 @@ export class Mail {
   async getUnread(n = -1, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
-        return reject('Mail is not connected');
+        return reject("Mail is not connected");
       }
-      this.imap.openBox('INBOX', false, (err) => {
+      this.imap.openBox("INBOX", false, (err) => {
         if (err) {
           reject(err);
         }
 
-        this.imap.search(['UNSEEN'], async (err, results) => {
+        this.imap.search(["UNSEEN"], async (err, results) => {
           if (err) {
             reject(err);
           }
-          resolve(await this.fetchResult(n < 0 ? results : results.slice(-n), options).catch(reject));
+          resolve(
+            await this.fetchResult(
+              n < 0 ? results : results.slice(-n),
+              options
+            ).catch(reject)
+          );
         });
       });
     });
@@ -64,18 +67,23 @@ export class Mail {
   async searchLatest(text: string, n: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
-        return reject('Mail is not connected');
+        return reject("Mail is not connected");
       }
-      this.imap.openBox('INBOX', false, (err) => {
+      this.imap.openBox("INBOX", false, (err) => {
         if (err) {
           reject(err);
         }
-        this.imap.search([['HEADER', 'SUBJECT', text]], async (err, results) => {
-          if (err) {
-            reject(err);
+        this.imap.search(
+          [["HEADER", "SUBJECT", text]],
+          async (err, results) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(
+              await this.fetchResult(results.slice(-n), options).catch(reject)
+            );
           }
-          resolve(await this.fetchResult(results.slice(-n), options).catch(reject));
-        });
+        );
       });
     });
   }
@@ -84,17 +92,19 @@ export class Mail {
   getLatest(n: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
-        return reject('Mail is not connected');
+        return reject("Mail is not connected");
       }
-      this.imap.openBox('INBOX', false, (err) => {
+      this.imap.openBox("INBOX", false, (err) => {
         if (err) {
           reject(err);
         }
-        this.imap.search(['ALL'], async (err, results) => {
+        this.imap.search(["ALL"], async (err, results) => {
           if (err) {
             reject(err);
           }
-          resolve(await this.fetchResult(results.slice(-n), options).catch(reject));
+          resolve(
+            await this.fetchResult(results.slice(-n), options).catch(reject)
+          );
         });
       });
     });
@@ -103,24 +113,24 @@ export class Mail {
   getMail(id: number, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       if (!this.imap) {
-        return reject('Mail is not connected');
+        return reject("Mail is not connected");
       }
-      this.imap.openBox('INBOX', false, (err) => {
+      this.imap.openBox("INBOX", false, (err) => {
         if (err) {
           reject(err);
         }
         const f = this.imap.fetch([id], {
-          bodies: '',
+          bodies: "",
           markSeen: options.markSeen,
         });
-        f.on('message', (msg) => {
+        f.on("message", (msg) => {
           this.recvMessage(msg, options).then(resolve).catch(reject);
         });
-        f.once('error', (err) => {
+        f.once("error", (err) => {
           reject(err);
         });
         if (options.markSeen) {
-          this.imap.setFlags([id], ['\\Seen'], function(err) {
+          this.imap.setFlags([id], ["\\Seen"], function (err) {
             if (!err) {
               console.log("marked as read");
             } else {
@@ -137,23 +147,25 @@ export class Mail {
       if (results.length === 0) return resolve([]);
       const mailsRecv = [];
       const f = this.imap.fetch(results, {
-        bodies: '',
+        bodies: "",
         markSeen: options.markSeen,
       });
-      f.on('message', (msg) => {
-        mailsRecv.push(this.recvMessage(msg, options).then((mail) => {
-          return mail;
-        }).catch((err) => {
-          console.error(err);
-        }));
+      f.on("message", (msg) => {
+        mailsRecv.push(
+          this.recvMessage(msg, options)
+            .then((mail) => {
+              return mail;
+            })
+            .catch((err) => {
+              console.error(err);
+            })
+        );
       });
-      f.once('error', (err) => {
+      f.once("error", (err) => {
         reject(err);
       });
-      f.once('end', async () => {
-        const mails = await Promise.all(
-          mailsRecv
-        ).catch(reject);
+      f.once("end", async () => {
+        const mails = await Promise.all(mailsRecv).catch(reject);
         resolve(mails);
       });
     });
@@ -162,39 +174,43 @@ export class Mail {
   private recvMessage(msg: Imap.ImapMessage, options: MailRecvOptions = {}) {
     return new Promise((resolve, reject) => {
       const mail: any = {};
-      msg.once('attributes', (attrs) => {
+      msg.once("attributes", (attrs) => {
         mail.id = attrs.uid;
       });
-      msg.on('body', (stream) => {
-        const parser = new MailParser({
-        });
+      msg.on("body", (stream) => {
+        const parser = new MailParser({});
         stream.pipe(parser);
-        options.content && parser.on('data', async (data) => {
-          if (data.type === 'text') {
-            mail.data = data.html;
-          }
-          if (options.attachments && data.type === 'attachment') {
-            mail.attachments = await options.saveAttachments?.(mail.headers, data);
-          }
-          if (mail.headers) parser.destroy();
-        });
-        parser.on('headers', (headers) => {
+        options.content &&
+          parser.on("data", async (data) => {
+            if (data.type === "text") {
+              mail.data = data.html;
+            }
+            if (options.attachments && data.type === "attachment") {
+              mail.attachments = await options.saveAttachments?.(
+                mail.headers,
+                data
+              );
+            }
+            if (mail.headers) parser.destroy();
+          });
+        parser.on("headers", (headers) => {
           mail.headers = {};
           headers.forEach((value, key) => {
             mail.headers[key] = value;
           });
-          if (mail.data || !options.content && !options.attachments) parser.destroy();
+          if (mail.data || (!options.content && !options.attachments))
+            parser.destroy();
         });
-        parser.on('error', reject);
-        parser.once('end', () => {
+        parser.on("error", reject);
+        parser.once("end", () => {
           resolve(mail);
         });
-        parser.once('close', () => {
+        parser.once("close", () => {
           resolve(mail);
           stream.resume();
         });
       });
-    })
+    });
   }
 
   private parserMail(buffer: string) {
@@ -204,7 +220,7 @@ export class Mail {
           reject(err);
         }
         resolve(parsed);
-      })
+      });
     });
   }
 }

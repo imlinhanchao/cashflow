@@ -1,5 +1,11 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
+import { Request, Response } from "express";
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
@@ -13,7 +19,7 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     const message = exception.message
       ? exception.message
-      : `${status >= 500 ? 'Service Error' : 'Client Error'}`;
+      : `${status >= 500 ? "Service Error" : "Client Error"}`;
     const errorResponse = {
       statusCode: status,
       data: null,
@@ -22,7 +28,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     };
     // 设置返回的状态码、请求头、发送错误信息
     response.status(200);
-    response.header('Content-Type', 'application/json; charset=utf-8');
+    response.header("Content-Type", "application/json; charset=utf-8");
     response.send(errorResponse);
 
     console.log(`Request ${request.url} Failed:`, message);

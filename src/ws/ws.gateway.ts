@@ -2,13 +2,13 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-} from '@nestjs/websockets';
-import { IncomingMessage } from 'http';
-import { Server } from 'ws';
-import { WebSocket } from 'ws';
-import { WsService } from './ws.service';
+} from "@nestjs/websockets";
+import { IncomingMessage } from "http";
+import { Server } from "ws";
+import { WebSocket } from "ws";
+import { WsService } from "./ws.service";
 
-@WebSocketGateway({path: '/ws'})
+@WebSocketGateway({ path: "/ws" })
 export class WsGateway {
   @WebSocketServer()
   server: Server;
@@ -19,9 +19,9 @@ export class WsGateway {
   }
 
   handleConnection(socket: WebSocket, request: IncomingMessage) {
-    const params = new URLSearchParams(request.url.split('?')[1] || '');
-    const channel = params.get('channel');
-    const token = params.get('token');
+    const params = new URLSearchParams(request.url.split("?")[1] || "");
+    const channel = params.get("channel");
+    const token = params.get("token");
     if (!channel) {
       socket.close();
       return;
@@ -33,16 +33,18 @@ export class WsGateway {
     this.eventsService.channelDisconnect(socket);
   }
 
-  @SubscribeMessage('boradcast')
+  @SubscribeMessage("boradcast")
   onBoradcastEvent(client: WebSocket, data: any) {
     const socket = this.eventsService.searchChannel(client);
-    this.eventsService.channelSend(socket.channel, socket.user ? { from: socket.user, data } : data);
+    this.eventsService.channelSend(
+      socket.channel,
+      socket.user ? { from: socket.user, data } : data
+    );
   }
 
-  @SubscribeMessage('anonymous')
+  @SubscribeMessage("anonymous")
   onAnonymousEvent(client: WebSocket, data: any) {
     const socket = this.eventsService.searchChannel(client);
     this.eventsService.channelSend(socket.channel, data);
   }
-
 }

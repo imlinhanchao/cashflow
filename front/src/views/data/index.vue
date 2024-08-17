@@ -64,7 +64,7 @@
       </section>
       <section>
         <a-button type="primary" shape="circle" @click="$router.push('/data/maker')"
-        ><Icon icon="i-majesticons:data-plus-line"
+          ><Icon icon="i-majesticons:data-plus-line"
         /></a-button>
       </section>
     </header>

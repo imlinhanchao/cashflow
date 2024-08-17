@@ -7,7 +7,7 @@
     "prebuild": "rimraf dist",
     "dev": "cd front && npm run dev",
     "build": "nest build && cd front && npm run build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" && cd front && npm run format",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

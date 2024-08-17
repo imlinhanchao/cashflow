@@ -1,15 +1,15 @@
-import * as dayjs from 'dayjs';
+import * as dayjs from "dayjs";
 
 export type ConfigType = dayjs.ConfigType;
 export const mmt = dayjs;
 
 export const PER_DAY_MS = 24 * 3600 * 1000;
-export const DATE_FORMAT = 'YYYY-MM-DD';
-export const DATE_FORMAT_TIME = 'YYYY-MM-DD HH:mm:ss';
-export const DATE_FORMAT_TIME_NO_SEC = 'YYYY-MM-DD HH:mm';
+export const DATE_FORMAT = "YYYY-MM-DD";
+export const DATE_FORMAT_TIME = "YYYY-MM-DD HH:mm:ss";
+export const DATE_FORMAT_TIME_NO_SEC = "YYYY-MM-DD HH:mm";
 
 export function formatDate(date: ConfigType, format = DATE_FORMAT): string {
-  if (!date) return '';
+  if (!date) return "";
   return dayjs(date).format(format);
 }
 export function formatDateTime(date: ConfigType): string {
@@ -30,9 +30,16 @@ export function getTime(date: ConfigType): number {
  * @returns 带时间00:00:00的日期
  */
 export function beginOfDay(param: Date) {
-  return new Date(param.getFullYear(), param.getMonth(), param.getDate(), 0, 0, 0, 0);
+  return new Date(
+    param.getFullYear(),
+    param.getMonth(),
+    param.getDate(),
+    0,
+    0,
+    0,
+    0
+  );
 }
-
 
 /**
  * 设置结束日期，时间为23:59:59
@@ -40,11 +47,19 @@ export function beginOfDay(param: Date) {
  * @returns 带时间23:59:59的日期
  */
 export function endOfDay(param: Date) {
-  return new Date(param.getFullYear(), param.getMonth(), param.getDate(), 23, 59, 59, 999);
+  return new Date(
+    param.getFullYear(),
+    param.getMonth(),
+    param.getDate(),
+    23,
+    59,
+    59,
+    999
+  );
 }
 
 function convertDate(param: Date | string) {
-  if (typeof param === 'string') return new Date(param);
+  if (typeof param === "string") return new Date(param);
 
   return param;
 }

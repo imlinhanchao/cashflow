@@ -1,28 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import { JwtService } from '@nestjs/jwt';
-import { UserDto } from 'src/users/users.dto';
-import { createHash } from 'crypto';
-import { User } from 'src/users/models/user.model';
-import { salt } from 'src/config';
+import { Injectable } from "@nestjs/common";
+import { UsersService } from "src/users/users.service";
+import { JwtService } from "@nestjs/jwt";
+import { UserDto } from "src/users/users.dto";
+import { createHash } from "crypto";
+import { User } from "src/users/models/user.model";
+import { salt } from "src/config";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
   async validateUser(username: string, pass: string): Promise<User | null> {
     const user = await this.usersService.findOne(username);
     if (!user) {
-      throw new Error('用户名或密码错误！');
+      throw new Error("用户名或密码错误！");
     }
-    pass = createHash('sha256').update(pass + salt).digest('hex');
+    pass = createHash("sha256")
+      .update(pass + salt)
+      .digest("hex");
     if (user && user.password === pass) {
       return this.usersService.clearUnSaftyFields(user);
     }
-    throw new Error('用户名或密码错误！');
+    throw new Error("用户名或密码错误！");
   }
 
   async login(user: any) {
@@ -35,10 +37,14 @@ export class AuthService {
   }
 
   register(user: UserDto) {
-    return this.usersService.create(user).then(this.usersService.clearUnSaftyFields);
+    return this.usersService
+      .create(user)
+      .then(this.usersService.clearUnSaftyFields);
   }
 
   getProfile(username: string) {
-    return this.usersService.findOne(username).then(this.usersService.clearUnSaftyFields);
+    return this.usersService
+      .findOne(username)
+      .then(this.usersService.clearUnSaftyFields);
   }
 }

@@ -68,18 +68,18 @@
     </a-form-item>
     <section class="flex justify-between">
       <a-button type="primary" size="small" @click="addParams"
-      ><Icon icon="i-mdi:add-bold" /> 添加参数</a-button
+        ><Icon icon="i-mdi:add-bold" /> 添加参数</a-button
       >
       <section>{{ data.toString() }}</section>
     </section>
     <section v-for="(p, i) in data.params" :key="i" class="border px-3 mt-2">
       <a-divider
-      >参数 {{ i + 1 }}
+        >参数 {{ i + 1 }}
         <Icon
           @click="data.params.splice(i, 1)"
           class="cursor-pointer hover:text-primary"
           icon="i-ic:baseline-close"
-        /></a-divider>
+      /></a-divider>
       <a-form-item label="类型" :name="['params', i, 'type']" :rules="rules.type">
         <a-select v-model:value="p.type" @change="typeChange($event, p)">
           <a-select-option value="col">字段</a-select-option>
