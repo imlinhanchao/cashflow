@@ -63,9 +63,9 @@
         </a-tooltip>
       </section>
       <section>
-        <a-button type="primary" shape="circle" @click="$router.push('/data/maker')"
-          ><Icon icon="i-majesticons:data-plus-line"
-        /></a-button>
+        <a-button type="primary" shape="circle" @click="$router.push('/data/maker')">
+          <Icon icon="i-majesticons:data-plus-line" />
+        </a-button>
       </section>
     </header>
     <main class="flex-1 overflow-auto min-h-[50vh]">

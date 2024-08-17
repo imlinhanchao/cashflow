@@ -48,6 +48,10 @@ export class DataSource {
    * 查询 SQL Where 条件
    */
   where = new SQLWhere([{ eq_type: '支出' }]);
+  /**
+   * 是否公开
+   */
+  public = false;
 
   static from(data: DataSource) {
     const src = Object.assign(new DataSource(), data);

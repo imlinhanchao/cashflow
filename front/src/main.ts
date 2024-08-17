@@ -1,10 +1,8 @@
 import 'virtual:uno.css';
+import 'virtual:svg-icons-register';
 import '@unocss/reset/tailwind-compat.css';
 import '@/assets/style/main.less';
 import 'ant-design-vue/dist/reset.css';
-
-// Register icon sprite
-import 'virtual:svg-icons-register';
 
 import { createApp } from 'vue';
 

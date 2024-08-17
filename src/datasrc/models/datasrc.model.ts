@@ -38,4 +38,7 @@ export class DataSource extends CommonModel {
 
   @Column({ comment: "数量", defaultValue: null })
   count: number;
+
+  @Column({ comment: "公开", defaultValue: false })
+  public: boolean;
 }

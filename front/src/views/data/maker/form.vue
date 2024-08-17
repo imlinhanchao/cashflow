@@ -124,6 +124,9 @@
     <a-form-item label="数量">
       <a-input v-model:value="data.count" allowClear type="number" />
     </a-form-item>
+    <a-form-item label="是否公开">
+      <a-switch v-model:value="data.public" />
+    </a-form-item>
     <section class="space-x-3 text-center">
       <a-button type="primary" @click="save">确定</a-button>
       <a-button @click="test">测试</a-button>

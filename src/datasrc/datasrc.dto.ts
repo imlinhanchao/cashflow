@@ -14,4 +14,7 @@ export class DataSrcDto extends DataSourceDto {
 
   @ApiProperty({ name: "description", description: "描述" })
   description: string;
+
+  @ApiProperty({ name: "public", description: "是否公开" })
+  public: boolean;
 }
