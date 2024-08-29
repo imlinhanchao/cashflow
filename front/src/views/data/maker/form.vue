@@ -4,7 +4,6 @@
   import Field from './field.vue';
   import Where from './where.vue';
   import { FormInstance } from 'ant-design-vue';
-  import FieldSelect from './fieldSelect.vue';
   import Order from './order.vue';
 
   const props = withDefaults(
@@ -28,6 +27,7 @@
 
   const data = ref(props.modelValue || new DataSource());
   const fieldRef = ref<InstanceType<typeof Field>>();
+  const groupRef = ref<InstanceType<typeof Field>>();
   const orderRef = ref<InstanceType<typeof Order>>();
 
   const formRef = ref<FormInstance>();
@@ -75,7 +75,7 @@
           <span><Icon v-if="f.fun" icon="i-fluent:braces-24-filled" /> {{ f.label }}</span>
         </a-tooltip>
         <Icon
-          class="!group-hover:inline !hidden cursor-pointer"
+          class="!group-hover:inline-flex !hidden cursor-pointer"
           icon="i-fluent:edit-20-regular"
           @click="fieldRef?.open(f).then((f) => (data.fields[i] = f))"
         />
@@ -108,7 +108,7 @@
         <Icon icon="i-ri:sort-alphabet-asc" v-if="f.order == 'ASC'" />
         <Icon icon="i-ri:sort-alphabet-desc" v-if="f.order == 'DESC'" />
         <Icon
-          class="!group-hover:inline !hidden cursor-pointer"
+          class="!group-hover:inline-flex !hidden cursor-pointer"
           icon="i-fluent:edit-20-regular"
           @click="orderRef?.open(f).then((f) => (data.order[i] = f))"
         />
@@ -116,7 +116,26 @@
       <Order ref="orderRef" />
     </a-form-item>
     <a-form-item label="分组">
-      <FieldSelect v-model="data.group" mode="multiple" />
+      <a-button type="link" @click="fieldRef?.open().then((f) => data.group.push(f))">
+        <Icon icon="i-ic:outline-add-circle" />
+      </a-button>
+      <a-tag
+        v-for="(f, i) in data.group"
+        :key="i"
+        closable
+        class="group !inline-flex items-center"
+        @close="data.group.splice(i, 1)"
+      >
+        <a-tooltip :title="f.name">
+          <span><Icon v-if="f.fun" icon="i-fluent:braces-24-filled" /> {{ f.name }}</span>
+        </a-tooltip>
+        <Icon
+          class="!group-hover:inline-flex !hidden cursor-pointer"
+          icon="i-fluent:edit-20-regular"
+          @click="groupRef?.open(f).then((f) => (data.group[i] = f))"
+        />
+      </a-tag>
+      <Field ref="groupRef" :label="false" />
     </a-form-item>
     <a-form-item label="起始">
       <a-input v-model:value="data.index" allowClear type="number" />

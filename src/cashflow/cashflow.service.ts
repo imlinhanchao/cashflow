@@ -18,6 +18,7 @@ import {
   markWhere,
   markFields,
   markOrder,
+  markGroup,
 } from "src/utils";
 import { decode } from "iconv-lite";
 import { Op, Sequelize } from "sequelize";
@@ -115,7 +116,7 @@ export class CashflowService {
         attributes: markFields(params.fields),
         where: { ...markWhere(params.where), username },
         order: markOrder(params.order),
-        group: params.group,
+        group: markGroup(params.group),
         offset: params.index || 0,
         limit: params.count || undefined,
       })

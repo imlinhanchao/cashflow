@@ -26,6 +26,9 @@ importers:
       axios:
         specifier: ^1.6.8
         version: 1.6.8
+      codemirror:
+        specifier: ^5.65.16
+        version: 5.65.16
       crypto-js:
         specifier: ^4.2.0
         version: 4.2.0
@@ -44,6 +47,9 @@ importers:
       vue:
         specifier: ^3.4.29
         version: 3.4.32(typescript@5.4.5)
+      vue-json-pretty:
+        specifier: ^2.4.0
+        version: 2.4.0(vue@3.4.32(typescript@5.4.5))
       vue-router:
         specifier: ^4.3.3
         version: 4.4.0(vue@3.4.32(typescript@5.4.5))
@@ -1688,6 +1694,9 @@ packages:
   clone@2.1.2:
     resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
     engines: {node: '>=0.8'}
+
+  codemirror@5.65.16:
+    resolution: {integrity: sha512-br21LjYmSlVL0vFCPWPfhzUCT34FM/pAdK7rRIZwa0rrtrIdotvP4Oh4GUHsu2E3IrQMCfRkL/fN3ytMNxVQvg==}
 
   collection-visit@1.0.0:
     resolution: {integrity: sha512-lNkKvzEeMBBjUGHZ+q6z9pSJla0KWAQPvtzhEV9+iGyQYG+pBpl7xKDhxoNSOZH2hhv0v5k0y2yAM4o4SjoSkw==}
@@ -3838,6 +3847,12 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
+  vue-json-pretty@2.4.0:
+    resolution: {integrity: sha512-e9bP41DYYIc2tWaB6KuwqFJq5odZ8/GkE6vHQuGcbPn37kGk4a3n1RNw3ZYeDrl66NWXgTlOfS+M6NKkowmkWw==}
+    engines: {node: '>= 10.0.0', npm: '>= 5.0.0'}
+    peerDependencies:
+      vue: '>=3.0.0'
+
   vue-router@4.4.0:
     resolution: {integrity: sha512-HB+t2p611aIZraV2aPSRNXf0Z/oLZFrlygJm+sZbdJaW6lcFqEDQwnzUBXn+DApw+/QzDU/I9TeWx9izEjTmsA==}
     peerDependencies:
@@ -5776,6 +5791,8 @@ snapshots:
       source-map: 0.6.1
 
   clone@2.1.2: {}
+
+  codemirror@5.65.16: {}
 
   collection-visit@1.0.0:
     dependencies:
@@ -8123,6 +8140,10 @@ snapshots:
       semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
+
+  vue-json-pretty@2.4.0(vue@3.4.32(typescript@5.4.5)):
+    dependencies:
+      vue: 3.4.32(typescript@5.4.5)
 
   vue-router@4.4.0(vue@3.4.32(typescript@5.4.5)):
     dependencies:

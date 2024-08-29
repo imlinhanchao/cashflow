@@ -21,7 +21,7 @@ export class SQLFn {
 
 export class SQLFnParam {
   @ApiProperty({ name: "type", description: "参数类型" })
-  type: "value" | "col" | "fn";
+  type: "value" | "string" | "col" | "fn";
   @ApiProperty({ name: "value", description: "参数值" })
   value: string | number | boolean | SQLFn;
 }
@@ -61,7 +61,7 @@ export class DataSourceDto {
   @ApiProperty({ name: "order", description: "查询排序字段" })
   order?: DataOrderDto[];
   @ApiProperty({ name: "group", description: "查询分组字段" })
-  group?: string[];
+  group?: DataFieldDto[];
   @ApiProperty({ name: "index", description: "起始 index" })
   index?: number;
   @ApiProperty({ name: "count", description: "查询数量" })

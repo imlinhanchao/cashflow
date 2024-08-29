@@ -18,6 +18,15 @@ export default [
           title: '统计报表',
         },
       },
+      {
+        path: '/report/maker',
+        name: 'ReportMaker',
+        component: () => import('/@/views/report/maker/index.vue'),
+        meta: {
+          title: '统计报表制作器',
+          hidden: true,
+        },
+      },
     ],
   },
 ];

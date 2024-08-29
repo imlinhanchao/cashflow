@@ -3,7 +3,6 @@
   import Fn from './fn.vue';
   import { FormInstance } from 'ant-design-vue';
   import FieldSelect from './fieldSelect.vue';
-  import { clone } from '@/utils';
 
   const data = ref<DataOrder>(new DataOrder());
   const emit = defineEmits<{
@@ -31,7 +30,7 @@
   let resolve: (value: DataOrder) => void;
   function open(field = new DataOrder()) {
     visible.value = true;
-    data.value = Object.assign(new DataOrder(), clone(field));
+    data.value = new DataOrder(field.field, field.order, field.fun);
     return new Promise<DataOrder>((r) => {
       resolve = r;
     });

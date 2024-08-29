@@ -83,13 +83,23 @@ export function markFnField(field: SQLFn) {
   return fn(
     field.name,
     ...field.params.map((param) => {
-      if (param.type == "value") {
-        return param.value;
+      if (param.type == "fn") {
+        return markFnField(param.value as SQLFn);
       } else if (param.type == "col") {
         return col(param.value as string);
       } else {
-        return markFnField(param.value as SQLFn);
+        return param.value;
       }
     })
   );
+}
+
+export function markGroup(fields: DataFieldDto[]): string[] {
+  return fields.map((field) => {
+    if (field.fun) {
+      return markFnField(field.fun);
+    } else {
+      return field.field;
+    }
+  });
 }

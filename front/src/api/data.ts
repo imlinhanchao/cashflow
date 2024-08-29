@@ -21,6 +21,7 @@ export const fieldMaps = {
  * DataSourceDto
  */
 export class DataSource {
+  id?: string;
   name: string = '';
 
   description: string = '';
@@ -35,7 +36,7 @@ export class DataSource {
   /**
    * 查询分组字段
    */
-  group: string[] = [];
+  group: DataField[] = [];
   /**
    * 起始 index
    */
@@ -57,6 +58,7 @@ export class DataSource {
     const src = Object.assign(new DataSource(), data);
     src.where = new SQLWhere(data.where.items, data.where.relational);
     src.fields = data.fields.map((field) => new DataField(field.field, field.label, field.fun));
+    src.group = data.group.map((field) => new DataField(field.field, field.label, field.fun));
     src.order = data.order.map((order) => new DataOrder(order.field, order.order, order.fun));
     return src;
   }

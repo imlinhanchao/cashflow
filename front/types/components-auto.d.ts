@@ -7,6 +7,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CodeEditor: typeof import('@/components/CodeEditor/index.ts')['default']
+    CodeEditorSrcCodeEditor: typeof import('@/CodeEditor.vue')['default']
+    CodeEditorSrcCodemirrorCodeMirror: typeof import('@/codemirror/CodeMirror.vue')['default']
+    CodeEditorSrcJsonPreviewJsonPreview: typeof import('@/json-preview/JsonPreview.vue')['default']
+    CodeEditorSrcTyping: typeof import('@/typing.ts')['default']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     FieldInput: typeof import('@/components/FieldInput/index.ts')['default']
     FieldInputSrcFieldInput: typeof import('@/FieldInput.vue')['default']

@@ -4,6 +4,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { DataSrcDto } from "./datasrc.dto";
 import { markQuery } from "src/utils";
 import { QueryReqDto, QueryRspDto } from "src/core/Dto/common.dto";
+import { isString } from "src/utils";
 
 @Injectable()
 export class DatasrcService {
@@ -33,13 +34,15 @@ export class DatasrcService {
       "index",
       "count",
     ];
+    const update_data: any = {}
     updateField.forEach((field) => {
       if (datasrc[field]) {
-        data[field] = datasrc[field];
+        update_data[field] = datasrc[field];
       }
     });
+    data.update(update_data);
 
-    return this.format(await data.save());
+    return this.format((await data.save()).dataValues);
   }
 
   async remove(id: string): Promise<DataSrcDto> {
@@ -91,10 +94,10 @@ export class DatasrcService {
   }
 
   format(data: any): DataSrcDto {
-    data.fields = JSON.parse(data.fields);
-    data.where = JSON.parse(data.where);
-    data.order = JSON.parse(data.order);
-    data.group = JSON.parse(data.group);
+    data.fields = isString(data.fields) ? JSON.parse(data.fields) : data.fields;
+    data.where = isString(data.where) ? JSON.parse(data.where) : data.where;
+    data.order = isString(data.order) ? JSON.parse(data.order) : data.order;
+    data.group = isString(data.group) ? JSON.parse(data.group) : data.group;
     return data;
   }
 }

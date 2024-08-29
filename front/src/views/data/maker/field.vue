@@ -3,7 +3,15 @@
   import Fn from './fn.vue';
   import { FormInstance } from 'ant-design-vue';
   import FieldSelect from './fieldSelect.vue';
-  import { clone } from '@/utils';
+
+  withDefaults(
+    defineProps<{
+      label?: boolean;
+    }>(),
+    {
+      label: true,
+    },
+  );
 
   const data = ref<DataField>(new DataField());
   const emit = defineEmits<{
@@ -28,10 +36,11 @@
     label: [{ required: true, message: '请输入标签', trigger: 'change' }],
   };
 
+  
   let resolve: (value: DataField) => void;
   function open(field = new DataField()) {
     visible.value = true;
-    data.value = Object.assign(new DataField(), clone(field));
+    data.value = new DataField(field.field, field.label, field.fun);
     return new Promise<DataField>((r) => {
       resolve = r;
     });
@@ -67,7 +76,7 @@
         <a-form-item v-if="!isFunction" label="字段" name="field">
           <FieldSelect v-model="data.field" @change="data.label = $event.label" />
         </a-form-item>
-        <a-form-item label="标签" name="label">
+        <a-form-item v-if="label" label="标签" name="label">
           <a-input v-model:value="data.label" />
         </a-form-item>
         <a-form-item v-if="isFunction" label="函数表达式" name="fun">

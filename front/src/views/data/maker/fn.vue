@@ -101,7 +101,7 @@
         <a-input-number v-model:value="p.value" />
       </a-form-item>
       <a-form-item
-        v-if="p.type == 'string'"
+        v-else-if="p.type == 'string'"
         label="　值"
         :name="['params', i, 'value']"
         :rules="rules.value"

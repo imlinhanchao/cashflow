@@ -31,7 +31,7 @@ export class DataSource extends CommonModel {
   order: DataOrderDto[];
 
   @Column({ comment: "分组", defaultValue: [], type: DataType.JSON })
-  group: string[];
+  group: DataFieldDto[];
 
   @Column({ comment: "起始", defaultValue: null })
   index: number;

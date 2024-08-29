@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { create, DataSource, getDetail } from '@/api/data';
+  import { create, DataSource, getDetail, update } from '@/api/data';
   import DataView from './dataView.vue';
   import DataForm from './form.vue';
   import { message } from 'ant-design-vue';
@@ -10,7 +10,7 @@
   const data = ref<any[]>([]);
   const source = ref<DataSource>(new DataSource());
   async function save(data: DataSource) {
-    await create([data]);
+    data.id ? await update(data.id, data) : await create([data]);
     message.success('保存成功！');
     router.replace('/data');
   }
