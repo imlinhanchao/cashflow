@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { advancedSearch } from '@/api/cashflow';
-import { DataSource, search } from '@/api/data';
+  import { DataSource, search } from '@/api/data';
   import { IReport, Report } from '@/api/report';
   import CodeEditor, { MODE } from '@/components/CodeEditor';
 
@@ -22,17 +22,20 @@ import { DataSource, search } from '@/api/data';
   const codeRef = ref<InstanceType<typeof CodeEditor>>();
   const dataFields = computed(() => data.datasrc?.fields.map((item) => item.label) ?? []);
   function pushField(field: string) {
-    codeRef.value?.replace(`$[${field}]`);
+    pushCode(`\#{${field}}`);
+  }
+  function pushCode(code: string) {
+    codeRef.value?.replace(code);
   }
 
   async function onPreview() {
     const table = await advancedSearch(data.datasrc);
-    let options = data.options.replace(/\$\[.*?\]/g, (field) => {
+    let options = data.options.replace(/\#\{.*?\}/g, (field) => {
       const label = field.slice(2, -1);
-      return `($table.map(row => row['${label}']))`;
-    });
+      return `($data.map(row => row['${label}']))`;
+    }).replace(/\#\[二维表\]/g, `($data.map(row => [${dataFields.value.map((field) => `row['${field}']`).join(', ')}]))`);
     
-    const getOptions = new Function('$table', `return ${options}`);
+    const getOptions = new Function('$data', `${options}\nreturn option;`);
     
     emit('preview', getOptions(table));
   }
@@ -65,8 +68,11 @@ import { DataSource, search } from '@/api/data';
       <section class="flex-column">
         <section class="flex justify-between pb-2 px-2">
           <section class="space-x-2">
-            <a-button type="primary" ghost v-for="field in dataFields" :key="field" size="small" @click="pushField(field)">
-              $[{{ field }}]
+            <a-button :title="`$table.map(row => row['${field}'])`" type="primary" ghost v-for="field in dataFields" :key="field" size="small" @click="pushField(field)">
+              #{<span>{{ field }}</span>}
+            </a-button>
+            <a-button type="primary" ghost size="small" @click="pushCode('#[二维表]')">
+              #[二维表]
             </a-button>
           </section>
           <section class="space-x-2">
@@ -74,7 +80,14 @@ import { DataSource, search } from '@/api/data';
             <a-button size="small" type="primary" @click="onPreview">预览</a-button>
           </section>
         </section>
-        <CodeEditor ref="codeRef" class="border border-gray-300 rounded overflow-hidden" v-model:value="data.options" :mode="MODE.JAVASCRIPT" />
+        <section class="rounded border border-gray-300">
+          <section class="font-mono p-1 whitespace-pre-wrap">
+            <span class="text-#7a3e9d">function</span> <span class="text-#aa3731 font-bold">getOptions</span><span class="text-#0431fa">(<span class="text-#7a3e9d">$data</span>) {</span>
+          </section>
+          <CodeEditor ref="codeRef" class="border border-gray-300 rounded overflow-hidden -mx-[1px]" v-model:value="data.options" :mode="MODE.JAVASCRIPT" />
+          <section class="font-mono indent-42px p-1"><span class="text-#4b69c6">return</span> <span class="text-#7a3e9d">option<b>;</b></span><br /><span class="text-#7a3e9d">}</span>
+          </section>
+        </section>
       </section>
     </a-form-item>
   </a-form>

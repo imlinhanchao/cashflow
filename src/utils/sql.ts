@@ -26,19 +26,22 @@ export function markQuery(query: Record<string, any>): any {
     const [prefix, ...fields] = key.split("_");
     const field = fields.join("_");
     if (prefixs[prefix] && query[key]) {
-      query[field] = {
-        [prefixs[prefix]]: query[key],
-      };
       if (arrayPrefixs.includes(prefix)) {
         query[field] = {
-          [prefixs[prefix]]: query[key].split(","),
+          [prefixs[prefix]]: (typeof query[key] == 'string' ? query[key].split(",") : query[key]),
+          ...(query[field] ?? {})
         };
       }
-      if (prefix == "like") {
+      else if (prefix == "like") {
         query[field] = {
           [prefixs[prefix]]: `%${query[key]}%`,
+          ...(query[field] ?? {})
         };
       }
+      else query[field] = {
+        [prefixs[prefix]]: query[key],
+        ...(query[field] ?? {})
+      };
       delete query[key];
     }
   });

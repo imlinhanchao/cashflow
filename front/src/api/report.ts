@@ -5,7 +5,7 @@ export class Report {
   description = '';
   datasrcId?: string;
   datasrc: DataSource = new DataSource();
-  options: string = '';
+  options: string = 'option = {\n}';
   public: boolean = false;
 }
 
