@@ -27,6 +27,15 @@ export default [
           hidden: true,
         },
       },
+      {
+        path: ':id',
+        name: 'DataDetail',
+        component: () => import('/@/views/report/maker/index.vue'),
+        meta: {
+          title: '统计报表详情',
+          hidden: true,
+        },
+      },
     ],
   },
 ];
