@@ -77,10 +77,7 @@
   });
 
   function setTheme(theme = 'idea') {
-    unref(editor)?.setOption(
-      'theme',
-      theme,
-    );
+    unref(editor)?.setOption('theme', theme);
   }
 
   function refresh() {

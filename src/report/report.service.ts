@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { Report } from './models/report.model';
-import { InjectModel } from '@nestjs/sequelize';
-import { ReportDto } from './report.dto';
-import { QueryReqDto, QueryRspDto } from 'src/core/Dto/common.dto';
-import { isString, markQuery } from 'src/utils';
+import { Injectable } from "@nestjs/common";
+import { Report } from "./models/report.model";
+import { InjectModel } from "@nestjs/sequelize";
+import { ReportDto } from "./report.dto";
+import { QueryReqDto, QueryRspDto } from "src/core/Dto/common.dto";
+import { isString, markQuery } from "src/utils";
 
 @Injectable()
 export class ReportService {
@@ -33,7 +33,7 @@ export class ReportService {
       "index",
       "count",
     ];
-    const update_data: any = {}
+    const update_data: any = {};
     updateField.forEach((field) => {
       if (datasrc[field]) {
         update_data[field] = datasrc[field];
@@ -93,7 +93,9 @@ export class ReportService {
   }
 
   format(data: any): ReportDto {
-    data.datasrc = isString(data.datasrc) ? JSON.parse(data.datasrc) : data.datasrc;
+    data.datasrc = isString(data.datasrc)
+      ? JSON.parse(data.datasrc)
+      : data.datasrc;
     return data;
   }
 }

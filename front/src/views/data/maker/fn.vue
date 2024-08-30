@@ -67,16 +67,13 @@
       <a-input v-model:value="data.name" />
     </a-form-item>
     <section class="flex justify-between">
-      <a-button type="primary" size="small" @click="addParams"
-      >
+      <a-button type="primary" size="small" @click="addParams">
         <Icon icon="i-mdi:add-bold" /> 添加参数
-      </a-button
-      >
+      </a-button>
       <section>{{ data.toString() }}</section>
     </section>
     <section v-for="(p, i) in data.params" :key="i" class="border px-3 mt-2">
-      <a-divider
-      >
+      <a-divider>
         参数 {{ i + 1 }}
         <Icon
           @click="data.params.splice(i, 1)"

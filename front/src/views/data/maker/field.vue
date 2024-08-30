@@ -36,7 +36,6 @@
     label: [{ required: true, message: '请输入标签', trigger: 'change' }],
   };
 
-  
   let resolve: (value: DataField) => void;
   function open(field = new DataField()) {
     visible.value = true;

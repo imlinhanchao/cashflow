@@ -34,7 +34,7 @@ export class DatasrcService {
       "index",
       "count",
     ];
-    const update_data: any = {}
+    const update_data: any = {};
     updateField.forEach((field) => {
       if (datasrc[field]) {
         update_data[field] = datasrc[field];

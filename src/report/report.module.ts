@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 import { SequelizeModule } from "@nestjs/sequelize";
-import { Report } from './models/report.model';
-import { ReportService } from './report.service';
-import { ReportController } from './report.controller';
+import { Report } from "./models/report.model";
+import { ReportService } from "./report.service";
+import { ReportController } from "./report.controller";
 
 @Module({
   imports: [SequelizeModule.forFeature([Report])],

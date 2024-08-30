@@ -64,5 +64,5 @@
     replace: (value: string) => {
       mirrorRef.value?.editor.replaceSelection(value);
     },
-  })
+  });
 </script>

@@ -15,10 +15,13 @@ export class Report extends CommonModel {
   @Column({ comment: "数据源", defaultValue: null, type: DataType.JSON })
   datasrc: any;
 
-  @Column({ comment: "Echart配置", defaultValue: '', type: DataType.TEXT('long') })
+  @Column({
+    comment: "Echart配置",
+    defaultValue: "",
+    type: DataType.TEXT("long"),
+  })
   options: string;
-  
+
   @Column({ comment: "公开", defaultValue: false })
   public: boolean;
-
 }

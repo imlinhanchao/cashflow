@@ -28,20 +28,20 @@ export function markQuery(query: Record<string, any>): any {
     if (prefixs[prefix] && query[key]) {
       if (arrayPrefixs.includes(prefix)) {
         query[field] = {
-          [prefixs[prefix]]: (typeof query[key] == 'string' ? query[key].split(",") : query[key]),
-          ...(query[field] ?? {})
+          [prefixs[prefix]]:
+            typeof query[key] == "string" ? query[key].split(",") : query[key],
+          ...(query[field] ?? {}),
         };
-      }
-      else if (prefix == "like") {
+      } else if (prefix == "like") {
         query[field] = {
           [prefixs[prefix]]: `%${query[key]}%`,
-          ...(query[field] ?? {})
+          ...(query[field] ?? {}),
         };
-      }
-      else query[field] = {
-        [prefixs[prefix]]: query[key],
-        ...(query[field] ?? {})
-      };
+      } else
+        query[field] = {
+          [prefixs[prefix]]: query[key],
+          ...(query[field] ?? {}),
+        };
       delete query[key];
     }
   });

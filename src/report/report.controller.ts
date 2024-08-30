@@ -10,7 +10,7 @@ import {
   UseGuards,
   Request,
 } from "@nestjs/common";
-import { ReportService } from './report.service';
+import { ReportService } from "./report.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserDto } from "src/users/users.dto";
@@ -18,7 +18,7 @@ import { ReportDto } from "./report.dto";
 import { permissions } from "src/core/Error";
 import { QueryReqDto } from "src/core/Dto/common.dto";
 
-@Controller('api/report')
+@Controller("api/report")
 @ApiTags("Report")
 export class ReportController {
   constructor(private readonly service: ReportService) {}
@@ -73,5 +73,4 @@ export class ReportController {
     if (user.username != "admin") query.username = user.username;
     return this.service.search(query);
   }
-
 }

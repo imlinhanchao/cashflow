@@ -11,7 +11,7 @@
     }>(),
     {},
   );
-  
+
   const emit = defineEmits<{
     (ev: 'update:modelValue', value: IReport): void;
     (ev: 'confirm', value: IReport): void;
@@ -28,7 +28,7 @@
     },
   );
 
-  const data = ref<IReport>(props.modelValue || new Report() as IReport);
+  const data = ref<IReport>(props.modelValue || (new Report() as IReport));
   const datasrcList = ref<DataSource[]>([]);
   function getDataSrc(value: string) {
     search({ page: 1, size: 10, like_name: value }).then((res) => {
@@ -124,16 +124,16 @@
           </section>
           <section class="space-x-2">
             <a-button size="small" type="primary" @click="data.options = ''">清空</a-button>
-            <a-button size="small" type="primary" :disabled="!data.datasrcId" @click="onPreview"
-            >预览</a-button
-            >
+            <a-button size="small" type="primary" :disabled="!data.datasrcId" @click="onPreview">
+              预览
+            </a-button>
           </section>
         </section>
         <section class="rounded border border-gray-300">
           <section class="font-mono p-1 whitespace-pre-wrap">
-            <span class="text-#7a3e9d">function</span> <span 
-              class="text-#aa3731 font-bold">getOptions</span> <span class="text-#0431fa"
-            >(<span class="text-#7a3e9d">$data</span>) {</span>
+            <span class="text-#7a3e9d">function </span>
+            <span class="text-#aa3731 font-bold">getOptions </span>
+            <span class="text-#0431fa">(<span class="text-#7a3e9d">$data</span>) {</span>
           </section>
           <CodeEditor
             ref="codeRef"
@@ -141,9 +141,11 @@
             v-model:value="data.options"
             :mode="MODE.JAVASCRIPT"
           />
-          <section class="font-mono indent-42px p-1"
-          ><span class="text-#4b69c6">return</span> <span class="text-#7a3e9d"
-          >option<b>;</b></span><br /><span class="text-#7a3e9d">}</span>
+          <section class="font-mono indent-42px p-1">
+            <span class="text-#4b69c6">return </span>
+            <span class="text-#7a3e9d"> option<b>;</b> </span>
+            <br />
+            <span class="text-#7a3e9d">}</span>
           </section>
         </section>
       </section>

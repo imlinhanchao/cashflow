@@ -1,5 +1,5 @@
 import { defHttp } from '@/utils/http';
-import { DataSource } from "./data";
+import { DataSource } from './data';
 import { IPageParam } from './common';
 
 export class Report {

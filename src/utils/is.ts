@@ -5,7 +5,7 @@ export function is(val: unknown, type: string) {
 }
 
 export function isDef<T = unknown>(val?: T): val is T {
-  return typeof val !== 'undefined';
+  return typeof val !== "undefined";
 }
 
 export function isUnDef<T = unknown>(val?: T): val is T {
@@ -13,10 +13,10 @@ export function isUnDef<T = unknown>(val?: T): val is T {
 }
 
 export function isObject(val: any): boolean {
-  return val !== null && is(val, 'Object');
+  return val !== null && is(val, "Object");
 }
 
-export function isEmpty(val: any): boolean{
+export function isEmpty(val: any): boolean {
   if (isArray(val) || isString(val)) {
     return val.length === 0;
   }
@@ -33,7 +33,7 @@ export function isEmpty(val: any): boolean{
 }
 
 export function isDate(val: unknown): boolean {
-  return is(val, 'Date');
+  return is(val, "Date");
 }
 
 export function isNull(val: unknown): boolean {
@@ -49,23 +49,23 @@ export function isNullOrUnDef(val: unknown): boolean {
 }
 
 export function isNumber(val: unknown): boolean {
-  return is(val, 'Number');
+  return is(val, "Number");
 }
 
 export function isString(val: unknown): boolean {
-  return is(val, 'String');
+  return is(val, "String");
 }
 
 export function isFunction(val: unknown): boolean {
-  return typeof val === 'function';
+  return typeof val === "function";
 }
 
 export function isBoolean(val: unknown): boolean {
-  return is(val, 'Boolean');
+  return is(val, "Boolean");
 }
 
 export function isRegExp(val: unknown): boolean {
-  return is(val, 'RegExp');
+  return is(val, "RegExp");
 }
 
 export function isArray(val: any): boolean {
@@ -73,10 +73,10 @@ export function isArray(val: any): boolean {
 }
 
 export function isMap(val: unknown): val is Map<any, any> {
-  return is(val, 'Map');
+  return is(val, "Map");
 }
 
-export const isServer = typeof window === 'undefined';
+export const isServer = typeof window === "undefined";
 
 export const isClient = !isServer;
 

@@ -11,7 +11,6 @@ export function useECharts(
   elRef: Ref<HTMLDivElement>,
   theme: 'light' | 'dark' | 'default' = 'default',
 ) {
-
   const getDarkMode = computed(() => {
     return theme;
   });
