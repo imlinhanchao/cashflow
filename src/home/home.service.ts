@@ -1,3 +1,4 @@
+import { Report } from "src/report/models/report.model";
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { HomeDto } from './home.dto';
@@ -18,7 +19,7 @@ export class HomeService {
   async update(id: string, datasrc: HomeDto): Promise<HomeDto> {
     const data = await this.dataModel.findByPk(id);
     if (!data) {
-      throw new Error("Data Source not found");
+      throw new Error("Home Config not found");
     }
     const updateField = [
       "name",
@@ -44,7 +45,7 @@ export class HomeService {
   async remove(id: string): Promise<HomeDto> {
     const data = await this.dataModel.findByPk(id);
     if (!data) {
-      throw new Error("Data Source not found");
+      throw new Error("Home Config not found");
     }
     await data.destroy();
     return this.format(data);
@@ -53,9 +54,10 @@ export class HomeService {
   async get(username: string): Promise<HomeDto[]> {
     const data = await this.dataModel.findAll({
       where: { username },
+      include: [{ model: Report, as: 'report' }]
     });
     if (!data) {
-      throw new Error("Data Source not found");
+      throw new Error("Home Config not found");
     }
     return data.map(d => this.format(d.dataValues));
   }
@@ -63,7 +65,7 @@ export class HomeService {
   async findOne(id: string): Promise<HomeDto> {
     const data = await this.dataModel.findByPk(id);
     if (!data) {
-      throw new Error("Data Source not found");
+      throw new Error("Home Config not found");
     }
     return this.format(data.dataValues);
   }
