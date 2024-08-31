@@ -115,8 +115,9 @@
               size="small"
               @click="pushField(field)"
             >
-              #{<span>{{ field }}</span
-              >}
+              #{
+              <span>{{ field }}</span>
+              }
             </a-button>
             <a-button type="primary" ghost size="small" @click="pushCode('#[二维表]')">
               #[二维表]

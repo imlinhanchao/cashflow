@@ -49,8 +49,12 @@ export class ReportController {
   @Get("get/:id")
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "获取报表配置" })
-  findOne(@Param("id") id: string) {
-    return this.service.findOne(id);
+  findOne(@Request() { user }: { user: UserDto }, @Param("id") id: string) {
+    return this.service.findOne(id).then((data) => {
+      if (user.username != "admin" && user.username != data.username && !data.public)
+        throw permissions;
+      return data;
+    });
   }
 
   @Delete(":id")

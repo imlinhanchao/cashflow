@@ -21,7 +21,7 @@ import { QueryReqDto } from "src/core/Dto/common.dto";
 @Controller("api/datasrc")
 @ApiTags("Datasrc")
 export class DatasrcController {
-  constructor(private readonly datasrcService: DatasrcService) {}
+  constructor(private readonly service: DatasrcService) {}
 
   @Post("create")
   @UseGuards(JwtAuthGuard)
@@ -31,7 +31,7 @@ export class DatasrcController {
       data.username = user.username;
       return data;
     });
-    return this.datasrcService.create(list);
+    return this.service.create(list);
   }
 
   @Put(":id")
@@ -43,14 +43,18 @@ export class DatasrcController {
     @Body() cashflow: DataSrcDto
   ) {
     if (user.username != cashflow.username) throw permissions;
-    return this.datasrcService.update(id, cashflow);
+    return this.service.update(id, cashflow);
   }
 
   @Get("get/:id")
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "获取数据源" })
-  findOne(@Param("id") id: string) {
-    return this.datasrcService.findOne(id);
+  findOne(@Request() { user }: { user: UserDto }, @Param("id") id: string) {
+    return this.service.findOne(id).then((data) => {
+      if (user.username != "admin" && user.username != data.username && !data.public)
+        throw permissions;
+      return data;
+    });
   }
 
   @Delete(":id")
@@ -60,10 +64,10 @@ export class DatasrcController {
     @Request() { user }: { user: UserDto },
     @Param("id") id: string
   ) {
-    const cashflow = await this.datasrcService.findOne(id);
+    const cashflow = await this.service.findOne(id);
     if (user.username != "admin" && user.username != cashflow.username)
       throw permissions;
-    return this.datasrcService.remove(id);
+    return this.service.remove(id);
   }
 
   @Get("search")
@@ -71,6 +75,6 @@ export class DatasrcController {
   @ApiOperation({ summary: "搜索数据源" })
   search(@Request() { user }: { user: UserDto }, @Query() query: QueryReqDto) {
     if (user.username != "admin") query.username = user.username;
-    return this.datasrcService.search(query);
+    return this.service.search(query);
   }
 }
