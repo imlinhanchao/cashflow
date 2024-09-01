@@ -101,7 +101,7 @@
         <section v-if="!item.relational" class="flex flex-col space-y-2">
           <section
             v-for="(val, field) in item"
-            :key="field"
+            :key="field + '_' + i"
             class="formula hover:border hover:border-dashed hover:border-gray-400 item group"
             :class="{ active: activeItems.includes(item) }"
             @click="
