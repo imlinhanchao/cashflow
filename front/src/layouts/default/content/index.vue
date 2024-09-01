@@ -15,9 +15,7 @@
           mode="out-in"
           appear
         >
-          <keep-alive>
-            <component :is="Component" :key="route.fullPath" />
-          </keep-alive>
+          <component :is="Component" :key="route.fullPath" />
         </transition>
       </template>
     </RouterView>

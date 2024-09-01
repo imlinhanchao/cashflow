@@ -3,17 +3,24 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { HomeDto } from './home.dto';
 import { HomeConfig } from './models/home.model';
+import { ReportService } from "src/report/report.service";
 
 @Injectable()
 export class HomeService {
   constructor(
+    private readonly reportService: ReportService,
     @InjectModel(HomeConfig)
     private readonly dataModel: typeof HomeConfig
-  ) {}
+  ) {
+    HomeConfig.belongsTo(Report, { foreignKey: 'reportId', as: 'report' });
+    Report.hasMany(HomeConfig, { foreignKey: 'reportId' });
+  }
 
   
-  async create(data: HomeDto): Promise<HomeDto> {
-    return this.format(await this.dataModel.create(data as any));
+  async create(data: HomeDto[]): Promise<HomeDto[]> {
+    return (await this.dataModel.bulkCreate(data as any)).map((data) =>
+      this.format(data.dataValues)
+    );
   }
 
   async update(id: string, datasrc: HomeDto): Promise<HomeDto> {
@@ -22,14 +29,11 @@ export class HomeService {
       throw new Error("Home Config not found");
     }
     const updateField = [
-      "name",
-      "description",
-      "fields",
-      "where",
-      "order",
-      "group",
-      "index",
-      "count",
+      "x",
+      "y",
+      "w",
+      "h",
+      "reportId",
     ];
     const update_data: any = {};
     updateField.forEach((field) => {
@@ -40,6 +44,14 @@ export class HomeService {
     data.update(update_data);
 
     return this.format((await data.save()).dataValues);
+  }
+
+  async updateAll(data: HomeDto[]): Promise<HomeDto[]> {
+    return (await this.dataModel.bulkCreate(data as any, {
+      updateOnDuplicate: ["id"]
+    })).map((data) =>
+      this.format(data.dataValues)
+    )
   }
 
   async remove(id: string): Promise<HomeDto> {
@@ -71,6 +83,10 @@ export class HomeService {
   }
 
   format(data: any): HomeDto {
+    data.index = data.id;
+    if (data.report) {
+      data.report = this.reportService.format(data.report);
+    }
     return data;
   }
 

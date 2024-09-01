@@ -2,13 +2,15 @@
   import { useUserStore } from '@/store/modules/user';
 
   const userStore = useUserStore();
+  const router = useRouter();
 
   function menuClick({ key }) {
     switch (key) {
-      case 'user':
-        break;
       case 'logout':
         userStore.confirmLoginOut();
+        break;
+      default:
+        router.push({ name: key });
         break;
     }
   }
@@ -21,7 +23,7 @@
 
     <template #overlay>
       <a-menu @click="menuClick">
-        <a-menu-item key="user">个人中心</a-menu-item>
+        <a-menu-item key="HomeEdit">编辑首页</a-menu-item>
         <a-menu-item key="logout">退出登录</a-menu-item>
       </a-menu>
     </template>

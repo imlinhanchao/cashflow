@@ -25,9 +25,27 @@ export class HomeController {
   @Post("create")
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "添加首页配置" })
-  create(@Request() { user }: { user: UserDto }, @Body() data: HomeDto) {
-    data.username = user.username;
-    return this.service.create(data);
+  create(@Request() { user }: { user: UserDto }, @Body() list: HomeDto[]) {
+    list = list.map((data) => {
+      data.username = user.username;
+      return data;
+    });
+    return this.service.create(list);
+  }
+
+  @Post("save")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "保存首页配置" })
+  updateAll(
+    @Request() { user }: { user: UserDto },
+    @Body() list: HomeDto[]
+  ) {
+    if (list.some(d => d.username && d.username != user.username)) throw permissions;
+    list = list.map((data) => {
+      data.username = user.username;
+      return data;
+    });
+    return this.service.updateAll(list);
   }
 
   @Put(":id")
@@ -38,7 +56,7 @@ export class HomeController {
     @Param("id") id: string,
     @Body() data: HomeDto
   ) {
-    if (user.username != data.username) throw permissions;
+    if (user.username && user.username != data.username) throw permissions;
     return this.service.update(id, data);
   }
 

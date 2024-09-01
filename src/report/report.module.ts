@@ -8,5 +8,6 @@ import { ReportController } from "./report.controller";
   imports: [SequelizeModule.forFeature([Report])],
   providers: [ReportService],
   controllers: [ReportController],
+  exports: [ReportService],
 })
 export class ReportModule {}

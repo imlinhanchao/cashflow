@@ -8,16 +8,16 @@ export class HomeConfig extends CommonModel {
   username: string;
 
   @Column({ comment: "行号", defaultValue: 0 })
-  row: number;
+  x: number;
 
   @Column({ comment: "列号", defaultValue: 0 })
-  column: number;
+  y: number;
 
   @Column({ comment: "宽度", defaultValue: 0 })
-  width: number;
+  w: number;
 
   @Column({ comment: "高度", defaultValue: 0 })
-  height: number;
+  h: number;
 
   @Column({ comment: "统计报表配置Id", type: DataType.STRING, defaultValue: '' })
   reportId: string;

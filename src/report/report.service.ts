@@ -4,6 +4,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { ReportDto } from "./report.dto";
 import { QueryReqDto, QueryRspDto } from "src/core/Dto/common.dto";
 import { isString, markQuery } from "src/utils";
+import { Op } from "sequelize";
 
 @Injectable()
 export class ReportService {
@@ -26,12 +27,9 @@ export class ReportService {
     const updateField = [
       "name",
       "description",
-      "fields",
-      "where",
-      "order",
-      "group",
-      "index",
-      "count",
+      "datasrc",
+      "public",
+      "options",
     ];
     const update_data: any = {};
     updateField.forEach((field) => {
@@ -58,20 +56,22 @@ export class ReportService {
 
     markQuery(query);
 
+    const where = { username: query.username };
     const keys = ["name", "description"];
     Object.keys(query).forEach((key) => {
-      if (!keys.includes(key) || !query[key]) {
+      if (!keys.includes(key)) {
         delete query[key];
       }
     });
+    if (Object.keys(query).length > 0) where[Op.or] = query;
 
     const total = await this.dataModel.count({
-      where: query,
+      where,
     });
 
     const rows = (
       await this.dataModel.findAll({
-        where: query,
+        where,
         offset: (page - 1) * size,
         limit: size * 1,
         order: [["createdAt", "DESC"]],
