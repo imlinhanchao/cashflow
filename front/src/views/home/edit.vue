@@ -32,8 +32,10 @@
     );
   }
 
-  function save() {
-    saveHome(layout);
+  const router = useRouter();
+  async function save() {
+    await saveHome(layout);
+    router.push('/home');
   }
 
   onMounted(() => {

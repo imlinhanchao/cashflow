@@ -47,11 +47,15 @@ export class HomeService {
   }
 
   async updateAll(data: HomeDto[]): Promise<HomeDto[]> {
-    return (await this.dataModel.bulkCreate(data as any, {
-      updateOnDuplicate: ["id"]
-    })).map((data) =>
-      this.format(data.dataValues)
-    )
+    const list = [];
+    list.push(...(await this.create(data.filter(d => !d.id))));
+    for (const d of data) {
+      if (d.id) {
+        list.push(await this.update(d.id, d));
+      }
+    }
+
+    return list;
   }
 
   async remove(id: string): Promise<HomeDto> {
