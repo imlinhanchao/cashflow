@@ -17,7 +17,6 @@ export class Report extends CommonModel {
 
   @Column({
     comment: "Echart配置",
-    defaultValue: "",
     type: DataType.TEXT("long"),
   })
   options: string;
