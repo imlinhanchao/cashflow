@@ -113,10 +113,10 @@
           @click="orderRef?.open(f).then((f) => (data.order[i] = f))"
         />
       </a-tag>
-      <Order ref="orderRef" />
+      <Order ref="orderRef" :fields="data.fields" />
     </a-form-item>
     <a-form-item label="分组">
-      <a-button type="link" @click="fieldRef?.open().then((f) => data.group.push(f))">
+      <a-button type="link" @click="groupRef?.open().then((f) => data.group.push(f))">
         <Icon icon="i-ic:outline-add-circle" />
       </a-button>
       <a-tag
@@ -135,7 +135,7 @@
           @click="groupRef?.open(f).then((f) => (data.group[i] = f))"
         />
       </a-tag>
-      <Field ref="groupRef" :label="false" />
+      <Field ref="groupRef" :label="false" :fields="data.fields" />
     </a-form-item>
     <a-form-item label="起始">
       <a-input v-model:value="data.index" allowClear type="number" />

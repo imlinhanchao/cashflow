@@ -7,6 +7,7 @@
   withDefaults(
     defineProps<{
       label?: boolean;
+      fields?: DataField[];
     }>(),
     {
       label: true,
@@ -83,6 +84,19 @@
         </a-form-item>
         <Fn ref="fnRef" v-model="data.fun" v-if="isFunction" />
       </a-form>
+      <section>
+        <b>使用数据源字段：</b>
+        <a-tag
+          v-for="(f, i) in fields"
+          :key="i"
+          class="group !inline-flex items-center cursor-pointer"
+          @click="data = new DataField(f.field, f.label, f.fun)"
+        >
+          <a-tooltip :title="f.name">
+            <span><Icon v-if="f.fun" icon="i-fluent:braces-24-filled" /> {{ f.label }}</span>
+          </a-tooltip>
+        </a-tag>
+      </section>
     </section>
   </a-modal>
 </template>

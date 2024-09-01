@@ -1,8 +1,16 @@
 <script setup lang="ts">
-  import { DataOrder, SQLFn } from '@/api/data';
+  import { DataField, DataOrder, Order, SQLFn } from '@/api/data';
   import Fn from './fn.vue';
   import { FormInstance } from 'ant-design-vue';
   import FieldSelect from './fieldSelect.vue';
+
+  withDefaults(
+    defineProps<{
+      fields?: DataField[];
+    }>(),
+    {
+    },
+  );
 
   const data = ref<DataOrder>(new DataOrder());
   const emit = defineEmits<{
@@ -77,6 +85,19 @@
           </a-select>
         </a-form-item>
       </a-form>
+      <section>
+        <b>使用数据源字段：</b>
+        <a-tag
+          v-for="(f, i) in fields"
+          :key="i"
+          class="group !inline-flex items-center cursor-pointer"
+          @click="data = new DataOrder(f.label, Order.Desc, f.fun)"
+        >
+          <a-tooltip :title="f.name">
+            <span><Icon v-if="f.fun" icon="i-fluent:braces-24-filled" /> {{ f.label }}</span>
+          </a-tooltip>
+        </a-tag>
+      </section>
     </section>
   </a-modal>
 </template>
