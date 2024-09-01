@@ -29,7 +29,7 @@ export default [
       },
       {
         path: ':id',
-        name: 'DataDetail',
+        name: 'ReportDetail',
         component: () => import('/@/views/report/maker/index.vue'),
         meta: {
           title: '统计报表详情',
