@@ -31,6 +31,8 @@ npm run dev
 
 vscode 按下 F5 运行调试后端或运行 `npm run start`
 
+API 文档：[https://cashflow.apifox.cn/](https://cashflow.apifox.cn/)
+
 ## 🔨 编译发布
 
 1. 编译生成  
