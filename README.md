@@ -8,6 +8,8 @@
 
 个人消费交易记录管理分析网站应用，通过同步微信与支付宝对账单，管理个人消费交易数据。
 
+[🌐 API 文档](https://cashflow.apifox.cn/) | [🤩 在线体验](https://s.hancel.org)
+
 ## ✨ 功能
 
 - [x] 🔁 对账单数据同步；
@@ -31,7 +33,6 @@ npm run dev
 
 vscode 按下 F5 运行调试后端或运行 `npm run start`
 
-API 文档：[https://cashflow.apifox.cn/](https://cashflow.apifox.cn/)
 
 ## 🔨 编译发布
 
