@@ -183,6 +183,19 @@ export function search(params: any & IPageParam) {
 }
 
 /**
+ * 导出交易记录
+ * GET /cashflow/query
+ * 接口ID：191344480
+ * 接口地址：https://app.apifox.com/link/project/2424992/apis/api-191344480
+ */
+export function exportBill(data: any & IPageParam) {
+  Object.keys(data).forEach((k) => {
+    if (Array.isArray(data[k])) data[k] = data[k].join(',');
+  });
+  return defHttp.post<any>({ url: '/cashflow/export', data, responseType: 'blob' }, { isReturnNativeResponse: true });
+}
+
+/**
  * 检索字段枚举值
  * GET /cashflow/enum
  * 接口ID：198437800

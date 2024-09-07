@@ -22,6 +22,7 @@ import { FilesInterceptor } from "@nestjs/platform-express";
 import { decode } from "iconv-lite";
 import { EnumDto } from "../core/Dto/enum.dto";
 import { DataSourceDto, QueryReqDto } from "src/core/Dto/common.dto";
+import { formatDate } from "src/utils";
 @Controller("api/cashflow")
 @ApiTags("Cashflow")
 export class CashflowController {
@@ -59,6 +60,18 @@ export class CashflowController {
   search(@Request() { user }: { user: UserDto }, @Query() query: QueryReqDto) {
     if (user.username != "admin") query.username = user.username;
     return this.cashflowService.search(query);
+  }
+
+  @Post("export")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "导出交易记录" })
+  async export(@Request() { user }: { user: UserDto }, @Body() query: QueryReqDto) {
+    if (user.username != "admin") query.username = user.username;
+    return {
+      type: 'application/vnd.openxmlformats',
+      data: await this.cashflowService.exportExcel(query),
+      filename: `交易记录对账单${formatDate(Date.now(), "YYYYMMDDHHmmss")}.xlsx`,
+    }
   }
 
   @Post("where")

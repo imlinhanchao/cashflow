@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { Cashflow, enumField, search, remove as removeItem } from '@/api/cashflow';
+  import { Cashflow, enumField, search, remove as removeItem, exportBill } from '@/api/cashflow';
   import { columns } from './index';
   import Item from './item.vue';
   import { message } from 'ant-design-vue';
+import { downloadByAxios } from '@/utils/file/download';
 
   const data = ref<Cashflow[]>([]);
   const page = reactive({
@@ -44,6 +45,10 @@
       queryTable();
       message.success('删除成功！');
     });
+  }
+  async function exportData() {
+    await downloadByAxios(await exportBill({ ...query.value }));
+    message.success('导出成功！');
   }
 
   onMounted(() => {
@@ -195,6 +200,11 @@
           <a-tooltip title="搜索">
             <a-button type="primary" shape="circle" @click="queryTable">
               <Icon icon="i-ion:search-sharp" />
+            </a-button>
+          </a-tooltip>
+          <a-tooltip title="导出">
+            <a-button type="primary" shape="circle" @click="exportData">
+              <Icon icon="i-hugeicons:file-export" />
             </a-button>
           </a-tooltip>
           <a-tooltip title="重置">

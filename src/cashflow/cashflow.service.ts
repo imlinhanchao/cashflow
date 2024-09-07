@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import * as ExcelJS from "exceljs";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import {
@@ -127,6 +128,47 @@ export class CashflowService {
     return rows;
   }
 
+  async exportExcel(query: QueryReqDto) {
+    query.size = -1;
+    const data = await this.search(query);
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("对账单");
+
+    worksheet.columns = [
+      { header: "交易时间", key: "transactionTime", width: 20 },
+      { header: "交易类型", key: "type", width: 20 },
+      { header: "交易对方", key: "counterparty", width: 20 },
+      { header: "交易说明", key: "description", width: 20 },
+      { header: "金额", key: "amount", width: 20 },
+      { header: "支付方式", key: "payment", width: 20 },
+      { header: "交易状态", key: "status", width: 20 },
+      { header: "交易分类", key: "category", width: 20 },
+      { header: "商家订单号", key: "merchantNumber", width: 20 },
+      { header: "交易订单号", key: "orderNumber", width: 20 },
+      { header: "备注", key: "remark", width: 20 },
+    ];
+
+    data.rows.forEach((cashflow) => {
+      worksheet.addRow({
+        transactionTime: cashflow.transactionTime,
+        type: cashflow.type,
+        counterparty: cashflow.counterparty,
+        description: cashflow.description,
+        amount: cashflow.amount,
+        payment: cashflow.payment,
+        status: cashflow.status,
+        category: cashflow.category,
+        merchantNumber: cashflow.merchantNumber,
+        orderNumber: cashflow.orderNumber,
+        remark: cashflow.remark,
+      });
+    });
+
+    const buffers = await workbook.xlsx.writeBuffer();
+    return buffers;
+  }
+
   async search(data: QueryReqDto): Promise<QueryRspDto<Cashflow>> {
     const { page, size, ...query } = data;
 
@@ -160,8 +202,8 @@ export class CashflowService {
     const rows = (
       await this.cashflowModel.findAll({
         where: query,
-        offset: (page - 1) * size,
-        limit: size * 1,
+        offset: size > 0 ? (page - 1) * size : undefined,
+        limit: size > 0 ? size * 1 : undefined,
         order: [["transactionTime", "DESC"]],
       })
     ).map((cashflow) => cashflow.dataValues);
