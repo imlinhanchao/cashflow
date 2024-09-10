@@ -8,7 +8,7 @@
 
 个人消费交易记录管理分析网站应用，通过同步微信与支付宝对账单，管理个人消费交易数据。
 
-🌐 [API 文档](https://cashflow.apifox.cn/) | 🤩 [在线体验](https://s.hancel.org)
+🌐 [API 文档](https://cashflow.apifox.cn/) | 🤩 [在线体验](https://s.hancel.org) (测试账号：demo 密码：demo_admin)
 
 ## ✨ 功能
 
