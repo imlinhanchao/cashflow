@@ -7,10 +7,6 @@ import { CommonModel } from "src/core/models/common.model";
       fields: ["username"],
     },
     {
-      unique: true,
-      fields: ["from", "orderNumber"],
-    },
-    {
       fields: ["category"],
     },
     {
