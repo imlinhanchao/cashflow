@@ -57,17 +57,23 @@ export class UsersService {
   async query(data): Promise<QueryRspDto<User>> {
     // 分页查询，按照创建时间倒序
     const { page, size, ...query } = data;
+    if (query.username) {
+      query.username = {
+        $like: `%${query.nickname}%`,
+      };
+    } else delete query.username;
+
     if (query.nickname) {
       query.nickname = {
         $like: `%${query.nickname}%`,
       };
-    }
+    } else delete query.nickname;
 
     if (query.email) {
       query.email = {
         $like: `%${query.email}%`,
       };
-    }
+    } else delete query.email;
 
     const total = await this.userModel.count({
       where: query,
@@ -77,7 +83,7 @@ export class UsersService {
       rows: await this.userModel.findAll({
         where: query,
         offset: (page - 1) * size,
-        limit: size,
+        limit: +size,
         order: [["createdAt", "DESC"]],
       }),
       total,

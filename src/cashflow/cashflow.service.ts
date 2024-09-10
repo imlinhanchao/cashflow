@@ -118,8 +118,8 @@ export class CashflowService {
         where: { ...markWhere(params.where), username },
         order: markOrder(params.order),
         group: markGroup(params.group),
-        offset: params.index || 0,
-        limit: params.count || undefined,
+        offset: Number(params.index || 0),
+        limit: params.count ? +params.count : undefined,
       })
     ).map((cashflow) => cashflow.dataValues);
 

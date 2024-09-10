@@ -24,7 +24,7 @@
 
 <template>
   <article class="flex h-full space-x-2">
-    <section class="flex-1 h-full overflow-auto">
+    <section class="flex-1 h-full overflow-auto pr-2">
       <DataForm v-model="source" @query="data = $event" @confirm="save" />
     </section>
     <section class="flex-1 h-full overflow-auto relative">
